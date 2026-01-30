@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-<link rel="stylesheet" href="painel.css">
+    <meta charset="UTF-8">
+    <title>Painel de Chamada</title>
+    <link rel="stylesheet" href="painel.css">
 </head>
 <body>
+    <div class="painel-container">
+        <div class="caixa-chamada">
+            <h1 id="nome-paciente">Aguardando Chamada...</h1>
+            <h2 id="consultorio">---</h2>
+            <hr>
+            <h3 id="nome-profissional">---</h3>
+        </div>
+    </div>
 
-<button id="ativarSom">🔊 ATIVAR SOM</button>
-
-<div id="ultimo">
-<h1 id="nome">---</h1>
-<h2 id="local">---</h2>
-<h3 id="profissional">---</h3>
-</div>
-
-<ul id="historico"></ul>
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="painel.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="painel.js"></script>
 </body>
 </html>

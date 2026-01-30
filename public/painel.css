@@ -1,10 +1,22 @@
+/* Estilo base do painel */
+.painel-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.5s;
+    background-color: #001f3f; /* Cor original (exemplo fundo escuro) */
+    color: white;
+}
+
+/* Animação Amarela */
 @keyframes alerta-amarelo {
-    0% { background-color: transparent; }
-    50% { background-color: #ffff00; } /* Amarelo Vibrante */
-    100% { background-color: transparent; }
+    0% { background-color: #001f3f; }
+    50% { background-color: #ffff00; }
+    100% { background-color: #001f3f; }
 }
 
 .piscar-amarelo {
     animation: alerta-amarelo 0.8s infinite;
-    color: #000 !important; /* Muda o texto para preto para dar contraste com o amarelo */
+    color: #000 !important; /* Texto preto para ler no amarelo */
 }

@@ -1,35 +1,38 @@
 const socket = io();
 
 socket.on("chamada", (dados) => {
-    console.log("Chamada recebida:", dados);
+    console.log("Recebido:", dados);
 
-    // 1. Atualiza os textos na tela
-    document.getElementById("nome-paciente").innerText = dados.paciente;
-    document.getElementById("nome-profissional").innerText = dados.profissional;
-    document.getElementById("consultorio").innerText = dados.consultorio;
+    // 1. Atualiza os textos (verifica se existem antes para não dar erro)
+    const elPaciente = document.getElementById("nome-paciente");
+    const elConsultorio = document.getElementById("consultorio");
+    const elProfissional = document.getElementById("nome-profissional");
 
-    // 2. Inicia o alerta visual (Piscar Amarelo)
-    const container = document.querySelector(".painel-container") || document.body;
-    container.classList.add("piscar-amarelo");
+    if(elPaciente) elPaciente.innerText = dados.paciente;
+    if(elConsultorio) elConsultorio.innerText = dados.consultorio;
+    if(elProfissional) elProfissional.innerText = dados.profissional;
 
-    // 3. Função para o computador falar
+    // 2. Alerta Visual (Piscar Amarelo)
+    const container = document.querySelector(".painel-container");
+    if (container) {
+        container.classList.add("piscar-amarelo");
+    }
+
+    // 3. Função de Voz
     const falar = (texto) => {
         const msg = new SpeechSynthesisUtterance(texto);
         msg.lang = 'pt-BR';
-        msg.rate = 0.9; // Velocidade um pouco mais lenta para clareza
+        msg.rate = 0.9;
         window.speechSynthesis.speak(msg);
     };
 
-    // 4. Executa a fala (2x o paciente e depois o profissional)
-    // Falando o nome do paciente duas vezes
+    // 4. Sequência de fala
     falar(`Paciente, ${dados.paciente}`);
     falar(`Paciente, ${dados.paciente}`);
-    
-    // Falando o profissional e consultório
     falar(`Dirigir-se ao ${dados.consultorio} com ${dados.profissional}`);
 
-    // 5. Para de piscar após a fala (aproximadamente 8 a 10 segundos)
+    // 5. Remove o pisca após 10 segundos
     setTimeout(() => {
-        container.classList.remove("piscar-amarelo");
+        if (container) container.classList.remove("piscar-amarelo");
     }, 10000);
 });
