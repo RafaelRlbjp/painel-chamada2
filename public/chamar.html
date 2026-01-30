@@ -34,29 +34,27 @@
   </select>
 
   <label>Paciente</label>
-  <input type="text" id="paciente" placeholder="Nome do paciente">
+  <input type="text" id="paciente" placeholder="Nome do paciente" autocomplete="off">
 
   <label>Consultório</label>
   <select id="consultorio">
-    <option value=""></option>
-    <option value="1">Consultório Médico 1</option>
-    <option value="2">Consultório Médico 2</option>
-    <option value="3">Consultório Médico 3</option>
-    <option value="4">Consultório Médico 4</option>
-    <option value="5">Consultório de enfermagem 1</option>
-    <option value="6">Consultório de enfermagem 2</option>
-    <option value="7">Consultório de enfermagem 3</option>
-    <option value="8">Consultório de enfermagem 4</option>
-    <option value="9">Consultório Odontológico 1</option>
-    <option value="10">Consultório Odontológico 2</option>
-    <option value="11">Consultório Odontológico 3</option>
+    <option value="">Selecione</option>
+    <option value="Consultório Médico 1">Consultório Médico 1</option>
+    <option value="Consultório Médico 2">Consultório Médico 2</option>
+    <option value="Consultório Médico 3">Consultório Médico 3</option>
+    <option value="Consultório Médico 4">Consultório Médico 4</option>
+    <option value="Consultório de enfermagem 1">Consultório de enfermagem 1</option>
+    <option value="Consultório de enfermagem 2">Consultório de enfermagem 2</option>
+    <option value="Consultório de enfermagem 3">Consultório de enfermagem 3</option>
+    <option value="Consultório de enfermagem 4">Consultório de enfermagem 4</option>
+    <option value="Consultório Odontológico 1">Consultório Odontológico 1</option>
+    <option value="Consultório Odontológico 2">Consultório Odontológico 2</option>
+    <option value="Consultório Odontológico 3">Consultório Odontológico 3</option>
     <option value="Recepção">Recepção</option>
-    <option value="Sala Triagem">Sala de Triagem</option>
+    <option value="Sala de Triagem">Sala de Triagem</option>
   </select>
 
- 
-
-  <button onclick="chamar()">CHAMAR</button>
+  <button onclick="chamarPaciente()">CHAMAR</button>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
