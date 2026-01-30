@@ -1,30 +1,35 @@
 const socket = io();
 
 socket.on("chamada", (dados) => {
-    console.log("Nova chamada recebida:", dados);
+    console.log("Chamada recebida:", dados);
 
     // 1. Atualiza os textos na tela
-    // Certifique-se que esses IDs existam no seu painel.html
-    const elementoPaciente = document.getElementById("nome-paciente");
-    const elementoProfissional = document.getElementById("nome-profissional");
-    const elementoConsultorio = document.getElementById("consultorio");
+    document.getElementById("nome-paciente").innerText = dados.paciente;
+    document.getElementById("nome-profissional").innerText = dados.profissional;
+    document.getElementById("consultorio").innerText = dados.consultorio;
 
-    if (elementoPaciente) elementoPaciente.innerText = dados.paciente;
-    if (elementoProfissional) elementoProfissional.innerText = dados.profissional;
-    if (elementoConsultorio) elementoConsultorio.innerText = dados.consultorio;
-
-    // 2. Efeito de piscar a tela
-    // Procure pela div principal ou use o corpo da página (body)
+    // 2. Inicia o alerta visual (Piscar Amarelo)
     const container = document.querySelector(".painel-container") || document.body;
+    container.classList.add("piscar-amarelo");
+
+    // 3. Função para o computador falar
+    const falar = (texto) => {
+        const msg = new SpeechSynthesisUtterance(texto);
+        msg.lang = 'pt-BR';
+        msg.rate = 0.9; // Velocidade um pouco mais lenta para clareza
+        window.speechSynthesis.speak(msg);
+    };
+
+    // 4. Executa a fala (2x o paciente e depois o profissional)
+    // Falando o nome do paciente duas vezes
+    falar(`Paciente, ${dados.paciente}`);
+    falar(`Paciente, ${dados.paciente}`);
     
-    container.classList.add("piscar-tela");
+    // Falando o profissional e consultório
+    falar(`Dirigir-se ao ${dados.consultorio} com ${dados.profissional}`);
 
-    // 3. Toca o alerta sonoro (opcional)
-    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
-    audio.play().catch(e => console.log("Erro ao tocar som, aguardando interação do usuário."));
-
-    // 4. Remove o efeito de piscar após 5 segundos
+    // 5. Para de piscar após a fala (aproximadamente 8 a 10 segundos)
     setTimeout(() => {
-        container.classList.remove("piscar-tela");
-    }, 5000);
+        container.classList.remove("piscar-amarelo");
+    }, 10000);
 });

@@ -1,10 +1,10 @@
-/* Animação para piscar a tela */
-@keyframes flash {
+@keyframes alerta-amarelo {
     0% { background-color: transparent; }
-    50% { background-color: #ff3333; } /* Cor vermelha de alerta */
+    50% { background-color: #ffff00; } /* Amarelo Vibrante */
     100% { background-color: transparent; }
 }
 
-.piscar-tela {
-    animation: flash 1s infinite; /* Pisca a cada 1 segundo */
+.piscar-amarelo {
+    animation: alerta-amarelo 0.8s infinite;
+    color: #000 !important; /* Muda o texto para preto para dar contraste com o amarelo */
 }
