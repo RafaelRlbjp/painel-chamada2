@@ -1,20 +1,26 @@
 const socket = io();
 
 function chamar() {
-  const nome = paciente.value.trim();
-  const prof = profissional.value;
-  const cons = consultorio.value;
+  const pacienteInput = document.getElementById("paciente");
+  const profissionalSelect = document.getElementById("profissional");
+  const consultorioSelect = document.getElementById("consultorio");
 
-  if (!nome || !prof || !cons) {
-    alert("Preencha tudo");
+  const nome = pacienteInput.value.trim();
+  const prof = profissionalSelect.value;
+  const localTexto = consultorioSelect.options[consultorioSelect.selectedIndex].text;
+
+  if (!nome || !prof || consultorioSelect.value === "") {
+    alert("Preencha todos os campos!");
     return;
   }
 
+  // Enviando o objeto para o servidor
   socket.emit("chamar", {
-    nome,
-    profissional: prof,
-    local: consultorio.options[consultorio.selectedIndex].text
+    paciente: nome,      // Nome que o painel vai ler
+    profissional: prof,  // Nome que o painel vai ler
+    local: localTexto    // Nome que o painel vai ler
   });
 
-  paciente.value = "";
+  pacienteInput.value = "";
+  console.log("Chamada enviada com sucesso!");
 }

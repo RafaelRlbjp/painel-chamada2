@@ -1,38 +1,33 @@
-const express = require("express");
-const app = express();
-const http = require("http").createServer(app);
+const socket = io();
+let somAtivado = false;
 
-// Configuração do Socket.io com CORS para evitar erros no navegador
-const io = require("socket.io")(http, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
-});
+document.getElementById('ativarSom').onclick = () => {
+    somAtivado = true;
+    document.getElementById('ativarSom').style.backgroundColor = "#28a745";
+    document.getElementById('ativarSom').innerText = "🔊 SOM ATIVADO";
+    setTimeout(() => {
+        document.getElementById('ativarSom').style.display = 'none';
+    }, 1000);
+};
 
-const PORT = process.env.PORT || 3000;
+socket.on("chamada", (dados) => {
+    // Atualiza a tela com os dados vindos do chamar.js
+    document.getElementById("nome").innerText = dados.paciente;
+    document.getElementById("local").innerText = dados.local;
+    document.getElementById("profissional").innerText = dados.profissional;
 
-// Serve os arquivos da sua pasta public
-app.use(express.static("public"));
+    if (somAtivado) {
+        // 1. Toca um "Ding" de alerta
+        const audio = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3');
+        audio.play();
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/painel.html");
-});
-
-io.on("connection", (socket) => {
-  console.log("Novo dispositivo conectado: " + socket.id);
-
-  socket.on("chamar", (dados) => {
-    // Envia a chamada para todos os clientes conectados
-    io.emit("chamada", dados);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Dispositivo desconectado");
-  });
-});
-
-// Rodando na porta do Render ou na 3000 localmente
-http.listen(PORT, "0.0.0.0", () => {
-  console.log("Servidor rodando na porta " + PORT);
+        // 2. Fala o nome do paciente após 1 segundo
+        setTimeout(() => {
+            const mensagem = new SpeechSynthesisUtterance();
+            mensagem.text = `Paciente, ${dados.paciente}. Comparecer ao, ${dados.local}`;
+            mensagem.lang = 'pt-BR';
+            mensagem.rate = 0.9; // Velocidade um pouco mais lenta
+            window.speechSynthesis.speak(mensagem);
+        }, 1200);
+    }
 });
