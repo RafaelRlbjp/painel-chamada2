@@ -1,0 +1,123 @@
+/* reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #020617, #020617);
+  color: white;
+  font-family: "Segoe UI", Arial;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 40px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* botão som */
+#ativarSom {
+  padding: 16px 40px;
+  border-radius: 30px;
+  border: none;
+  background: #22c55e;
+  color: #000;
+  font-size: 08px;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+/* cartão principal (alerta) - mais retangular */
+#ultimo {
+  background: #0f172a;
+  border-radius: 20px; /* menos arredondado */
+  padding: 50px 200px;
+  text-align: center;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.7);
+  border: 5px solid #22c55e;
+  width: 1500px;
+  flex-shrink: 0;
+  margin-bottom: 40px;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* alerta piscando */
+.piscar {
+  animation: piscar 1s infinite alternate;
+}
+
+@keyframes piscar {
+  0% {
+    background-color: #0f172a;
+    color: #f5dc5d;
+  }
+  50% {
+    background-color: #fde047;
+    color: #000;
+  }
+  100% {
+    background-color: #0f172a;
+    color: #fde047;
+  }
+}
+
+/* nome paciente */
+#nome {
+  font-size: 80px;
+  color: #38bdf8;
+  margin-bottom: 20px;
+}
+
+/* consultório */
+#local {
+  font-size: 70px;
+  color: #38bdf8;
+  margin-bottom: 15px;
+}
+
+/* profissional */
+#profissional {
+  font-size: 50px;
+  color: #d1d5db;
+}
+
+/* histórico - caixa contendo os 3 últimos chamados */
+#historico-container {
+  width: 900px;
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  margin-top: 20px;
+}
+
+#historico-container h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 15px;
+  color: #38bdf8;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column-reverse; /* último chamado em cima */
+  gap: 12px;
+}
+
+ul li {
+  background: #020617;
+  border-radius: 18px;
+  padding: 18px;
+  font-size: 28px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+  max-height: 80px; /* para manter tamanho uniforme */
+  overflow: hidden; /* evita texto sair da caixa */
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Chamar Paciente</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="chamar.css">
+</head>
+<body>
+
+<div class="box">
+  <h2>Chamada de Paciente</h2>
+
+  <label>Profissional</label>
+  <select id="profissional">
+    <option value="">Selecione</option>
+    <option value="Dr. Pedro">Dr. Pedro</option>
+    <option value="Dra. Elba">Dra. Elba</option>
+    <option value="Enfermeira Gabriella">Enfermeira Gabriella</option>
+    <option value="Enfermeira Vesper">Enfermeira Vesper</option>
+    <option value="Enfermeira Clotilde">Enfermeira Clotilde</option>
+    <option value="Enfermeira Clarice">Enfermeira Clarice</option>
+    <option value="Dra. Karina">Dra. Karina</option>
+    <option value="Dra. Elainy">Dra. Elainy</option>
+    <option value="Dra. Fernanda">Dra. Fernanda</option>
+    <option value="Dra. Danielle">Dra. Danielle</option>
+    <option value="Dra. Thaiane">Dra. Thaiane</option>
+    <option value="Dra. Alex">Dra. Alex</option>
+    <option value="Técnica de Enfermagem Mayara">Técnica de Enfermagem Mayara</option>
+    <option value="Técnica de Enfermagem Nayanna">Técnica de Enfermagem Nayanna</option>
+    <option value="Técnica de Enfermagem Priscila">Técnica de Enfermagem Priscila</option>
+    <option value="Recepcionista Kelly">Recepcionista Kelly</option>
+    <option value="Recepcionista chefe Elaine">Recepcionista chefe Elaine</option>
+  </select>
+
+  <label>Paciente</label>
+  <input type="text" id="paciente" placeholder="Nome do paciente">
+
+  <label>Consultório</label>
+  <select id="consultorio">
+    <option value=""></option>
+    <option value="1">Consultório Médico 1</option>
+    <option value="2">Consultório Médico 2</option>
+    <option value="3">Consultório Médico 3</option>
+    <option value="4">Consultório Médico 4</option>
+    <option value="5">Consultório de enfermagem 1</option>
+    <option value="6">Consultório de enfermagem 2</option>
+    <option value="7">Consultório de enfermagem 3</option>
+    <option value="8">Consultório de enfermagem 4</option>
+    <option value="9">Consultório Odontológico 1</option>
+    <option value="10">Consultório Odontológico 2</option>
+    <option value="11">Consultório Odontológico 3</option>
+    <option value="Recepção">Recepção</option>
+    <option value="Sala Triagem">Sala de Triagem</option>
+  </select>
+
+ 
+
+  <button onclick="chamar()">CHAMAR</button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="chamar.js"></script>
+</body>
+</html>
