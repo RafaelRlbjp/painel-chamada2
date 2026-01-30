@@ -1,26 +1,36 @@
 const socket = io();
 
-function chamar() {
-  const pacienteInput = document.getElementById("paciente");
-  const profissionalSelect = document.getElementById("profissional");
-  const consultorioSelect = document.getElementById("consultorio");
+// Função para disparar a chamada
+function chamarPaciente() {
+    // 1. Captura os valores digitados nos campos do seu HTML
+    // Certifique-se de que os IDs ('paciente', 'profissional', 'consultorio') existem no seu HTML
+    const nomePaciente = document.getElementById("paciente").value;
+    const nomeProfissional = document.getElementById("profissional").value;
+    const numConsultorio = document.getElementById("consultorio").value;
 
-  const nome = pacienteInput.value.trim();
-  const prof = profissionalSelect.value;
-  const localTexto = consultorioSelect.options[consultorioSelect.selectedIndex].text;
+    // Validação simples para não enviar vazio
+    if (!nomePaciente) {
+        alert("Por favor, digite o nome do paciente!");
+        return;
+    }
 
-  if (!nome || !prof || consultorioSelect.value === "") {
-    alert("Preencha todos os campos!");
-    return;
-  }
+    // 2. Monta o objeto com os nomes exatos que o painel.js espera receber
+    const dados = {
+        paciente: nomePaciente,
+        profissional: nomeProfissional,
+        consultorio: numConsultorio
+    };
 
-  // Enviando o objeto para o servidor
-  socket.emit("chamar", {
-    paciente: nome,      // Nome que o painel vai ler
-    profissional: prof,  // Nome que o painel vai ler
-    local: localTexto    // Nome que o painel vai ler
-  });
-
-  pacienteInput.value = "";
-  console.log("Chamada enviada com sucesso!");
+    // 3. Envia para o servidor via Socket.io
+    socket.emit("chamar", dados);
+    
+    console.log("Chamada enviada com sucesso:", dados);
+    
+    // Opcional: Limpar o campo do paciente após chamar
+    document.getElementById("paciente").value = "";
 }
+
+// Escuta confirmação do servidor (opcional para debug)
+socket.on("connect", () => {
+    console.log("Conectado ao servidor para realizar chamadas!");
+});

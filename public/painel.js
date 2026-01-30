@@ -1,33 +1,30 @@
 const socket = io();
-let somAtivado = false;
-
-document.getElementById('ativarSom').onclick = () => {
-    somAtivado = true;
-    document.getElementById('ativarSom').style.backgroundColor = "#28a745";
-    document.getElementById('ativarSom').innerText = "🔊 SOM ATIVADO";
-    setTimeout(() => {
-        document.getElementById('ativarSom').style.display = 'none';
-    }, 1000);
-};
 
 socket.on("chamada", (dados) => {
-    // Atualiza a tela com os dados vindos do chamar.js
-    document.getElementById("nome").innerText = dados.paciente;
-    document.getElementById("local").innerText = dados.local;
-    document.getElementById("profissional").innerText = dados.profissional;
+    console.log("Nova chamada recebida:", dados);
 
-    if (somAtivado) {
-        // 1. Toca um "Ding" de alerta
-        const audio = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3');
-        audio.play();
+    // 1. Atualiza os textos na tela
+    // Certifique-se que esses IDs existam no seu painel.html
+    const elementoPaciente = document.getElementById("nome-paciente");
+    const elementoProfissional = document.getElementById("nome-profissional");
+    const elementoConsultorio = document.getElementById("consultorio");
 
-        // 2. Fala o nome do paciente após 1 segundo
-        setTimeout(() => {
-            const mensagem = new SpeechSynthesisUtterance();
-            mensagem.text = `Paciente, ${dados.paciente}. Comparecer ao, ${dados.local}`;
-            mensagem.lang = 'pt-BR';
-            mensagem.rate = 0.9; // Velocidade um pouco mais lenta
-            window.speechSynthesis.speak(mensagem);
-        }, 1200);
-    }
+    if (elementoPaciente) elementoPaciente.innerText = dados.paciente;
+    if (elementoProfissional) elementoProfissional.innerText = dados.profissional;
+    if (elementoConsultorio) elementoConsultorio.innerText = dados.consultorio;
+
+    // 2. Efeito de piscar a tela
+    // Procure pela div principal ou use o corpo da página (body)
+    const container = document.querySelector(".painel-container") || document.body;
+    
+    container.classList.add("piscar-tela");
+
+    // 3. Toca o alerta sonoro (opcional)
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+    audio.play().catch(e => console.log("Erro ao tocar som, aguardando interação do usuário."));
+
+    // 4. Remove o efeito de piscar após 5 segundos
+    setTimeout(() => {
+        container.classList.remove("piscar-tela");
+    }, 5000);
 });
