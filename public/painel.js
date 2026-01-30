@@ -1,38 +1,40 @@
 const socket = io();
 
 socket.on("chamada", (dados) => {
-    console.log("Recebido:", dados);
+    document.getElementById("nome-paciente").innerText = dados.paciente.toUpperCase();
+    document.getElementById("consultorio").innerText = dados.consultorio;
+    document.getElementById("nome-profissional").innerText = dados.profissional;
 
-    // 1. Atualiza os textos (verifica se existem antes para não dar erro)
-    const elPaciente = document.getElementById("nome-paciente");
-    const elConsultorio = document.getElementById("consultorio");
-    const elProfissional = document.getElementById("nome-profissional");
+    document.body.classList.add("piscar-amarelo");
 
-    if(elPaciente) elPaciente.innerText = dados.paciente;
-    if(elConsultorio) elConsultorio.innerText = dados.consultorio;
-    if(elProfissional) elProfissional.innerText = dados.profissional;
-
-    // 2. Alerta Visual (Piscar Amarelo)
-    const container = document.querySelector(".painel-container");
-    if (container) {
-        container.classList.add("piscar-amarelo");
-    }
-
-    // 3. Função de Voz
     const falar = (texto) => {
-        const msg = new SpeechSynthesisUtterance(texto);
-        msg.lang = 'pt-BR';
-        msg.rate = 0.9;
-        window.speechSynthesis.speak(msg);
+        return new Promise((resolve) => {
+            const msg = new SpeechSynthesisUtterance(texto);
+            msg.lang = 'pt-BR';
+            msg.rate = 0.9;
+            msg.onend = resolve; // Só resolve quando termina de falar
+            window.speechSynthesis.speak(msg);
+        });
     };
 
-    // 4. Sequência de fala
-    falar(`Paciente, ${dados.paciente}`);
-    falar(`Paciente, ${dados.paciente}`);
-    falar(`Dirigir-se ao ${dados.consultorio} com ${dados.profissional}`);
+    async function executarChamada() {
+        await falar(`Paciente, ${dados.paciente}`);
+        await falar(`Paciente, ${dados.paciente}`);
+        await falar(`Dirigir-se ao ${dados.consultorio} com ${dados.profissional}`);
+        
+        document.body.classList.remove("piscar-amarelo");
+        // Avisa o servidor que terminou e pode vir o próximo
+        socket.emit("proximoDaFila");
+    }
 
-    // 5. Remove o pisca após 10 segundos
-    setTimeout(() => {
-        if (container) container.classList.remove("piscar-amarelo");
-    }, 10000);
+    executarChamada();
+});
+
+socket.on("atualizarHistorico", (historico) => {
+    const lista = document.getElementById("lista-historico");
+    lista.innerHTML = historico.map((item, index) => 
+        `<li class="${index === 0 ? 'atual' : ''}">
+            <strong>${item.paciente}</strong> - ${item.consultorio}
+        </li>`
+    ).join("");
 });

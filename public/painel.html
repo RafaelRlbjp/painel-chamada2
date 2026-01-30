@@ -2,16 +2,22 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Chamada</title>
+    <title>Painel de Chamadas</title>
     <link rel="stylesheet" href="painel.css">
 </head>
 <body>
     <div class="painel-container">
-        <div class="caixa-chamada">
-            <h1 id="nome-paciente">Aguardando Chamada...</h1>
-            <h2 id="consultorio">---</h2>
-            <hr>
-            <h3 id="nome-profissional">---</h3>
+        <div class="chamada-principal">
+            <h1 id="nome-paciente">AGUARDANDO...</h1>
+            <div class="detalhes">
+                <h2 id="consultorio">---</h2>
+                <h3 id="nome-profissional">---</h3>
+            </div>
+        </div>
+
+        <div class="historico-container">
+            <h3>Últimos Chamados</h3>
+            <ul id="lista-historico"></ul>
         </div>
     </div>
 
