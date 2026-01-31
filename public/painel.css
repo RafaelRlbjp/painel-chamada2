@@ -67,7 +67,7 @@ body {
 .label {
     display: block;
     font-size: 1.2rem;
-    color: #B10DC9; /* Roxo para etiquetas */
+    color: #eedb09; /* Roxo para etiquetas */
     font-weight: bold;
     margin-bottom: 5px;
 }
@@ -87,7 +87,7 @@ body {
 }
 
 .historico-secao h2 {
-    font-size: 1.8rem;
+    font-size: 2.8rem;
     color: #aaa;
     margin-bottom: 10px;
     border-bottom: 2px solid #333;
