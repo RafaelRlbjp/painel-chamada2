@@ -26,8 +26,10 @@ border:10px solid #0d6efd;
 border-radius:30px;
 display:flex;
 flex-direction:column;
-justify-content:center;
+justify-content:flex-start;
 align-items:center;
+padding-top:30px;
+overflow:hidden;
 }
 
 .label-topo{
@@ -115,8 +117,9 @@ color:black;
 /* ================= TV FORÇADO ================= */
 
 body.tv #nome-paciente{
-font-size:220px;
-margin:40px 0;
+font-size:180px;
+margin:20px 0;
+line-height:1;
 }
 
 body.tv .label-topo{
@@ -124,8 +127,8 @@ font-size:60px;
 }
 
 body.tv .cards-container{
-gap:80px;
-margin-top:50px;
+gap:40px;
+margin-top:20px;
 }
 
 body.tv .card{
