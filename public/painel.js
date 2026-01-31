@@ -1,66 +1,66 @@
-const socket = io();
+const express = require("express");
+const app = express();
+const http = require("http").createServer(app);
+const path = require("path");
 
-// Lista para armazenar o histórico de chamadas
-let historicoChamadas = [];
-
-// Escuta o evento 'proxima-chamada' enviado pelo servidor
-socket.on("proxima-chamada", (dados) => {
-    console.log("Recebendo chamada:", dados);
-
-    // 1. ATUALIZAÇÃO DO PAINEL PRINCIPAL
-    // Garante que o texto fique em caixa alta para melhor visibilidade
-    document.getElementById("nome-paciente").innerText = dados.paciente.toUpperCase();
-    document.getElementById("nome-profissional").innerText = dados.profissional;
-    document.getElementById("consultorio").innerText = dados.consultorio;
-
-    // 2. LÓGICA DO HISTÓRICO
-    // Adiciona a nova chamada ao início do array
-    historicoChamadas.unshift(dados);
-
-    // Mantém apenas as últimas 5 chamadas no histórico (ajustável)
-    if (historicoChamadas.length > 6) {
-        historicoChamadas.pop();
-    }
-
-    atualizarInterfaceHistorico();
-
-    // 3. EFEITOS VISUAIS E SONOROS
-    dispararAlerta(dados);
+// Configuração do Socket.io com permissão para conexões externas
+const io = require("socket.io")(http, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
 });
 
-// Função para renderizar a lista de últimos chamados
-function atualizarInterfaceHistorico() {
-    const containerHistorico = document.getElementById("lista-historico");
-    if (!containerHistorico) return;
+const PORT = process.env.PORT || 3000;
 
-    containerHistorico.innerHTML = ""; // Limpa a lista atual
+// Serve os arquivos da pasta public
+app.use(express.static(path.join(__dirname, "public")));
 
-    // Pulamos o índice 0 porque ele já é o destaque principal na tela
-    const chamadosAnteriores = historicoChamadas.slice(1);
+// Variáveis de controle de fila
+let filaChamadas = [];
+let estaProcessando = false;
 
-    chamadosAnteriores.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "historico-item";
-        div.innerHTML = `<strong>${item.paciente}</strong> <br> <small>${item.consultorio}</small>`;
-        containerHistorico.appendChild(div);
-    });
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "painel.html"));
+});
+
+// Lógica de comunicação em tempo real
+io.on("connection", (socket) => {
+  console.log("Novo dispositivo conectado: " + socket.id);
+
+  // Quando alguém clica em chamar no celular
+  socket.on("chamar", (dados) => {
+    console.log("Adicionando à fila:", dados.paciente);
+    filaChamadas.push(dados); // Coloca o paciente no final da fila
+    processarProximoDaFila();
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Dispositivo desconectado");
+  });
+});
+
+// Função que gerencia a ordem das chamadas
+function processarProximoDaFila() {
+  // Se já tiver alguém sendo chamado ou a fila estiver vazia, não faz nada
+  if (estaProcessando || filaChamadas.length === 0) return;
+
+  estaProcessando = true;
+  const proximoPaciente = filaChamadas.shift(); // Remove o primeiro da fila para chamar
+
+  console.log("Chamando agora:", proximoPaciente.paciente);
+  
+  // Envia para o painel piscar e falar
+  io.emit("proxima-chamada", proximoPaciente);
+
+  // AGUARDA 12 SEGUNDOS antes de liberar a próxima pessoa da fila
+  // Esse tempo garante que o painel termine de piscar e a voz fale 2x
+  setTimeout(() => {
+    estaProcessando = false;
+    processarProximoDaFila(); // Tenta processar o próximo, se houver
+  }, 12000); 
 }
 
-// Função para voz e efeito de piscar
-function dispararAlerta(dados) {
-    // Efeito Visual: Faz o fundo ou container piscar
-    document.body.classList.add("piscar-tela");
-    
-    // Voz: Síntese de fala do navegador
-    const mensagemVoz = new SpeechSynthesisUtterance();
-    mensagemVoz.text = `Paciente, ${dados.paciente}. Comparecer ao, ${dados.consultorio}`;
-    mensagemVoz.lang = 'pt-BR';
-    mensagemVoz.rate = 0.9; // Velocidade um pouco mais lenta para clareza
-
-    window.speechSynthesis.speak(mensagemVoz);
-
-    // Remove o efeito de piscar após 5 segundos
-    setTimeout(() => {
-        document.body.classList.remove("piscar-tela");
-    }, 5000);
-}
+http.listen(PORT, "0.0.0.0", () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
