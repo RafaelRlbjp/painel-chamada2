@@ -143,3 +143,47 @@ body {
 }
 
 }
+
+/* ===================== */
+/* MODO TV AUTOMÁTICO */
+/* ===================== */
+
+@media (min-width: 1200px) {
+
+.label-topo{
+  font-size:4vh;
+}
+
+#nome-paciente{
+  font-size:12vw !important;
+  margin:40px 0;
+}
+
+.cards-container{
+  gap:80px;
+  margin-top:50px;
+}
+
+.card{
+  padding:50px;
+}
+
+.card .label{
+  font-size:3vh;
+}
+
+#nome-profissional,
+#consultorio{
+  font-size:5vw;
+}
+
+.secao-historico{
+  padding:30px;
+}
+
+#lista-historico li{
+  font-size:3vh;
+  padding:18px 40px;
+}
+
+}
