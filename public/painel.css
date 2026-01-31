@@ -63,7 +63,7 @@ body{
 
 #nome-profissional,
 #consultorio{
-  font-size:3vw;
+  font-size:32px;
   margin-top:10px;
 }
 
@@ -139,6 +139,11 @@ body{
 /* ================= TV GRANDE ================= */
 
 @media(min-width:1400px){
+
+#nome-profissional,
+#consultorio{
+  font-size:4vw;
+}
 
   #nome-paciente{
     font-size:12vw;
