@@ -2,34 +2,36 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Painel de Chamada Profissional</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Chamada Hospitalar</title>
   <link rel="stylesheet" href="painel.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 
+<div id="camada-ativacao" onclick="this.style.display='none'">
+    <button>CLIQUE NA TELA PARA ATIVAR O SISTEMA</button>
+</div>
+
 <div class="container">
-  <main class="chamada-principal">
-    <div class="header-label">PACIENTE</div>
-    <div id="nome-paciente">Aguardando...</div>
+  <main class="bloco-chamada">
+    <div class="status-topo">PACIENTE</div>
+    <div id="nome-paciente">AGUARDANDO...</div>
     
-    <div class="info-secundaria">
-      <div class="box-info">
+    <div class="cards-info">
+      <div class="card">
         <span class="label">PROFISSIONAL</span>
         <div id="nome-profissional">---</div>
       </div>
-      <div class="box-info">
+      <div class="card">
         <span class="label">LOCAL</span>
         <div id="consultorio">---</div>
       </div>
     </div>
   </main>
 
-  <footer class="rodape-historico">
-    <div class="titulo-historico">ÚLTIMOS CHAMADOS</div>
-    <ul id="lista-historico" class="historico-flex">
-      </ul>
+  <footer class="rodape">
+    <span class="txt-hist">HISTÓRICO:</span>
+    <ul id="lista-historico"></ul>
   </footer>
 </div>
 
