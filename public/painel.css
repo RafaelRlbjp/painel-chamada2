@@ -1,4 +1,12 @@
-/* 1. RESET E CONFIGURAÇÃO DE TELA CHEIA */
+/* 1. RESET E DEFINIÇÕES DE CORES PREMIUM */
+:root {
+    --bg-dark: #0a0e17;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --accent-blue: #00d2ff;
+    --accent-yellow: #ffcc00;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,141 +14,146 @@
 }
 
 body {
-    background-color: #001b3a;
+    background: radial-gradient(circle at center, #1a2a44 0%, #0a0e17 100%);
     color: #ffffff;
-    font-family: 'Arial Black', sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     height: 100vh;
     width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Evita barras de rolagem */
-    transition: background-color 0.3s ease;
+    overflow: hidden;
+    padding: 2vh;
 }
 
-/* 2. CONTAINER PRINCIPAL EM GRID */
+/* 2. CONTAINER PRINCIPAL */
 .container {
     display: grid;
-    grid-template-rows: 70% 15% 15%; /* Divide a tela em 3 faixas horizontais */
-    width: 95vw;
-    height: 95vh;
-    gap: 2vh;
+    grid-template-rows: 1fr auto auto; /* Layout dinâmico */
+    width: 100%;
+    height: 100%;
+    gap: 3vh;
+    max-width: 1800px; /* Limita largura em telas Ultra-Wide */
 }
 
-/* 3. ÁREA DO PACIENTE (DESTAQUE CENTRAL) */
+/* 3. CARD PRINCIPAL (PACIENTE) */
 .chamada-principal {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    border: 1.5vh solid #0074D9;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
     border-radius: 4vh;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2vh;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    position: relative;
+    padding: 4vh;
 }
 
 .header-label {
-    font-size: 5vh; /* Proporcional à altura da TV */
-    color: #85fffd;
-    letter-spacing: 1.5vw;
+    font-size: clamp(1.5rem, 4vh, 3rem);
+    color: var(--accent-blue);
+    font-weight: 300;
     text-transform: uppercase;
+    letter-spacing: 0.8vw;
+    margin-bottom: 2vh;
 }
 
 #nome-paciente {
-    /* Ajusta entre 60px e 22% da altura da tela */
-    font-size: clamp(60px, 22vh, 25vh); 
-    font-weight: 900;
-    color: #ffffff;
+    font-size: clamp(3rem, 18vh, 22vh); /* Ajuste inteligente de tamanho */
+    font-weight: 800;
     text-transform: uppercase;
-    line-height: 1.1;
-    text-shadow: 0.5vh 0.5vh 2vh rgba(0,0,0,0.8);
+    text-align: center;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
     width: 100%;
 }
 
-/* 4. ÁREA DE INFO (PROFISSIONAL E LOCAL) */
+/* 4. INFORMAÇÕES SECUNDÁRIAS (BOXES) */
 .info-secundaria {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Divide em duas colunas iguais */
-    gap: 2vw;
+    grid-template-columns: 1fr 1fr;
+    gap: 3vw;
 }
 
 .box-info {
-    background: #0074D9;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 2vh;
-    box-shadow: 0 1vh 3vh rgba(0,0,0,0.4);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 2.5vh;
+    padding: 3vh;
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
 .label {
-    font-size: 3vh;
-    color: #001b3a;
-    font-weight: bold;
+    font-size: clamp(1rem, 2.5vh, 2rem);
+    color: #8892b0;
     text-transform: uppercase;
+    margin-bottom: 1vh;
+    display: block;
 }
 
 #nome-profissional, #consultorio {
-    font-size: clamp(24px, 6vh, 7vh);
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #fff;
+    font-size: clamp(1.5rem, 6vh, 8vh);
+    font-weight: 600;
+    color: var(--accent-blue);
 }
 
-/* 5. RODAPÉ DE HISTÓRICO */
+/* 5. RODAPÉ (HISTÓRICO) */
 .rodape-historico {
-    background-color: rgba(0,0,0,0.5);
+    padding: 2vh;
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 2vh;
-    padding: 1.5vh 3vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border: 0.3vh solid #333;
 }
 
 .titulo-historico {
-    font-size: 2.5vh;
-    color: #666;
-    margin-bottom: 1vh;
+    font-size: 1.8vh;
+    color: #4a5568;
+    margin-bottom: 1.5vh;
+    font-weight: bold;
     text-transform: uppercase;
 }
 
 .historico-flex {
     display: flex;
-    gap: 2vw;
+    gap: 1.5vw;
     list-style: none;
     overflow: hidden;
 }
 
 .historico-flex li {
-    background: #1a1a1a;
-    padding: 1vh 3vh;
-    border-radius: 5vh;
-    font-size: 4vh;
-    color: #aaa;
-    border: 0.2vh solid #444;
+    background: var(--glass-bg);
+    padding: 1.2vh 2.5vh;
+    border-radius: 50px;
+    font-size: 3vh;
+    color: #a0aec0;
+    border: 1px solid var(--glass-border);
     white-space: nowrap;
+    animation: fadeIn 0.5s ease-out;
 }
 
-/* 6. ANIMAÇÃO DE ALERTA (PISCA AMARELO) */
+/* 6. ANIMAÇÃO DE ALERTA (MODERNA) */
 .piscar-amarelo {
-    animation: alerta-amarelo 0.7s infinite !important;
+    animation: alert-glow 0.8s infinite alternate !important;
 }
 
-@keyframes alerta-amarelo {
-    0% { background-color: #001b3a; }
-    50% { background-color: #FFFF00; }
-    100% { background-color: #001b3a; }
+@keyframes alert-glow {
+    0% { background-color: var(--bg-dark); }
+    100% { background-color: #3d3300; } /* Um brilho dourado mais elegante que o amarelo puro */
 }
 
-/* Garante legibilidade total no pisca */
-.piscar-amarelo #nome-paciente, 
-.piscar-amarelo .header-label,
-.piscar-amarelo .label,
-.piscar-amarelo #nome-profissional,
-.piscar-amarelo #consultorio {
-    color: #000 !important;
-    text-shadow: none !important;
+.piscar-amarelo .chamada-principal {
+    border-color: var(--accent-yellow);
+    box-shadow: 0 0 60px rgba(255, 204, 0, 0.3);
+}
+
+.piscar-amarelo #nome-paciente {
+    color: var(--accent-yellow);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
