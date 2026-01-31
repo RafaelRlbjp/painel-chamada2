@@ -1,26 +1,24 @@
 const socket = io();
 const sintetizador = window.speechSynthesis;
 
-// Desbloqueio de som (obrigatório clicar na tela da TV uma vez)
+// Desbloqueio de áudio (clique na TV uma vez ao carregar)
 document.body.addEventListener('click', () => {
-    const wakeup = new SpeechSynthesisUtterance("");
-    sintetizador.speak(wakeup);
+    sintetizador.speak(new SpeechSynthesisUtterance(""));
+    console.log("Áudio desbloqueado");
 }, { once: true });
 
 socket.on("proxima-chamada", (dados) => {
-    // 1. Atualizar a Interface
+    // Atualiza os textos na tela
     document.getElementById("nome-paciente").innerText = dados.paciente;
     document.getElementById("nome-profissional").innerText = dados.profissional;
     document.getElementById("consultorio").innerText = dados.consultorio;
 
-    // 2. Efeito Visual (Pisca Amarelo)
-    document.body.classList.remove("piscar-amarelo");
-    void document.body.offsetWidth; 
+    // Inicia animação visual
     document.body.classList.add("piscar-amarelo");
-    setTimeout(() => document.body.classList.remove("piscar-amarelo"), 15000);
+    setTimeout(() => document.body.classList.remove("piscar-amarelo"), 10000);
 
-    // 3. Lógica de Voz (Repetir apenas 2 vezes)
-    sintetizador.cancel(); // Para qualquer fala anterior
+    // LÓGICA DE ÁUDIO (FALAR 2 VEZES E PARAR)
+    sintetizador.cancel(); // Para qualquer fala anterior imediatamente
     
     const frase = `Paciente, ${dados.paciente}. Comparecer ao ${dados.consultorio} com ${dados.profissional}`;
     
@@ -31,6 +29,6 @@ socket.on("proxima-chamada", (dados) => {
         sintetizador.speak(msg);
     };
 
-    falar(); // Primeira vez
-    setTimeout(falar, 7000); // Segunda vez após 7 segundos (sem loop infinito)
+    falar(); // Fala a 1ª vez
+    setTimeout(falar, 6000); // Fala a 2ª vez após 6 segundos
 });

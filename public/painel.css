@@ -1,100 +1,76 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    background: #001b3a;
+    background-color: #001b3a;
     color: white;
     font-family: 'Arial Black', sans-serif;
     height: 100vh;
-    width: 100vw;
-    overflow: hidden;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 .container {
+    width: 95%;
+    height: 90%;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 100%;
-    padding: 2vh;
 }
 
-/* ÁREA PRINCIPAL: Ocupa 75% da altura da TV */
 .area-principal {
-    flex: 3; 
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1vh solid #0074D9;
-    border-radius: 3vh;
+    border: 10px solid #0074D9;
+    border-radius: 40px;
     background: rgba(255,255,255,0.02);
-    text-align: center;
+    padding: 40px;
 }
 
-.label-topo { 
-    font-size: 5vh; 
-    color: #85fffd; 
-    letter-spacing: 2vw; 
-    margin-bottom: 2vh;
-}
+.label-topo { font-size: 3vh; color: #85fffd; letter-spacing: 15px; margin-bottom: 20px; }
 
 #nome-paciente {
-    font-size: 15vh; /* GIGANTE */
-    color: #FFDC00; /* Amarelo para destacar no azul */
+    font-size: clamp(50px, 15vh, 180px);
+    color: #FFFFFF;
     text-transform: uppercase;
-    line-height: 1.1;
-    width: 90%;
-    text-shadow: 0.5vh 0.5vh 2vh rgba(0,0,0,0.8);
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 40px;
+    text-shadow: 5px 5px 15px rgba(0,0,0,0.5);
 }
 
-/* CARDS DE INFO: Esticados horizontalmente */
 .cards-container {
     display: flex;
-    width: 95%;
-    gap: 2vw;
-    margin-top: 5vh;
+    width: 100%;
+    gap: 30px;
+    justify-content: center;
 }
 
 .card {
-    flex: 1;
     background: #0074D9;
-    padding: 4vh;
-    border-radius: 2vh;
-    box-shadow: 0 1vh 3vh rgba(0,0,0,0.5);
+    padding: 30px;
+    border-radius: 25px;
+    flex: 1;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-.label { font-size: 3vh; color: #001b3a; font-weight: bold; }
+.label { font-size: 2vh; color: #001b3a; font-weight: bold; display: block; margin-bottom: 10px; }
 
 #nome-profissional, #consultorio {
-    font-size: 7vh; 
+    font-size: clamp(25px, 5vh, 60px);
     font-weight: bold;
-    color: white;
+    text-transform: uppercase;
 }
 
-/* RODAPÉ DO HISTÓRICO */
-.historico {
-    flex: 0.8;
-    margin-top: 2vh;
-    background: rgba(0,0,0,0.3);
-    border-radius: 2vh;
-    display: flex;
-    align-items: center;
-    padding: 0 3vh;
-}
-
-#lista-historico {
-    display: flex;
-    list-style: none;
-    gap: 3vw;
-    font-size: 4vh;
-    color: #888;
-}
-
-/* ANIMAÇÃO DE ALERTA */
+/* Alerta visual ao chamar */
 .piscar-amarelo { animation: alerta 0.6s infinite; }
 @keyframes alerta {
-    0%, 100% { background: #001b3a; }
-    50% { background: #FFFF00; }
+    0%, 100% { background-color: #001b3a; }
+    50% { background-color: #FFFF00; }
 }
 .piscar-amarelo #nome-paciente { color: #000 !important; }
