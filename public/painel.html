@@ -2,13 +2,18 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Painel de Chamada</title>
+  <title>Painel de Chamada Profissional</title>
   <link rel="stylesheet" href="painel.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
+
+  <div id="aviso-som" onclick="this.style.display='none'" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; display:flex; justify-content:center; align-items:center; color:white; font-size:2rem; cursor:pointer;">
+    CLIQUE AQUI PARA ATIVAR O SOM
+  </div>
+
   <div class="container">
-    <div class="area-principal">
+    <main class="area-principal">
       <span class="label-topo">PACIENTE</span>
       <div id="nome-paciente">AGUARDANDO...</div>
       
@@ -22,8 +27,14 @@
           <div id="consultorio">---</div>
         </div>
       </div>
-    </div>
+    </main>
+
+    <footer class="secao-historico">
+      <span class="titulo-hist">ÚLTIMOS CHAMADOS:</span>
+      <ul id="lista-historico"></ul>
+    </footer>
   </div>
+
   <script src="painel.js"></script>
 </body>
 </html>
