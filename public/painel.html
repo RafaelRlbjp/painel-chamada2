@@ -1,39 +1,38 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Chamadas Profissional</title>
-    <link rel="stylesheet" href="painel.css">
-    <script src="/socket.io/socket.io.js"></script>
+  <meta charset="UTF-8">
+  <title>Painel de Chamada Profissional</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="painel.css">
+  <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 
-    <div class="container">
-        <main class="chamada-principal">
-            <div class="header-label">PACIENTE</div>
-            <h1 id="nome-paciente">AGUARDANDO...</h1>
-            
-            <div class="info-secundaria">
-                <div class="box-info">
-                    <span class="label">PROFISSIONAL</span>
-                    <div id="nome-profissional">---</div>
-                </div>
-                <div class="box-info">
-                    <span class="label">LOCAL</span>
-                    <div id="consultorio">---</div>
-                </div>
-            </div>
-        </main>
-
-        <footer class="rodape-historico">
-            <div class="titulo-historico">ÚLTIMOS CHAMADOS</div>
-            <div id="lista-historico" class="historico-flex">
-                <div class="historico-item">Aguardando chamadas...</div>
-            </div>
-        </footer>
+<div class="container">
+  <main class="chamada-principal">
+    <div class="header-label">PACIENTE</div>
+    <div id="nome-paciente">Aguardando...</div>
+    
+    <div class="info-secundaria">
+      <div class="box-info">
+        <span class="label">PROFISSIONAL</span>
+        <div id="nome-profissional">---</div>
+      </div>
+      <div class="box-info">
+        <span class="label">LOCAL</span>
+        <div id="consultorio">---</div>
+      </div>
     </div>
+  </main>
 
-    <script src="painel.js"></script>
+  <footer class="rodape-historico">
+    <div class="titulo-historico">ÚLTIMOS CHAMADOS</div>
+    <ul id="lista-historico" class="historico-flex">
+      </ul>
+  </footer>
+</div>
+
+<script src="painel.js"></script>
 </body>
 </html>
