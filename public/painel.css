@@ -1,70 +1,74 @@
-body {
+/* Reset básico para ocupar a tela toda */
+* {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #001529;
+    box-sizing: border-box;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #001f3f; /* Azul marinho escuro */
     color: white;
     overflow: hidden;
     display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
-.painel-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 20px;
-}
-
-.chamada-principal {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+/* Container principal do painel */
+.painel-container {
     text-align: center;
-    border-bottom: 4px solid #1890ff;
+    width: 90%;
+    max-width: 1200px;
+    padding: 40px;
+    border: 5px solid #0074D9;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
+/* Estilo do Nome do Paciente (O maior destaque) */
 #nome-paciente {
-    font-size: 120px; /* Nome gigante */
-    margin: 0;
-    color: #ffd700;
-    text-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+    font-size: 8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #FFDC00; /* Amarelo vibrante */
+    margin-bottom: 20px;
+    display: block;
 }
 
-.detalhes h2 { font-size: 60px; color: #fff; margin: 10px 0; }
-.detalhes h3 { font-size: 40px; color: #a6adb4; margin: 0; }
-
-.historico-container {
-    flex: 1;
-    padding-top: 20px;
+/* Estilo do Consultório */
+#consultorio {
+    font-size: 5rem;
+    color: #2ECC40; /* Verde */
+    margin-bottom: 10px;
+    display: block;
 }
 
-.historico-container h3 { font-size: 30px; margin-bottom: 10px; color: #1890ff; }
-
-#lista-historico {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    gap: 20px;
-    font-size: 24px;
+/* Estilo do Profissional */
+#nome-profissional {
+    font-size: 3rem;
+    color: #AAAAAA;
+    font-style: italic;
+    display: block;
 }
 
-#lista-historico li {
-    background: #112a45;
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 5px solid #001529;
+/* --- ANIMAÇÃO DE PISCAR --- */
+
+/* Classe que será adicionada via JavaScript */
+.piscar-tela {
+    animation: alert-blink 0.6s infinite;
 }
 
-#lista-historico li.atual { border-left-color: #ffd700; background: #1a3d5e; }
-
-@keyframes alerta {
-    0% { background-color: #001529; }
-    50% { background-color: #e6b800; }
-    100% { background-color: #001529; }
+@keyframes alert-blink {
+    0% { background-color: #001f3f; }
+    50% { background-color: #FF4136; } /* Pisca em Vermelho */
+    100% { background-color: #001f3f; }
 }
 
-.piscar-amarelo { animation: alerta 1s infinite; }
+/* Borda piscante opcional para dar mais destaque */
+.piscar-tela .painel-container {
+    border-color: white;
+    box-shadow: 0 0 50px white;
+}
