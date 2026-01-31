@@ -2,26 +2,37 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Chamadas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Chamada</title>
     <link rel="stylesheet" href="painel.css">
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
+
     <div class="painel-container">
-        <div class="chamada-principal">
-            <h1 id="nome-paciente">AGUARDANDO...</h1>
-            <div class="detalhes">
-                <h2 id="consultorio">---</h2>
-                <h3 id="nome-profissional">---</h3>
+        <div class="chamado-atual">
+            <h1 class="titulo">PACIENTE</h1>
+            <div id="nome-paciente" class="destaque">Aguardando...</div>
+            
+            <div class="info-secundaria">
+                <div>
+                    <span class="label">PROFISSIONAL</span>
+                    <div id="nome-profissional">---</div>
+                </div>
+                <div>
+                    <span class="label">LOCAL</span>
+                    <div id="consultorio">---</div>
+                </div>
             </div>
         </div>
 
-        <div class="historico-container">
-            <h3>Últimos Chamados</h3>
-            <ul id="lista-historico"></ul>
+        <div class="historico-secao">
+            <h2>ÚLTIMOS CHAMADOS</h2>
+            <ul id="lista-historico">
+                </ul>
         </div>
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
     <script src="painel.js"></script>
 </body>
 </html>

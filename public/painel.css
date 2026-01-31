@@ -1,64 +1,119 @@
-/* Reset básico para ocupar a tela toda */
+/* Configurações Gerais */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body, html {
-    width: 100%;
-    height: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #001f3f; /* Azul marinho escuro */
+body {
+    background-color: #001f3f; /* Azul Marinho Profissional */
     color: white;
-    overflow: hidden;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    transition: background-color 0.3s ease;
 }
 
-/* Container principal do painel */
+/* Container Principal */
 .painel-container {
+    width: 95%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     text-align: center;
-    width: 90%;
-    max-width: 1200px;
-    padding: 40px;
-    border: 5px solid #0074D9;
-    border-radius: 20px;
-    background-color: rgba(0, 0, 0, 0.3);
 }
 
-/* Estilo do Nome do Paciente (O maior destaque) */
-#nome-paciente {
-    font-size: 8rem;
+/* Área do Chamado Atual (Destaque) */
+.chamado-atual {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 40px;
+    border: 4px solid #0074D9;
+}
+
+.titulo {
+    font-size: 3rem;
+    letter-spacing: 5px;
+    color: #7FDBFF;
+    margin-bottom: 20px;
+}
+
+.destaque {
+    font-size: 8rem; /* Nome do Paciente bem grande */
     font-weight: bold;
     text-transform: uppercase;
-    color: #FFDC00; /* Amarelo vibrante */
-    margin-bottom: 20px;
-    display: block;
+    color: #ffffff;
+    text-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+    margin-bottom: 30px;
 }
 
-/* Estilo do Consultório */
-#consultorio {
-    font-size: 5rem;
-    color: #2ECC40; /* Verde */
+/* Informações de Rodapé (Profissional e Local) */
+.info-secundaria {
+    display: flex;
+    justify-content: space-around;
+    background: #0074D9;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.label {
+    display: block;
+    font-size: 1.2rem;
+    color: #B10DC9; /* Roxo para etiquetas */
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#nome-profissional, #consultorio {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* Área do Histórico (Fica na parte de baixo) */
+.historico-secao {
+    flex: 1;
+    margin-top: 30px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.historico-secao h2 {
+    font-size: 1.8rem;
+    color: #aaa;
     margin-bottom: 10px;
-    display: block;
+    border-bottom: 2px solid #333;
 }
 
-/* Estilo do Profissional */
-#nome-profissional {
-    font-size: 3rem;
-    color: #AAAAAA;
-    font-style: italic;
-    display: block;
+#lista-historico {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-/* --- ANIMAÇÃO DE PISCAR --- */
+#lista-historico li {
+    font-size: 1.8rem;
+    color: #ccc;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    animation: slideIn 0.5s ease forwards;
+}
 
-/* Classe que será adicionada via JavaScript */
+/* --- ANIMAÇÕES --- */
+
+/* Efeito de piscar a tela inteira */
 .piscar-tela {
-    animation: alert-blink 0.6s infinite;
+    animation: alert-blink 0.8s infinite;
 }
 
 @keyframes alert-blink {
@@ -67,8 +122,8 @@ body, html {
     100% { background-color: #001f3f; }
 }
 
-/* Borda piscante opcional para dar mais destaque */
-.piscar-tela .painel-container {
-    border-color: white;
-    box-shadow: 0 0 50px white;
+/* Entrada suave dos nomes no histórico */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
 }

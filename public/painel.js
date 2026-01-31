@@ -1,40 +1,40 @@
 const socket = io();
 
-socket.on("chamada", (dados) => {
-    document.getElementById("nome-paciente").innerText = dados.paciente.toUpperCase();
-    document.getElementById("consultorio").innerText = dados.consultorio;
-    document.getElementById("nome-profissional").innerText = dados.profissional;
+socket.on("proxima-chamada", (dados) => {
+    // 1. ANTES de mudar o nome atual, pegamos o que estava na tela para o histórico
+    const nomeAtual = document.getElementById("nome-paciente").innerText;
+    const listaHistorico = document.getElementById("lista-historico");
 
-    document.body.classList.add("piscar-amarelo");
-
-    const falar = (texto) => {
-        return new Promise((resolve) => {
-            const msg = new SpeechSynthesisUtterance(texto);
-            msg.lang = 'pt-BR';
-            msg.rate = 0.9;
-            msg.onend = resolve; // Só resolve quando termina de falar
-            window.speechSynthesis.speak(msg);
-        });
-    };
-
-    async function executarChamada() {
-        await falar(`Paciente, ${dados.paciente}`);
-        await falar(`Paciente, ${dados.paciente}`);
-        await falar(`Dirigir-se ao ${dados.consultorio} com ${dados.profissional}`);
+    if (nomeAtual && nomeAtual !== "Aguardando..." && nomeAtual !== "undefined") {
+        const item = document.createElement("li");
+        item.innerText = nomeAtual;
+        // Adiciona no topo da lista de histórico
+        listaHistorico.prepend(item);
         
-        document.body.classList.remove("piscar-amarelo");
-        // Avisa o servidor que terminou e pode vir o próximo
-        socket.emit("proximoDaFila");
+        // Limita o histórico aos últimos 5 para não encher a tela
+        if (listaHistorico.children.length > 5) {
+            listaHistorico.removeChild(listaHistorico.lastChild);
+        }
     }
 
-    executarChamada();
-});
+    // 2. ATUALIZA A TELA COM O NOVO CHAMADO
+    document.getElementById("nome-paciente").innerText = dados.paciente;
+    document.getElementById("nome-profissional").innerText = dados.profissional;
+    document.getElementById("consultorio").innerText = dados.consultorio;
 
-socket.on("atualizarHistorico", (historico) => {
-    const lista = document.getElementById("lista-historico");
-    lista.innerHTML = historico.map((item, index) => 
-        `<li class="${index === 0 ? 'atual' : ''}">
-            <strong>${item.paciente}</strong> - ${item.consultorio}
-        </li>`
-    ).join("");
+    // 3. REMOVE O POP-UP (Não usamos alert()) e FAZ PISCAR
+    document.body.classList.add("piscar-tela");
+    setTimeout(() => document.body.classList.remove("piscar-tela"), 5000);
+
+    // 4. SINCRO DE VOZ (Fala exatamente o que está na tela)
+    const textoParaFalar = `Paciente, ${dados.paciente}, comparecer ao ${dados.consultorio} com ${dados.profissional}`;
+    const sintetizador = window.speechSynthesis;
+    
+    // Cancela falas anteriores para não encavalar
+    sintetizador.cancel(); 
+    
+    const enunciado = new SpeechSynthesisUtterance(textoParaFalar);
+    enunciado.lang = 'pt-BR';
+    enunciado.rate = 0.9; // Velocidade um pouco mais lenta para clareza
+    sintetizador.speak(enunciado);
 });
