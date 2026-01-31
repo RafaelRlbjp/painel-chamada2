@@ -146,20 +146,20 @@ body{
 }
 
   #nome-paciente{
-    font: size 30px;
+    font: size 60px;
   }
 
   #nome-profissional,
   #consultorio{
-    font: size 40px;;
+    font: size 50px;;
   }
 
   .card{
-    padding:60px;
+    padding:80px;
   }
 
   .cards-container{
-    gap:100px;
+    gap:90px;
   }
 
   .titulo-hist{
