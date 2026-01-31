@@ -18,7 +18,7 @@ display:flex;
 flex-direction:column;
 }
 
-/* ================= NOTEBOOK / PADRÃO ================= */
+/* ================= PADRÃO ================= */
 
 .area-principal{
 flex:4;
@@ -36,23 +36,24 @@ opacity:.7;
 }
 
 #nome-paciente{
-font-size:clamp(50px,12vw,140px);
+font-size:clamp(60px,12vw,160px);
 color:#ffd500;
 margin:20px 0;
 text-align:center;
 }
 
 .cards-container{
-width:90%;
+width:100%;
 display:flex;
-gap:25px;
+gap:40px;
+margin-top:20px;
 }
 
 .card{
 flex:1;
 background:#0d6efd;
-padding:25px;
-border-radius:20px;
+padding:30px;
+border-radius:25px;
 text-align:center;
 }
 
@@ -63,8 +64,8 @@ opacity:.8;
 
 #nome-profissional,
 #consultorio{
-font-size:clamp(20px,4vw,50px);
-margin-top:10px;
+font-size:clamp(30px,4vw,60px);
+margin-top:15px;
 }
 
 .secao-historico{
@@ -91,7 +92,7 @@ list-style:none;
 
 #lista-historico li{
 background:#111;
-padding:12px 30px;
+padding:15px 40px;
 border-radius:40px;
 font-size:2.5vh;
 }
@@ -108,10 +109,41 @@ animation:pisca .6s infinite;
 }
 
 .piscar-amarelo #nome-paciente{
-color:rgb(255, 250, 250);
+color:black;
 }
 
-/* ================= MOBILE ================= */
+/* ================= TV FORÇADO ================= */
+
+body.tv #nome-paciente{
+font-size:220px;
+margin:40px 0;
+}
+
+body.tv .label-topo{
+font-size:60px;
+}
+
+body.tv .cards-container{
+gap:80px;
+margin-top:50px;
+}
+
+body.tv .card{
+padding:60px;
+border-radius:40px;
+}
+
+body.tv #nome-profissional,
+body.tv #consultorio{
+font-size:110px;
+}
+
+body.tv #lista-historico li{
+font-size:50px;
+padding:30px 60px;
+}
+
+/* MOBILE */
 
 @media(max-width:768px){
 
@@ -121,51 +153,6 @@ flex-direction:column;
 
 .secao-historico{
 flex-direction:column;
-}
-
-}
-
-/* ================= MODO TV AUTOMÁTICO ================= */
-
-@media (min-width:1601px){
-
-.container{
-padding:40px;
-}
-
-.label-topo{
-font-size:5vh;
-margin-bottom:20px;
-}
-
-#nome-paciente{
-font-size:clamp(180px,14vw,300px);
-margin:40px 0;
-}
-
-.cards-container{
-gap:60px;
-margin-top:40px;
-width:100%;
-}
-
-.card{
-padding:50px;
-border-radius:30px;
-}
-
-#nome-profissional,
-#consultorio{
-font-size:clamp(70px,6vw,120px);
-}
-
-.secao-historico{
-padding:40px;
-}
-
-#lista-historico li{
-font-size:4vh;
-padding:25px 50px;
 }
 
 }

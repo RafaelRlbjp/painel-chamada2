@@ -54,3 +54,12 @@ setInterval(()=>{
   const r = document.getElementById("relogio");
   r.innerText = new Date().toLocaleTimeString();
 },1000);
+
+// FORÇA MODO TV AUTOMÁTICO
+if (
+navigator.userAgent.includes("TV") ||
+navigator.userAgent.includes("SMART") ||
+navigator.userAgent.includes("Android")
+){
+document.body.classList.add("tv");
+}
