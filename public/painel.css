@@ -1,202 +1,190 @@
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 body{
-  background:linear-gradient(180deg,#001b3a,#000814);
-  color:white;
-  height:100vh;
-  font-family:Arial, Helvetica, sans-serif;
+background:#001b3a;
+color:white;
+height:100vh;
+font-family:Arial Black;
+overflow:hidden;
 }
 
-.container {
-  height:100%;
-  width:100%;
-  padding:40px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
+.container{
+height:100%;
+padding:20px;
+display:flex;
+flex-direction:column;
 }
 
-/* ================= AREA PRINCIPAL ================= */
+/* ÁREA PRINCIPAL */
 
-.area-principal {
-  flex:1;
-  border:10px solid #0d6efd;
-  border-radius:40px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  padding:30px;
+.area-principal{
+flex:4;
+border:10px solid #0d6efd;
+border-radius:30px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
 }
 
 .label-topo{
-  font-size:2.5vh;
-  opacity:.7;
-  letter-spacing:2px;
+font-size:2.5vh;
+opacity:.7;
 }
 
- #nome-paciente {
-  font-size: clamp(80px, 18vw, 220px);
-  color:#ffd500;
-  margin:30px 0;
-  text-align:center;
-  text-shadow:0 0 25px #ffd500;
+/* PACIENTE */
+
+#nome-paciente{
+font-size:clamp(40px,10vw,140px);
+color:#ffd500;
+margin:25px 0;
+text-transform:uppercase;
 }
 
-
-/* ================= CARDS ================= */
+/* CARDS */
 
 .cards-container{
-  width:100%;
-  margin-top:30px;
-  display:flex;
-  gap:25px;
+width:100%;
+display:flex;
+gap:25px;
+margin-top:30px;
 }
 
 .card{
-  flex:1;
-  background:linear-gradient(180deg,#0d6efd,#0046b3);
-  padding:25px;
-  border-radius:25px;
-  text-align:center;
-  box-shadow:0 10px 25px #00000066;
+flex:1;
+background:#0d6efd;
+padding:25px;
+border-radius:20px;
+text-align:center;
 }
 
 .card .label{
-  font-size:2vh;
-  opacity:.8;
+font-size:2vh;
+opacity:.8;
 }
 
 #nome-profissional,
 #consultorio{
-  font-size:clamp(22px,3.5vw,50px);
-  margin-top:10px;
-  font-weight:bold;
+font-size:clamp(22px,4vw,55px);
+margin-top:10px;
 }
 
-/* ================= HISTORICO ================= */
+/* HISTÓRICO */
 
 .secao-historico{
-  flex:1;
-  background:#00000066;
-  border-radius:25px;
-  padding:15px 25px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:10px;
+flex:1;
+margin-top:20px;
+background:#00000055;
+border-radius:20px;
+padding:20px;
+display:flex;
+align-items:center;
+gap:20px;
+overflow:hidden;
 }
 
 .titulo-hist{
-  font-size:2vh;
-  color:#7dfcff;
-  text-align:center;
+font-size:2vh;
+color:#7dfcff;
+white-space:nowrap;
 }
 
 #lista-historico{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  list-style:none;
-  flex-wrap:wrap;
+display:flex;
+gap:15px;
+list-style:none;
+overflow:hidden;
 }
 
 #lista-historico li{
-  background:#0d6efd;
-  padding:10px 25px;
-  border-radius:40px;
-  font-size:2.2vh;
-  box-shadow:0 0 15px #0d6efd88;
+background:#111;
+padding:12px 30px;
+border-radius:40px;
+font-size:2.5vh;
+white-space:nowrap;
 }
 
-/* ================= ALERTA ================= */
+/* ALERTA AMARELO */
 
 .piscar-amarelo{
-  animation:pisca 1s infinite;
+animation:pisca .6s infinite;
 }
 
 @keyframes pisca{
-  0%{
-    background:#001b3a;
-  }
-  50%{
-    background:#ffd500;
-  }
-  100%{
-    background:#001b3a;
-  }
+0%,100%{background:#001b3a;}
+50%{background:yellow;}
 }
 
 .piscar-amarelo #nome-paciente{
-  color:#000;
-  text-shadow:0 0 15px white;
+color:black;
 }
+
 /* ================= MOBILE ================= */
 
 @media(max-width:768px){
 
 .cards-container{
-  flex-direction:column;
+flex-direction:column;
 }
 
 .secao-historico{
-  padding:10px;
+flex-direction:column;
 }
 
 #nome-paciente{
-  font-size:50px;
+font-size:8vh;
 }
 
 }
-/* aguardando menor */
 
-.aguardando{
-  font-size:60px !important;
-  color:#7dfcff !important;
-  text-shadow:none !important;
+/* ================= NOTEBOOK ================= */
+
+@media (max-width:1600px){
+
+#nome-paciente{
+font-size:clamp(40px,8vw,110px);
 }
-/* ================= MODO TV AUTOMÁTICO ================= */
 
-@media (min-width: 1200px) {
-
-  #nome-paciente{
-    font-size: clamp(120px, 14vw, 240px);
-  }
-
-  #nome-profissional,
-  #consultorio{
-    font-size: clamp(50px, 5vw, 90px);
-  }
-
-  .area-principal{
-    padding:60px;
-  }
-
-  .cards-container{
-    width:100%;
-    margin-top:40px;
-  }
-
-  .secao-historico{
-    padding:30px;
-  }
-
-  #lista-historico li{
-    font-size:3vh;
-    padding:18px 40px;
-  }
+#nome-profissional,
+#consultorio{
+font-size:clamp(18px,3vw,40px);
+}
 
 }
 
-#relogio{
-  position:fixed;
-  top:15px;
-  right:25px;
-  font-size:40px;
-  color:#7dfcff;
+/* ================= TV AUTOMÁTICA ================= */
+
+@media (min-width:1601px){
+
+#nome-paciente{
+font-size:clamp(130px,12vw,240px);
 }
 
+#nome-profissional,
+#consultorio{
+font-size:clamp(60px,6vw,100px);
+}
+
+.label-topo{
+font-size:4vh;
+}
+
+.card{
+padding:45px;
+}
+
+.secao-historico{
+padding:35px;
+}
+
+#lista-historico li{
+font-size:4vh;
+}
+
+}
