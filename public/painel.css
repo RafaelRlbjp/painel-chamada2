@@ -5,7 +5,7 @@
 }
 
 body{
-  background:#001b3a;
+  background:#001427;
   color:white;
   height:100vh;
   font-family:Arial Black, Arial;
@@ -13,99 +13,103 @@ body{
 
 .container{
   height:100%;
-  padding:25px;
-  display:flex;
-  flex-direction:column;
+  padding:30px;
+  display:grid;
+  grid-template-rows: 1fr auto;
 }
 
-/* ================= PAINEL PRINCIPAL ================= */
+/* ================= PAINEL ================= */
 
 .area-principal{
-  flex:4;
-  border:10px solid #0d6efd;
-  border-radius:35px;
+  border:8px solid #0d6efd;
+  border-radius:40px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  padding:40px;
 }
 
 .label-topo{
   font-size:2vh;
-  opacity:.7;
+  opacity:.6;
 }
 
 #nome-paciente{
-  font-size:7vw;
+  font-size:clamp(60px,10vw,200px);
   color:#ffd500;
-  margin:25px 0;
+  margin:30px 0;
   text-align:center;
+  line-height:1.1;
 }
 
+/* ================= CARDS ================= */
+
 .cards-container{
-  width:90%;
-  display:flex;
-  gap:50px;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  max-width:1400px;
 }
 
 .card{
-  flex:1;
   background:#0d6efd;
-  padding:35px;
-  border-radius:25px;
+  padding:45px;
+  border-radius:30px;
   text-align:center;
 }
 
 .card .label{
-  font-size:2vh;
   opacity:.8;
+  font-size:clamp(14px,2vh,22px);
 }
 
 #nome-profissional,
 #consultorio{
-  font-size:32px;
-  margin-top:10px;
+  font-size:clamp(25px,4vw,70px);
+  margin-top:15px;
 }
 
 /* ================= HISTÓRICO ================= */
 
 .secao-historico{
-  flex:1;
   margin-top:25px;
-  background:#00000055;
-  border-radius:25px;
-  padding:20px;
+  background:#00000050;
+  border-radius:30px;
+  padding:20px 30px;
   display:flex;
   align-items:center;
-  gap:20px;
+  gap:25px;
 }
 
 .titulo-hist{
-  font-size:2vh;
+  font-size:clamp(14px,2vh,22px);
   color:#7dfcff;
 }
 
 #lista-historico{
   display:flex;
-  gap:20px;
+  gap:25px;
   list-style:none;
+  flex-wrap:wrap;
 }
 
 #lista-historico li{
   background:#111;
   padding:12px 30px;
   border-radius:40px;
-  font-size:2.3vh;
+  font-size:clamp(14px,2vh,26px);
 }
 
-/* ================= ALERTA (SÓ PAINEL) ================= */
+/* ================= ALERTA ================= */
 
 .piscar-amarelo .area-principal{
   animation:pisca .6s infinite;
 }
 
 @keyframes pisca{
-  0%,100%{background:#001b3a;}
+  0%,100%{background:#001427;}
   50%{background:yellow;}
 }
 
@@ -113,60 +117,35 @@ body{
   color:black;
 }
 
-/* ================= CELULAR ================= */
+/* ================= MOBILE ================= */
 
-@media(max-width:768px){
+@media(max-width:900px){
 
-  #nome-paciente{
-    font-size:10vw;
-  }
-
-  .cards-container{
-    flex-direction:column;
-    gap:20px;
-  }
-
-  .card{
-    width:100%;
-  }
-
-  #nome-profissional,
-  #consultorio{
-    font-size:6vw;
-  }
+.cards-container{
+  grid-template-columns:1fr;
+  gap:25px;
 }
 
-/* ================= TV GRANDE ================= */
-
-@media(min-width:1400px){
-
-#nome-profissional,
-#consultorio{
-  font: size 40px;;
+#nome-paciente{
+  font-size:12vw;
 }
 
-  #nome-paciente{
-    font: size 60px;
-  }
+}
 
-  #nome-profissional,
-  #consultorio{
-    font: size 50px;;
-  }
+/* ================= TV EXTRA GRANDE ================= */
 
-  .card{
-    padding:80px;
-  }
+@media(min-width:1600px){
 
-  .cards-container{
-    gap:90px;
-  }
+.container{
+  padding:50px;
+}
 
-  .titulo-hist{
-    font: size 30pix;
-  }
+.card{
+  padding:70px;
+}
 
-  #lista-historico li{
-    font-size:3vh;
-  }
+.cards-container{
+  gap:100px;
+}
+
 }
