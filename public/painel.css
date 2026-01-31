@@ -1,95 +1,121 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-    background-color: #001b3a;
-    color: white;
-    font-family: 'Arial Black', sans-serif;
-    height: 100vh;
-    display: flex;
-    overflow: hidden;
+  background:#001b3a;
+  color:white;
+  height:100vh;
+  font-family: Arial Black;
 }
 
 .container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
+  height:100%;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
 }
 
 .area-principal {
-    flex: 4;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 8px solid #0074D9;
-    border-radius: 30px;
-    background: rgba(255,255,255,0.03);
-    margin-bottom: 20px;
+  flex:4;
+  border:10px solid #0d6efd;
+  border-radius:30px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.label-topo{
+  font-size:3vh;
+  opacity:.7;
 }
 
 #nome-paciente {
-    font-size: clamp(50px, 16vh, 160px);
-    color: #FFDC00;
-    text-transform: uppercase;
-    text-align: center;
-    line-height: 1.1;
-    margin: 20px 0;
+  font-size: clamp(50px, 14vw, 170px);
+  color:#ffd500;
+  margin:20px 0;
+  text-align:center;
 }
 
-.cards-container {
-    display: flex;
-    width: 90%;
-    gap: 20px;
+.cards-container{
+  width:90%;
+  display:flex;
+  gap:20px;
 }
 
-.card {
-    background: #0074D9;
-    padding: 20px;
-    border-radius: 15px;
-    flex: 1;
-    text-align: center;
+.card{
+  flex:1;
+  background:#0d6efd;
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
 }
 
-#nome-profissional, #consultorio {
-    font-size: clamp(20px, 5vh, 50px);
-    font-weight: bold;
+.card .label{
+  font-size:2vh;
 }
 
-/* HISTÓRICO REATIVADO */
-.secao-historico {
-    flex: 1;
-    background: rgba(0,0,0,0.3);
-    border-radius: 15px;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    overflow: hidden;
+#nome-profissional,#consultorio{
+  font-size: clamp(20px,4vw,55px);
+  margin-top:10px;
 }
 
-.titulo-hist { font-size: 1.5rem; color: #85fffd; white-space: nowrap; }
-
-#lista-historico {
-    display: flex;
-    list-style: none;
-    gap: 15px;
+.secao-historico{
+  flex:1;
+  margin-top:20px;
+  background:#00000055;
+  border-radius:20px;
+  padding:15px;
+  display:flex;
+  align-items:center;
+  gap:20px;
 }
 
-#lista-historico li {
-    background: #1a1a1a;
-    padding: 10px 25px;
-    border-radius: 50px;
-    font-size: 1.8rem;
-    color: #ccc;
-    border: 1px solid #444;
-    white-space: nowrap;
+.titulo-hist{
+  font-size:2vh;
+  color:#7dfcff;
 }
 
-.piscar-amarelo { animation: alerta 0.6s infinite; }
-@keyframes alerta {
-    0%, 100% { background-color: #001b3a; }
-    50% { background-color: #FFFF00; }
+#lista-historico{
+  display:flex;
+  gap:15px;
+  list-style:none;
 }
-.piscar-amarelo #nome-paciente { color: #000 !important; }
+
+#lista-historico li{
+  background:#111;
+  padding:12px 30px;
+  border-radius:40px;
+  font-size:2.5vh;
+}
+
+/* ALERTA */
+
+.piscar-amarelo{
+  animation:pisca .6s infinite;
+}
+
+@keyframes pisca{
+  0%,100%{background:#001b3a;}
+  50%{background:yellow;}
+}
+
+.piscar-amarelo #nome-paciente{
+  color:black;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.cards-container{
+  flex-direction:column;
+}
+
+.secao-historico{
+  flex-direction:column;
+}
+}
