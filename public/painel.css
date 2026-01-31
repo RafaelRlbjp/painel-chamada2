@@ -1,67 +1,190 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* 1. CONFIGURAÇÕES GERAIS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
-    background-color: #001b3a;
-    color: white;
-    font-family: 'Arial Black', sans-serif;
+    background-color: #001b3a; /* Azul marinho profundo */
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
     height: 100vh;
+    width: 100vw;
     display: flex;
+    flex-direction: column;
     overflow: hidden;
+    transition: background-color 0.3s ease;
 }
 
-/* Tela de ativação */
+/* 2. CORTINA DE ATIVAÇÃO (TV) */
 #camada-ativacao {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.95); z-index: 9999;
-    display: flex; justify-content: center; align-items: center;
-}
-#camada-ativacao button {
-    padding: 40px; font-size: 30px; background: #FFCC00; 
-    border: none; border-radius: 20px; font-weight: bold; cursor: pointer;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+.modal-ativacao {
+    text-align: center;
+    background: #1a1a1a;
+    padding: 5vh;
+    border-radius: 3vh;
+    border: 2px solid #FFCC00;
+}
+
+.modal-ativacao p {
+    font-size: 3vh;
+    margin-bottom: 3vh;
+    color: #FFCC00;
+}
+
+.modal-ativacao button {
+    padding: 3vh 6vh;
+    font-size: 4vh;
+    font-weight: 900;
+    background: #FFCC00;
+    color: #000;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* 3. CONTAINER PRINCIPAL */
 .container {
-    display: flex; flex-direction: column; width: 100%; height: 100%; padding: 2vh;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2vh;
 }
 
-.bloco-chamada {
-    flex: 4; display: flex; flex-direction: column; justify-content: center;
-    align-items: center; border: 1vh solid #0074D9; border-radius: 5vh;
-    background: rgba(255,255,255,0.02); margin-bottom: 2vh;
+/* 4. BLOCO DO CHAMADO ATUAL */
+.bloco-principal {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 0.8vh solid #0074D9;
+    border-radius: 4vh;
+    background: rgba(255, 255, 255, 0.03);
+    margin-bottom: 2vh;
 }
 
-.status-topo { font-size: 4vh; color: #85fffd; letter-spacing: 1.5vw; }
+.label-paciente {
+    font-size: 4vh;
+    color: #85fffd;
+    letter-spacing: 1.5vw;
+    font-weight: 700;
+}
 
 #nome-paciente {
-    font-size: 16vh; /* Letra Gigante na TV */
-    text-align: center; line-height: 1; margin: 2vh 0;
-    text-shadow: 0 0 20px rgba(0,0,0,0.5);
+    /* Mínimo 60px, ideal 15vh da tela, máximo 200px */
+    font-size: clamp(60px, 15vh, 200px);
+    font-weight: 900;
+    color: #FFCC00; /* Nome em destaque amarelo */
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin: 2vh 0;
+    text-shadow: 4px 4px 15px rgba(0,0,0,0.6);
 }
 
-.cards-info { display: flex; width: 90%; gap: 3vw; }
-
-.card {
-    flex: 1; background: #0074D9; padding: 3vh; border-radius: 3vh;
-    text-align: center; box-shadow: 0 1vh 3vh rgba(0,0,0,0.5);
+/* CARDS DE PROFISSIONAL E LOCAL */
+.infos-container {
+    display: flex;
+    width: 90%;
+    gap: 3vw;
+    margin-top: 2vh;
 }
 
-.label { font-size: 2.5vh; color: #001b3a; font-weight: bold; }
-
-#nome-profissional, #consultorio { font-size: 6vh; font-weight: bold; }
-
-.rodape {
-    flex: 1; background: rgba(0,0,0,0.3); border-radius: 3vh;
-    padding: 2vh; display: flex; align-items: center; gap: 20px;
+.card-detalhe {
+    flex: 1;
+    background: #0074D9;
+    padding: 2.5vh;
+    border-radius: 2vh;
+    box-shadow: 0 1vh 3vh rgba(0,0,0,0.4);
 }
 
-.txt-hist { font-size: 2vh; color: #666; font-weight: bold; }
+.sub-label {
+    display: block;
+    font-size: 2vh;
+    color: #001b3a;
+    font-weight: 700;
+    margin-bottom: 0.5vh;
+}
 
-#lista-historico { display: flex; list-style: none; gap: 2vw; font-size: 3.5vh; color: #aaa; }
+#nome-profissional, #consultorio {
+    font-size: 5vh;
+    font-weight: 700;
+    text-transform: uppercase;
+}
 
-/* ANIMAÇÃO AMARELA */
-.piscar-amarelo { animation: alerta 0.7s infinite; }
+/* 5. BARRA DE HISTÓRICO (RODAPÉ) */
+.barra-historico {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 2vh;
+    padding: 1.5vh 3vh;
+    display: flex;
+    align-items: center;
+    border: 1px solid #333;
+}
+
+.historico-titulo {
+    font-size: 2vh;
+    color: #666;
+    font-weight: 700;
+    margin-right: 2vw;
+    white-space: nowrap;
+}
+
+#lista-historico {
+    display: flex;
+    list-style: none;
+    gap: 1.5vw;
+}
+
+#lista-historico li {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1vh 3vh;
+    border-radius: 50px;
+    font-size: 3vh;
+    color: #cbd5e0;
+    border-left: 0.8vh solid #0074D9;
+    text-transform: uppercase;
+    animation: aparecer 0.5s ease-out;
+}
+
+/* 6. ANIMAÇÕES */
+@keyframes aparecer {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* EFEITO PISCAR AMARELO */
+.piscar-amarelo {
+    animation: alerta 0.7s infinite;
+}
+
 @keyframes alerta {
     0%, 100% { background-color: #001b3a; }
     50% { background-color: #FFFF00; }
 }
-.piscar-amarelo #nome-paciente, .piscar-amarelo .status-topo { color: #000 !important; }
+
+/* Ajuste de cor do texto durante o pisca para não sumir no amarelo */
+.piscar-amarelo #nome-paciente, 
+.piscar-amarelo .label-paciente,
+.piscar-amarelo .sub-label,
+.piscar-amarelo #nome-profissional,
+.piscar-amarelo #consultorio {
+    color: #000 !important;
+    text-shadow: none !important;
+}

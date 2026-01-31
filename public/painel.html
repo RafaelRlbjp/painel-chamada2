@@ -2,39 +2,49 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Painel de Chamada Hospitalar</title>
+  <title>Painel de Chamada Profissional</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="painel.css">
+  
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 
-<div id="camada-ativacao" onclick="this.style.display='none'">
-    <button>CLIQUE NA TELA PARA ATIVAR O SISTEMA</button>
-</div>
-
-<div class="container">
-  <main class="bloco-chamada">
-    <div class="status-topo">PACIENTE</div>
-    <div id="nome-paciente">AGUARDANDO...</div>
-    
-    <div class="cards-info">
-      <div class="card">
-        <span class="label">PROFISSIONAL</span>
-        <div id="nome-profissional">---</div>
-      </div>
-      <div class="card">
-        <span class="label">LOCAL</span>
-        <div id="consultorio">---</div>
-      </div>
+  <div id="camada-ativacao" onclick="this.style.display='none'">
+    <div class="modal-ativacao">
+      <p>O SISTEMA ESTÁ PRONTO</p>
+      <button>CLIQUE AQUI PARA INICIAR O SOM</button>
     </div>
-  </main>
+  </div>
 
-  <footer class="rodape">
-    <span class="txt-hist">HISTÓRICO:</span>
-    <ul id="lista-historico"></ul>
-  </footer>
-</div>
+  <div class="container">
+    <main class="bloco-principal">
+      <div class="label-paciente">PACIENTE</div>
+      <h1 id="nome-paciente">AGUARDANDO...</h1>
+      
+      <div class="infos-container">
+        <div class="card-detalhe">
+          <span class="sub-label">PROFISSIONAL</span>
+          <div id="nome-profissional">---</div>
+        </div>
+        
+        <div class="card-detalhe">
+          <span class="sub-label">LOCAL</span>
+          <div id="consultorio">---</div>
+        </div>
+      </div>
+    </main>
 
-<script src="painel.js"></script>
+    <footer class="barra-historico">
+      <div class="historico-titulo">ÚLTIMOS CHAMADOS:</div>
+      <ul id="lista-historico">
+        </ul>
+    </footer>
+  </div>
+
+  <script src="painel.js"></script>
 </body>
 </html>
