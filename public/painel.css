@@ -1,4 +1,4 @@
-/* 1. RESET E BASE */
+/* 1. RESET PARA OCUPAR A TELA TODA */
 * {
     margin: 0;
     padding: 0;
@@ -14,8 +14,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: background-color 0.3s ease;
-    padding: 20px;
+    padding: 2vh; /* Respiro lateral baseado na altura */
 }
 
 .container {
@@ -25,111 +24,109 @@ body {
     height: 100%;
 }
 
-/* 2. ÁREA DE CHAMADA PRINCIPAL */
+/* 2. ÁREA DO PACIENTE (OCUPA O MÁXIMO DE ESPAÇO) */
 .chamada-principal {
-    flex: 3;
+    flex: 5; /* Dá mais peso para esta área */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    border: 6px solid #0074D9;
-    border-radius: 30px;
+    border: 1vh solid #0074D9;
+    border-radius: 4vh;
     background: rgba(255, 255, 255, 0.03);
-    margin-bottom: 20px;
-    padding: 20px;
+    margin-bottom: 2vh;
 }
 
 .header-label {
-    /* Mínimo 20px, Ideal 3vw, Máximo 40px */
-    font-size: clamp(20px, 3vw, 40px);
+    font-size: 4vh; /* Baseado na altura da tela */
     color: #85fffd;
-    letter-spacing: 10px;
-    margin-bottom: 10px;
+    letter-spacing: 1.5vw;
+    text-transform: uppercase;
 }
 
 #nome-paciente {
-    /* Mínimo 60px, Ideal 8vw, Máximo 150px */
-    /* Isso impede que o nome saia da tela em notebooks */
-    font-size: clamp(60px, 8vw, 150px);
+    /* O texto vai se ajustar entre 50px e 25vh (altura da tela) */
+    font-size: clamp(50px, 20vh, 25vh); 
     font-weight: 900;
     color: #ffffff;
     text-transform: uppercase;
-    line-height: 1.1;
-    text-shadow: 4px 4px 15px rgba(0,0,0,0.7);
-    word-wrap: break-word;
-    max-width: 95%;
+    line-height: 1;
+    margin: 2vh 0;
+    text-shadow: 0.5vh 0.5vh 2vh rgba(0,0,0,0.8);
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* 3. CAIXAS DE INFORMAÇÃO (PROFISSIONAL E LOCAL) */
+/* 3. BOXES DE INFO (PROFISSIONAL E LOCAL) */
 .info-secundaria {
     display: flex;
     width: 100%;
+    gap: 3vw;
     justify-content: center;
-    gap: 30px;
-    margin-top: 30px;
 }
 
 .box-info {
     background: #0074D9;
-    padding: clamp(10px, 2vw, 20px);
-    border-radius: 15px;
+    padding: 3vh;
+    border-radius: 2vh;
     flex: 1;
-    max-width: 400px;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 1vh 3vh rgba(0,0,0,0.4);
 }
 
 .label {
-    display: block;
-    font-size: clamp(14px, 1.5vw, 22px);
+    font-size: 2.5vh;
     color: #001b3a;
     font-weight: bold;
-    margin-bottom: 5px;
+    text-transform: uppercase;
+    margin-bottom: 1vh;
 }
 
 #nome-profissional, #consultorio {
-    font-size: clamp(24px, 2.5vw, 45px);
+    font-size: 6vh; /* Letras bem grandes para o médico e local */
     font-weight: bold;
     text-transform: uppercase;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-/* 4. HISTÓRICO */
+/* 4. HISTÓRICO NO RODAPÉ */
 .rodape-historico {
-    flex: 0.8;
-    background-color: rgba(0,0,0,0.4);
-    border-radius: 20px;
-    padding: 15px;
-    border: 1px solid #333;
+    flex: 1.2;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 2vh;
+    padding: 2vh;
+    margin-top: 2vh;
+    border: 0.3vh solid #333;
 }
 
 .titulo-historico {
-    font-size: 1.2rem;
+    font-size: 2vh;
     color: #666;
-    margin-bottom: 8px;
+    margin-bottom: 1vh;
     text-transform: uppercase;
 }
 
 .historico-flex {
     display: flex;
-    gap: 15px;
+    gap: 2vw;
     list-style: none;
-    overflow: hidden;
 }
 
 .historico-flex li {
     background: #1a1a1a;
-    padding: 10px 20px;
-    border-radius: 50px;
-    font-size: clamp(18px, 1.8vw, 28px);
+    padding: 1.5vh 3vh;
+    border-radius: 5vh;
+    font-size: 3.5vh; /* Histórico também legível */
     color: #aaa;
-    border: 1px solid #444;
-    white-space: nowrap;
+    border: 0.2vh solid #444;
 }
 
-/* 5. ANIMAÇÃO DE ALERTA */
+/* 5. ANIMAÇÃO DE ALERTA AMARELO */
 .piscar-amarelo {
     animation: alerta-amarelo 0.7s infinite !important;
 }
