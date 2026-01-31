@@ -1,123 +1,106 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-body {
+body{
   background:#001b3a;
   color:white;
   height:100vh;
-  font-family: Arial Black, Arial, sans-serif;
+  font-family:Arial Black, Arial;
 }
 
-.container {
+.container{
   height:100%;
-  padding:3vh;
+  padding:25px;
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
 }
 
-/* PRINCIPAL */
+/* ================= PAINEL PRINCIPAL ================= */
 
-.area-principal {
-  flex:6;
-  border:1.2vh solid #0d6efd;
-  border-radius:3vh;
+.area-principal{
+  flex:4;
+  border:10px solid #0d6efd;
+  border-radius:35px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  padding:3vh;
 }
 
 .label-topo{
-  font-size:3vh;
+  font-size:2vh;
   opacity:.7;
 }
 
-/* NOME PACIENTE */
-
-#nome-paciente {
-  font-size:12vh;
-  color:#f6f6f3;
-  margin:2vh 0;
+#nome-paciente{
+  font-size:7vw;
+  color:#ffd500;
+  margin:25px 0;
   text-align:center;
-  line-height:1.1;
-  max-width:95%;
-  word-break:break-word;
 }
-
-/* CARDS */
 
 .cards-container{
   width:90%;
-  margin-top:40px;
   display:flex;
-  justify-content:center;
-  gap:50px; /* distância entre profissional e local */
+  gap:50px;
 }
 
-
 .card{
-  width:48%;
-}
-
-
-.card{
-  width:45%;
+  flex:1;
   background:#0d6efd;
-  padding:30px;
+  padding:35px;
   border-radius:25px;
   text-align:center;
 }
 
-
 .card .label{
-  font-size:3vh;
+  font-size:2vh;
   opacity:.8;
 }
 
-#nome-profissional,#consultorio{
-  font-size:5vh;
-  margin-top:1vh;
+#nome-profissional,
+#consultorio{
+  font-size:3vw;
+  margin-top:10px;
 }
 
-/* HISTÓRICO */
+/* ================= HISTÓRICO ================= */
 
 .secao-historico{
-  flex:2;
-  margin-top:2vh;
+  flex:1;
+  margin-top:25px;
   background:#00000055;
-  border-radius:3vh;
-  padding:2vh;
+  border-radius:25px;
+  padding:20px;
   display:flex;
   align-items:center;
-  gap:3vh;
+  gap:20px;
 }
 
 .titulo-hist{
-  font-size:3vh;
+  font-size:2vh;
   color:#7dfcff;
 }
 
 #lista-historico{
   display:flex;
-  gap:2vh;
+  gap:20px;
   list-style:none;
 }
 
 #lista-historico li{
   background:#111;
-  padding:1.5vh 4vh;
-  border-radius:5vh;
-  font-size:3vh;
+  padding:12px 30px;
+  border-radius:40px;
+  font-size:2.3vh;
 }
 
-/* ALERTA */
+/* ================= ALERTA (SÓ PAINEL) ================= */
 
-.piscar-amarelo{
+.piscar-amarelo .area-principal{
   animation:pisca .6s infinite;
 }
 
@@ -127,91 +110,58 @@ body {
 }
 
 .piscar-amarelo #nome-paciente{
-  color:rgb(255, 254, 254);
+  color:black;
 }
 
-/* NOTEBOOK */
+/* ================= CELULAR ================= */
 
-@media(max-width:1400px){
+@media(max-width:768px){
 
-#nome-paciente{
-  font-size:8vh;
+  #nome-paciente{
+    font-size:10vw;
+  }
+
+  .cards-container{
+    flex-direction:column;
+    gap:20px;
+  }
+
+  .card{
+    width:100%;
+  }
+
+  #nome-profissional,
+  #consultorio{
+    font-size:6vw;
+  }
 }
 
-#nome-profissional,#consultorio{
-  font-size:3vh;
-}
+/* ================= TV GRANDE ================= */
 
-}
+@media(min-width:1400px){
 
-/* ===================== */
-/* MODO TV AUTOMÁTICO */
-/* ===================== */
+  #nome-paciente{
+    font-size:12vw;
+  }
 
-@media (min-width: 1200px) {
+  #nome-profissional,
+  #consultorio{
+    font-size:4vw;
+  }
 
-.label-topo{
-  font-size:4vh;
-}
+  .card{
+    padding:60px;
+  }
 
-#nome-paciente{
-  font-size:12vw !important;
-  margin:40px 0;
-}
+  .cards-container{
+    gap:100px;
+  }
 
-.cards-container{
-  gap:80px;
-  margin-top:50px;
-}
+  .titulo-hist{
+    font-size:3vh;
+  }
 
-.card{
-  padding:50px;
-}
-
-.card .label{
-  font-size:3vh;
-}
-
-#nome-profissional,
-#consultorio{
-  font-size:5vw;
-}
-
-.secao-historico{
-  padding:30px;
-}
-
-#lista-historico li{
-  font-size:3vh;
-  padding:18px 40px;
-}
-
-}
-
-@media (min-width: 1200px) {
-
-.area-principal{
-  padding-top:40px;
-}
-
-#nome-paciente{
-  margin-bottom:60px;
-}
-
-/* separar bem profissional / local */
-.cards-container{
-  gap:120px;
-  margin-top:20px;
-}
-
-/* subir cards um pouco */
-.cards-container{
-  transform: translateY(-40px);
-}
-
-/* evitar que invadam histórico */
-.secao-historico{
-  margin-top:60px;
-}
-
+  #lista-historico li{
+    font-size:3vh;
+  }
 }
