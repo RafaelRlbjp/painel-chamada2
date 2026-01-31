@@ -3,34 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Chamada</title>
+    <title>Painel de Chamadas Profissional</title>
     <link rel="stylesheet" href="painel.css">
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 
-    <div class="painel-container">
-        <div class="chamado-atual">
-            <h1 class="titulo">PACIENTE</h1>
-            <div id="nome-paciente" class="destaque">Aguardando...</div>
+    <div class="container">
+        <main class="chamada-principal">
+            <div class="header-label">PACIENTE</div>
+            <h1 id="nome-paciente">AGUARDANDO...</h1>
             
             <div class="info-secundaria">
-                <div>
+                <div class="box-info">
                     <span class="label">PROFISSIONAL</span>
                     <div id="nome-profissional">---</div>
                 </div>
-                <div>
+                <div class="box-info">
                     <span class="label">LOCAL</span>
                     <div id="consultorio">---</div>
                 </div>
             </div>
-        </div>
+        </main>
 
-        <div class="historico-secao">
-            <h2>ÚLTIMOS CHAMADOS</h2>
-            <ul id="lista-historico">
-                </ul>
-        </div>
+        <footer class="rodape-historico">
+            <div class="titulo-historico">ÚLTIMOS CHAMADOS</div>
+            <div id="lista-historico" class="historico-flex">
+                <div class="historico-item">Aguardando chamadas...</div>
+            </div>
+        </footer>
     </div>
 
     <script src="painel.js"></script>

@@ -1,36 +1,66 @@
 const socket = io();
-const sintetizador = window.speechSynthesis;
 
+// Lista para armazenar o histórico de chamadas
+let historicoChamadas = [];
+
+// Escuta o evento 'proxima-chamada' enviado pelo servidor
 socket.on("proxima-chamada", (dados) => {
-    // 1. Move o que está na tela para o histórico antes de atualizar
-    const nomeAnterior = document.getElementById("nome-paciente").innerText;
-    if (nomeAnterior && nomeAnterior !== "Aguardando...") {
-        const li = document.createElement("li");
-        li.innerText = nomeAnterior;
-        const lista = document.getElementById("lista-historico");
-        lista.prepend(li);
-        if (lista.children.length > 5) lista.lastChild.remove();
-    }
+    console.log("Recebendo chamada:", dados);
 
-    // 2. Atualiza a tela com o novo
-    document.getElementById("nome-paciente").innerText = dados.paciente;
+    // 1. ATUALIZAÇÃO DO PAINEL PRINCIPAL
+    // Garante que o texto fique em caixa alta para melhor visibilidade
+    document.getElementById("nome-paciente").innerText = dados.paciente.toUpperCase();
     document.getElementById("nome-profissional").innerText = dados.profissional;
     document.getElementById("consultorio").innerText = dados.consultorio;
 
-    // 3. Efeito de piscar Amarelo
-    document.body.classList.add("piscar-amarelo");
-    setTimeout(() => document.body.classList.remove("piscar-amarelo"), 8000);
+    // 2. LÓGICA DO HISTÓRICO
+    // Adiciona a nova chamada ao início do array
+    historicoChamadas.unshift(dados);
 
-    // 4. Chamada de Voz (Repete 2 vezes)
-    sintetizador.cancel(); 
-    const frase = `Paciente, ${dados.paciente}, comparecer ao ${dados.consultorio}`;
-    const falar = () => {
-        const msg = new SpeechSynthesisUtterance(frase);
-        msg.lang = 'pt-BR';
-        msg.rate = 0.9;
-        sintetizador.speak(msg);
-    };
+    // Mantém apenas as últimas 5 chamadas no histórico (ajustável)
+    if (historicoChamadas.length > 6) {
+        historicoChamadas.pop();
+    }
 
-    falar(); // Primeira vez
-    setTimeout(falar, 5000); // Segunda vez após 5 segundos
+    atualizarInterfaceHistorico();
+
+    // 3. EFEITOS VISUAIS E SONOROS
+    dispararAlerta(dados);
 });
+
+// Função para renderizar a lista de últimos chamados
+function atualizarInterfaceHistorico() {
+    const containerHistorico = document.getElementById("lista-historico");
+    if (!containerHistorico) return;
+
+    containerHistorico.innerHTML = ""; // Limpa a lista atual
+
+    // Pulamos o índice 0 porque ele já é o destaque principal na tela
+    const chamadosAnteriores = historicoChamadas.slice(1);
+
+    chamadosAnteriores.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "historico-item";
+        div.innerHTML = `<strong>${item.paciente}</strong> <br> <small>${item.consultorio}</small>`;
+        containerHistorico.appendChild(div);
+    });
+}
+
+// Função para voz e efeito de piscar
+function dispararAlerta(dados) {
+    // Efeito Visual: Faz o fundo ou container piscar
+    document.body.classList.add("piscar-tela");
+    
+    // Voz: Síntese de fala do navegador
+    const mensagemVoz = new SpeechSynthesisUtterance();
+    mensagemVoz.text = `Paciente, ${dados.paciente}. Comparecer ao, ${dados.consultorio}`;
+    mensagemVoz.lang = 'pt-BR';
+    mensagemVoz.rate = 0.9; // Velocidade um pouco mais lenta para clareza
+
+    window.speechSynthesis.speak(mensagemVoz);
+
+    // Remove o efeito de piscar após 5 segundos
+    setTimeout(() => {
+        document.body.classList.remove("piscar-tela");
+    }, 5000);
+}
