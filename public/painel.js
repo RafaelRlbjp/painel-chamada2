@@ -1,7 +1,7 @@
 const socket = io();
 const sintetizador = window.speechSynthesis;
 
-// 🔔 BEEP MP3 (2x)
+// 🔔 BEEP MP3 (4x)
 const beep = new Audio("/audio/bip.mp3");
 
 function tocarBeep() {
