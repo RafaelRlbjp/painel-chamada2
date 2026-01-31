@@ -53,10 +53,15 @@ body {
 
 .cards-container{
   width:100%;
-  margin-top:30px;
   display:flex;
-  gap:40px; /* AQUI separa as duas barras */
+  justify-content:space-between;
+  margin-top:40px;
 }
+
+.card{
+  width:48%;
+}
+
 
 .card{
   flex:1;

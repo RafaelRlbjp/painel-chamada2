@@ -1,16 +1,18 @@
 const socket = io();
 const sintetizador = window.speechSynthesis;
 
-const beep = new Audio("/audio/bip.mp3");
+const beep1 = new Audio("/audio/bip.mp3");
+const beep2 = new Audio("/audio/bip.mp3");
+
 
 function tocar2Bips() {
-  beep.currentTime = 0;
-  beep.play().catch(()=>{});
+  beep1.currentTime = 0;
+  beep1.play().catch(()=>{});
 
   setTimeout(() => {
-    beep.currentTime = 0;
-    beep.play().catch(()=>{});
-  }, 700);
+    beep2.currentTime = 0;
+    beep2.play().catch(()=>{});
+  }, 600);
 }
 
 function falar(frase) {
