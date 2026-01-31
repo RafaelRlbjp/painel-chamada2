@@ -2,35 +2,44 @@ const socket = io();
 const sintetizador = window.speechSynthesis;
 
 socket.on("proxima-chamada", (dados) => {
-    // 1. GERENCIAR HISTÓRICO (CAPTURANDO NOME + LOCAL)
+    // 1. GERENCIAR HISTÓRICO (CAPTURAR NOME + CONSULTÓRIO)
     const nomeAtual = document.getElementById("nome-paciente").innerText.trim();
-    const localAtual = document.getElementById("consultorio").innerText.trim();
+    const consultorioAtual = document.getElementById("consultorio").innerText.trim(); // Captura o local atual
     const listaHistorico = document.getElementById("lista-historico");
 
+    // Só adiciona se houver um nome real na tela
     if (nomeAtual !== "AGUARDANDO..." && nomeAtual !== "" && nomeAtual !== "---") {
         const novoItem = document.createElement("li");
-        // Adiciona Nome e Consultório no histórico
-        novoItem.innerHTML = `<strong>${nomeAtual}</strong> <small>${localAtual}</small>`;
+        
+        // Monta o HTML do histórico com Nome em destaque e Consultório logo abaixo
+        novoItem.innerHTML = `
+            <strong>${nomeAtual}</strong>
+            <small>${consultorioAtual}</small>
+        `;
         
         listaHistorico.prepend(novoItem);
         
+        // Mantém apenas os 5 últimos
         while (listaHistorico.children.length > 5) {
             listaHistorico.lastChild.remove();
         }
     }
 
-    // 2. ATUALIZAR A TELA
+    // 2. ATUALIZAR A TELA COM O NOVO CHAMADO
     document.getElementById("nome-paciente").innerText = dados.paciente;
     document.getElementById("nome-profissional").innerText = dados.profissional;
     document.getElementById("consultorio").innerText = dados.consultorio;
 
-    // 3. PISCAR E VOZ
+    // 3. EFEITO VISUAL (PISCAR)
     document.body.classList.remove("piscar-amarelo");
     void document.body.offsetWidth; 
     document.body.classList.add("piscar-amarelo");
 
-    setTimeout(() => document.body.classList.remove("piscar-amarelo"), 15000);
+    setTimeout(() => {
+        document.body.classList.remove("piscar-amarelo");
+    }, 15000);
 
+    // 4. VOZ
     sintetizador.cancel();
     const frase = `Paciente ${dados.paciente}, comparecer ao ${dados.consultorio} com ${dados.profissional}`;
     const falar = () => {
