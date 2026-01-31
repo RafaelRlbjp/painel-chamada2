@@ -1,4 +1,4 @@
-/* 1. CONFIGURAÇÕES GERAIS */
+/* 1. RESET E FONTES */
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #001b3a; /* Azul marinho profundo */
+    background-color: #001b3a;
     color: #ffffff;
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
@@ -17,32 +17,13 @@ body {
     transition: background-color 0.3s ease;
 }
 
-/* 2. CORTINA DE ATIVAÇÃO (TV) */
+/* 2. ATIVAÇÃO DE ÁUDIO (TV) */
 #camada-ativacao {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.95);
     z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-ativacao {
-    text-align: center;
-    background: #1a1a1a;
-    padding: 5vh;
-    border-radius: 3vh;
-    border: 2px solid #FFCC00;
-}
-
-.modal-ativacao p {
-    font-size: 3vh;
-    margin-bottom: 3vh;
-    color: #FFCC00;
+    display: flex; justify-content: center; align-items: center;
 }
 
 .modal-ativacao button {
@@ -52,12 +33,12 @@ body {
     background: #FFCC00;
     color: #000;
     border: none;
-    border-radius: 15px;
+    border-radius: 20px;
     cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 0 30px rgba(255, 204, 0, 0.4);
 }
 
-/* 3. CONTAINER PRINCIPAL */
+/* 3. ESTRUTURA PRINCIPAL */
 .container {
     display: flex;
     flex-direction: column;
@@ -65,121 +46,139 @@ body {
     padding: 2vh;
 }
 
-/* 4. BLOCO DO CHAMADO ATUAL */
+/* 4. ÁREA DO PACIENTE (DESTAQUE MÁXIMO) */
 .bloco-principal {
-    flex: 4;
+    flex: 5; /* Aumentado para dar mais destaque */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    border: 0.8vh solid #7ab5e8;
-    border-radius: 2vh;
+    border: 0.8vh solid #0074D9;
+    border-radius: 4vh;
     background: rgba(255, 255, 255, 0.03);
     margin-bottom: 2vh;
 }
 
 .label-paciente {
-    font-size: 10vh;
-    color: #FFCC00;
-    letter-spacing: 1.5vw;
+    font-size: clamp(20px, 4vh, 40px);
+    color: #85fffd;
+    letter-spacing: 1.2vw;
     font-weight: 700;
+    margin-bottom: 1vh;
 }
 
 #nome-paciente {
-    /* Mínimo 60px, ideal 15vh da tela, máximo 200px */
-    font-size: clamp(60px, 15vh, 200px);
+    /* Fonte gigante e SEMPRE amarela */
+    font-size: clamp(60px, 18vh, 220px);
     font-weight: 900;
-    color: #FFCC00; /* Nome em destaque amarelo */
+    color: #FFCC00; 
     text-transform: uppercase;
-    line-height: 1.1;
-    margin: 2vh 0;
-    text-shadow: 4px 4px 15px rgba(0,0,0,0.6);
+    line-height: 1;
+    text-shadow: 4px 4px 20px rgba(0,0,0,0.7);
 }
 
-/* CARDS DE PROFISSIONAL E LOCAL */
+/* 5. CAIXAS DE INFO (MAIS COMPACTAS) */
 .infos-container {
     display: flex;
-    width: 90%;
-    gap: 3vw;
-    margin-top: 2vh;
+    width: 75%; /* Reduzido para centralizar mais */
+    gap: 2vw;
+    margin-top: 3vh;
 }
 
 .card-detalhe {
     flex: 1;
     background: #0074D9;
-    padding: 2.5vh;
+    padding: 1.5vh 3vh; /* Padding reduzido conforme pedido */
     border-radius: 2vh;
     box-shadow: 0 1vh 3vh rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .sub-label {
     display: block;
     font-size: 2vh;
     color: #001b3a;
-    font-weight: 700;
-    margin-bottom: 0.5vh;
-}
-
-#nome-profissional, #consultorio {
-    font-size: 5vh;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
 }
 
-/* 5. BARRA DE HISTÓRICO (RODAPÉ) */
+#nome-profissional, #consultorio {
+    font-size: clamp(20px, 4.5vh, 60px);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+/* 6. HISTÓRICO (NOME + LOCAL) */
 .barra-historico {
-    flex: 1;
-    background: rgba(0, 0, 0, 0.4);
+    flex: 1.2;
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 2vh;
-    padding: 1.5vh 3vh;
+    padding: 1.5vh;
     display: flex;
     align-items: center;
     border: 1px solid #333;
 }
 
 .historico-titulo {
-    font-size: 2vh;
-    color: #666;
-    font-weight: 700;
+    font-size: 1.8vh;
+    color: #555;
+    font-weight: 900;
     margin-right: 2vw;
-    white-space: nowrap;
+    writing-mode: vertical-lr; /* Efeito estiloso na lateral */
+    transform: rotate(180deg);
 }
 
 #lista-historico {
     display: flex;
     list-style: none;
     gap: 1.5vw;
+    width: 100%;
 }
 
 #lista-historico li {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1vh 3vh;
-    border-radius: 50px;
-    font-size: 3vh;
-    color: #cbd5e0;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1vh 2.5vh;
+    border-radius: 15px;
     border-left: 0.8vh solid #0074D9;
+    display: flex;
+    flex-direction: column;
+    min-width: 15vw;
+    animation: slideIn 0.5s ease;
+}
+
+#lista-historico li strong {
+    font-size: 2.8vh; /* Nome do paciente no histórico */
+    color: #FFCC00;
     text-transform: uppercase;
-    animation: aparecer 0.5s ease-out;
 }
 
-/* 6. ANIMAÇÕES */
-@keyframes aparecer {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
+#lista-historico li small {
+    font-size: 1.8vh; /* Local no histórico */
+    color: #85fffd;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
-/* EFEITO PISCAR AMARELO */
+/* 7. ANIMAÇÕES */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .piscar-amarelo {
     animation: alerta 0.7s infinite;
 }
 
 @keyframes alerta {
     0%, 100% { background-color: #001b3a; }
-    50% { background-color: #FFFF00; }
+    50% { background-color: #FFCC00; }
 }
 
-/* Ajuste de cor do texto durante o pisca para não sumir no amarelo */
+/* Durante o pisca, garantimos que tudo fique visível em preto */
 .piscar-amarelo #nome-paciente, 
 .piscar-amarelo .label-paciente,
 .piscar-amarelo .sub-label,
