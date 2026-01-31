@@ -1,43 +1,43 @@
 const socket = io();
-const sintetizador = window.speechSynthesis;
+
+// Lista para armazenar o histórico (opcional, mas mantém o painel organizado)
+let historicoChamadas = [];
 
 socket.on("proxima-chamada", (dados) => {
-    // 1. Histórico
-    const nomeAnterior = document.getElementById("nome-paciente").innerText;
-    if (nomeAnterior && nomeAnterior !== "Aguardando...") {
-        const li = document.createElement("li");
-        li.innerText = nomeAnterior;
-        const lista = document.getElementById("lista-historico");
-        lista.prepend(li);
-        if (lista.children.length > 5) lista.lastChild.remove();
-    }
-
-    // 2. Atualiza Tela
-    document.getElementById("nome-paciente").innerText = dados.paciente;
+    // 1. ATUALIZA OS TEXTOS NA TELA
+    document.getElementById("nome-paciente").innerText = dados.paciente.toUpperCase();
     document.getElementById("nome-profissional").innerText = dados.profissional;
     document.getElementById("consultorio").innerText = dados.consultorio;
 
-    // 3. PISCAR AMARELO (Duração de 15 segundos)
+    // 2. REMOVIDO: alert(dados.paciente); <-- O pop-up foi apagado daqui
+
+    // 3. ATIVA O PISCAR EM AMARELO
     document.body.classList.add("piscar-amarelo");
+
+    // 4. LÓGICA DO HISTÓRICO (Para não bugar o PC)
+    historicoChamadas.unshift(dados);
+    if (historicoChamadas.length > 6) historicoChamadas.pop();
+    atualizarInterfaceHistorico();
+
+    // 5. REPRODUZ A VOZ
+    const msg = new SpeechSynthesisUtterance(`Paciente, ${dados.paciente}. Comparecer ao, ${dados.consultorio}`);
+    msg.lang = 'pt-BR';
+    window.speechSynthesis.speak(msg);
+
+    // 6. PARA DE PISCAR APÓS 8 SEGUNDOS
     setTimeout(() => {
         document.body.classList.remove("piscar-amarelo");
-    }, 15000); 
-
-    // 4. CHAMADA DE VOZ DUPLA
-    sintetizador.cancel(); 
-    const frase = `Paciente, ${dados.paciente}, comparecer ao ${dados.consultorio} com ${dados.profissional}`;
-    
-    const falar = () => {
-        const msg = new SpeechSynthesisUtterance(frase);
-        msg.lang = 'pt-BR';
-        msg.rate = 0.85; 
-        sintetizador.speak(msg);
-    };
-
-    falar(); // Primeira vez imediata
-
-    // Segunda vez após 7 segundos (tempo para a primeira frase longa terminar)
-    setTimeout(() => {
-        falar();
-    }, 7500);
+    }, 8000);
 });
+
+function atualizarInterfaceHistorico() {
+    const lista = document.getElementById("lista-historico");
+    if (!lista) return;
+    lista.innerHTML = "";
+    historicoChamadas.slice(1).forEach(item => {
+        const div = document.createElement("div");
+        div.className = "historico-item";
+        div.innerHTML = `<strong>${item.paciente}</strong> <small>${item.consultorio}</small>`;
+        lista.appendChild(div);
+    });
+}

@@ -1,52 +1,40 @@
 const socket = io();
 
-// Função disparada pelo botão "CHAMAR" no seu HTML
-function chamarPaciente() {
-    console.log("Iniciando chamada...");
+// Função principal disparada pelo botão do formulário
+function realizarChamada() {
+    // 1. CAPTURA DOS DADOS DO FORMULÁRIO
+    // Certifique-se de que os IDs abaixo existem no seu chamar.html
+    const pacienteInput = document.getElementById("paciente");
+    const profissionalInput = document.getElementById("profissional");
+    const consultorioInput = document.getElementById("consultorio");
 
-    // 1. Captura os elementos do seu HTML pelos IDs corretos
-    const selectProfissional = document.getElementById("profissional");
-    const inputPaciente = document.getElementById("paciente");
-    const selectConsultorio = document.getElementById("consultorio");
-
-    // 2. Extrai os valores digitados/selecionados
-    const nomeProfissional = selectProfissional.value;
-    const nomePaciente = inputPaciente.value;
-    const nomeConsultorio = selectConsultorio.value;
-
-    // 3. Validações básicas para evitar chamadas vazias
-    if (!nomeProfissional) {
-        alert("Por favor, selecione um Profissional.");
-        return;
-    }
-    if (!nomePaciente.trim()) {
-        alert("Por favor, digite o nome do Paciente.");
-        return;
-    }
-    if (!nomeConsultorio) {
-        alert("Por favor, selecione o Consultório.");
+    // Validação básica para não enviar campos vazios
+    if (!pacienteInput.value) {
+        console.warn("Nome do paciente é obrigatório.");
         return;
     }
 
-    // 4. Monta o objeto de dados exatamente como o painel.js espera
     const dados = {
-        paciente: nomePaciente,
-        profissional: nomeProfissional,
-        consultorio: nomeConsultorio
+        paciente: pacienteInput.value,
+        profissional: profissionalInput.value || "Não informado",
+        consultorio: consultorioInput.value || "Geral"
     };
 
-    // 5. Envia para o servidor via Socket.io
+    // 2. ENVIO PARA O SERVIDOR
+    // O servidor recebe e repassa para o painel.js
     socket.emit("chamar", dados);
 
-    // 6. Feedback visual e limpeza do campo paciente
-    console.log("Dados enviados ao servidor:", dados);
-    alert("Chamando: " + nomePaciente);
-    
-    // Limpa apenas o nome do paciente para a próxima chamada
-    inputPaciente.value = "";
+    // 3. LOG DE CONFIRMAÇÃO NO TERMINAL DO NAVEGADOR (SEM POP-UP)
+    console.log("Chamada enviada com sucesso:", dados);
+
+    // 4. LIMPAR O CAMPO DO PACIENTE PARA A PRÓXIMA CHAMADA
+    pacienteInput.value = "";
+    pacienteInput.focus(); // Coloca o cursor de volta no campo de texto
 }
 
-// Log para confirmar que o dispositivo de chamada conectou
-socket.on("connect", () => {
-    console.log("Controle conectado ao servidor!");
+// Opcional: Permitir chamar ao apertar "Enter" no campo do paciente
+document.getElementById("paciente").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+        realizarChamada();
+    }
 });

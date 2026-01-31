@@ -1,4 +1,4 @@
-/* 1. RESET E CONFIGURAÇÕES GERAIS */
+/* 1. CONFIGURAÇÕES TÉCNICAS (NÃO MUDAR) */
 * {
     margin: 0;
     padding: 0;
@@ -6,14 +6,15 @@
 }
 
 body {
-    background-color: #001b3a; /* Azul escuro profissional */
+    background-color: #001b3a; /* Azul escuro de fundo */
     color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Arial', sans-serif;
     height: 100vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Impede rolagem na TV */
+    overflow: hidden; /* Evita que a tela role na TV */
+    transition: background-color 0.3s ease;
 }
 
 /* 2. ESTRUTURA PRINCIPAL */
@@ -21,40 +22,36 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 100%;
 }
 
-/* 3. ÁREA DE DESTAQUE (CHAMADA ATUAL) */
+/* 3. ÁREA DO CHAMADO (PARTE SUPERIOR) */
 .chamada-principal {
-    flex: 3; /* Ocupa a maior parte da tela */
+    flex: 3;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     padding: 20px;
-    border-bottom: 8px solid #0074D9;
 }
 
 .header-label {
     font-size: 2.5vw;
     color: #85fffd;
-    letter-spacing: 5px;
     font-weight: bold;
-    margin-bottom: 10px;
+    letter-spacing: 5px;
 }
 
 #nome-paciente {
-    font-size: 9vw; /* Tamanho grande que se ajusta à tela */
+    font-size: 9vw; /* Tamanho grande para TV */
     font-weight: 900;
-    color: #FFDC00; /* Amarelo vibrante para o nome */
+    color: #FFDC00; /* Nome em amarelo vibrante */
     text-transform: uppercase;
-    line-height: 1;
     margin: 20px 0;
-    text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.6);
+    text-shadow: 4px 4px 10px rgba(0,0,0,0.5);
 }
 
-/* 4. INFORMAÇÕES SECUNDÁRIAS (PROFISSIONAL E LOCAL) */
+/* 4. INFORMAÇÕES SECUNDÁRIAS */
 .info-secundaria {
     display: flex;
     width: 100%;
@@ -64,8 +61,9 @@ body {
 
 .box-info {
     background: rgba(255, 255, 255, 0.1);
-    padding: 15px 40px;
-    border-radius: 15px;
+    padding: 15px 30px;
+    border-radius: 10px;
+    text-align: center;
     min-width: 30%;
 }
 
@@ -81,27 +79,26 @@ body {
     font-weight: bold;
 }
 
-/* 5. RODAPÉ DE HISTÓRICO */
+/* 5. RODAPÉ DO HISTÓRICO */
 .rodape-historico {
     flex: 1;
     background-color: #000000;
-    padding: 15px;
+    padding: 10px 20px;
     display: flex;
     flex-direction: column;
 }
 
 .titulo-historico {
     font-size: 1.2vw;
-    color: #555;
-    margin-bottom: 10px;
+    color: #666;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .historico-flex {
     display: flex;
-    gap: 20px;
-    overflow-x: hidden; /* Mantém limpo */
-    height: 100%;
+    gap: 15px;
+    overflow-x: hidden;
     align-items: center;
 }
 
@@ -110,14 +107,13 @@ body {
     border-left: 5px solid #0074D9;
     padding: 10px 20px;
     border-radius: 5px;
-    min-width: 250px;
-    animation: slideIn 0.5s ease-out;
+    min-width: 200px;
 }
 
 .historico-item strong {
-    font-size: 1.4vw;
-    color: #eee;
     display: block;
+    font-size: 1.3vw;
+    color: #eee;
 }
 
 .historico-item small {
@@ -125,19 +121,13 @@ body {
     color: #0074D9;
 }
 
-/* 6. ANIMAÇÕES */
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
+/* 6. ANIMAÇÃO: PISCAR EM AMARELO */
+.piscar-amarelo {
+    animation: alerta-amarelo 0.6s infinite;
 }
 
-/* Efeito de piscar a tela inteira na chamada */
-.piscar-tela {
-    animation: alert-bg 0.8s infinite;
-}
-
-@keyframes alert-bg {
+@keyframes alerta-amarelo {
     0% { background-color: #001b3a; }
-    50% { background-color: #ff4136; } /* Vermelho alerta */
+    50% { background-color: #FFFF00; } /* Amarelo puro */
     100% { background-color: #001b3a; }
 }
