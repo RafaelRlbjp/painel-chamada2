@@ -67,8 +67,8 @@ body{
 
 #nome-profissional,
 #consultorio{
-  font-size:clamp(25px,4vw,70px);
-  margin-top:15px;
+  font-size:clamp(25px,40px,70px);
+  margin-top:10px;
 }
 
 /* ================= HISTÓRICO ================= */
@@ -114,7 +114,7 @@ body{
 }
 
 .piscar-amarelo #nome-paciente{
-  color:black;
+  color:rgb(255, 255, 255);
 }
 
 /* ================= MOBILE ================= */
