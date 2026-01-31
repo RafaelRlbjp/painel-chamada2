@@ -7,32 +7,32 @@ const io = require("socket.io")(http, { cors: { origin: "*" } });
 const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, "public")));
 
-let fila = [];
-let processando = false;
+let filaChamadas = [];
+let estaProcessando = false;
 
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "public", "painel.html")));
 
 io.on("connection", (socket) => {
-    socket.on("chamar", (dados) => {
-        fila.push(dados); // Adiciona ao final da fila
-        processarFila();
-    });
+  socket.on("chamar", (dados) => {
+    filaChamadas.push(dados);
+    processarFila();
+  });
 });
 
 function processarFila() {
-    if (processando || fila.length === 0) return;
-    
-    processando = true;
-    const proximo = fila.shift(); // Remove o primeiro da fila
-    
-    // Envia para o painel
-    io.emit("proxima-chamada", proximo);
+  if (estaProcessando || filaChamadas.length === 0) return;
 
-    // Aguarda 10 segundos (tempo da voz falar 2x) antes de liberar a próxima pessoa da fila
-    setTimeout(() => {
-        processando = false;
-        processarFila();
-    }, 10000);
+  estaProcessando = true;
+  const proximo = filaChamadas.shift();
+  
+  io.emit("proxima-chamada", proximo);
+
+  // AUMENTADO PARA 16 SEGUNDOS: 
+  // Garante que o painel termine as 2 falas e o pisca antes de enviar o próximo.
+  setTimeout(() => {
+    estaProcessando = false;
+    processarFila();
+  }, 16000); 
 }
 
-http.listen(PORT, "0.0.0.0", () => console.log(`Servidor na porta ${PORT}`));
+http.listen(PORT, "0.0.0.0", () => console.log(`Servidor rodando na porta ${PORT}`));

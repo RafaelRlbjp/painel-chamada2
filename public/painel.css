@@ -1,143 +1,164 @@
-/* 1. RESET E CONFIGURAÇÕES GERAIS */
+/* Configurações Gerais e Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Arial Black', Gadget, sans-serif; /* Fonte robusta para leitura à distância */
 }
 
 body {
-    background-color: #001b3a; /* Azul escuro profissional */
-    color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #001f3f; /* Azul Marinho profundo */
+    color: white;
     height: 100vh;
     width: 100vw;
     display: flex;
-    flex-direction: column;
-    overflow: hidden; /* Impede rolagem na TV */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.3s ease;
 }
 
-/* 2. ESTRUTURA PRINCIPAL */
-.container {
+/* Container Principal */
+.painel-container {
+    width: 96%;
+    height: 94%;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 100%;
+    gap: 20px;
 }
 
-/* 3. ÁREA DE DESTAQUE (CHAMADA ATUAL) */
-.chamada-principal {
-    flex: 3; /* Ocupa a maior parte da tela */
+/* --- ÁREA DO CHAMADO ATUAL (DESTAQUE) --- */
+.chamado-atual {
+    flex: 3;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 40px;
+    border: 6px solid #0074D9;
+    padding: 30px;
     text-align: center;
-    padding: 20px;
-    border-bottom: 8px solid #0074D9;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.header-label {
-    font-size: 2.5vw;
-    color: #85fffd;
-    letter-spacing: 5px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-#nome-paciente {
-    font-size: 9vw; /* Tamanho grande que se ajusta à tela */
-    font-weight: 900;
-    color: #FFDC00; /* Amarelo vibrante para o nome */
+.titulo {
+    font-size: 3rem;
+    color: #7FDBFF; /* Azul claro para o rótulo "PACIENTE" */
     text-transform: uppercase;
-    line-height: 1;
-    margin: 20px 0;
-    text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.6);
+    letter-spacing: 10px;
 }
 
-/* 4. INFORMAÇÕES SECUNDÁRIAS (PROFISSIONAL E LOCAL) */
+.destaque {
+    font-size: 10rem; /* Tamanho massivo para o nome do paciente */
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1;
+    margin: 30px 0;
+    word-wrap: break-word;
+    text-shadow: 5px 5px 15px rgba(0,0,0,0.8);
+}
+
+/* Faixa de Informações (Profissional e Consultório) */
 .info-secundaria {
     display: flex;
     width: 100%;
     justify-content: space-around;
-    margin-top: 30px;
+    background: #0074D9;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.box-info {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px 40px;
-    border-radius: 15px;
-    min-width: 30%;
+.item-info {
+    text-align: center;
 }
 
 .label {
     display: block;
-    font-size: 1.5vw;
-    color: #bdc3c7;
+    font-size: 1.6rem;
+    color: #001f3f;
+    font-weight: bold;
+    text-transform: uppercase;
     margin-bottom: 5px;
 }
 
 #nome-profissional, #consultorio {
-    font-size: 3vw;
+    font-size: 3.5rem;
     font-weight: bold;
+    color: white;
 }
 
-/* 5. RODAPÉ DE HISTÓRICO */
-.rodape-historico {
+/* --- ÁREA DO HISTÓRICO (PARTE INFERIOR) --- */
+.historico-secao {
     flex: 1;
-    background-color: #000000;
-    padding: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 25px;
+    padding: 20px;
+    border: 2px solid #333;
+}
+
+.historico-secao h2 {
+    font-size: 1.8rem;
+    color: #7FDBFF;
+    margin-bottom: 15px;
+    border-bottom: 3px solid #0074D9;
+    display: inline-block;
+    padding-right: 20px;
+}
+
+#lista-historico {
+    list-style: none;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 15px;
+    overflow: hidden;
 }
 
-.titulo-historico {
-    font-size: 1.2vw;
-    color: #555;
-    margin-bottom: 10px;
-    font-weight: bold;
+#lista-historico li {
+    font-size: 2.2rem;
+    background: #111;
+    padding: 12px 30px;
+    border-radius: 60px;
+    color: #888;
+    border: 2px solid #444;
+    animation: slideIn 0.5s ease-out forwards;
 }
 
-.historico-flex {
-    display: flex;
-    gap: 20px;
-    overflow-x: hidden; /* Mantém limpo */
-    height: 100%;
-    align-items: center;
+/* --- ANIMAÇÕES E EFEITOS --- */
+
+/* Efeito de piscar em AMARELO VIBRANTE */
+.piscar-amarelo {
+    animation: alerta-amarelo 0.7s infinite;
 }
 
-.historico-item {
-    background: #1a1a1a;
-    border-left: 5px solid #0074D9;
-    padding: 10px 20px;
-    border-radius: 5px;
-    min-width: 250px;
-    animation: slideIn 0.5s ease-out;
+@keyframes alerta-amarelo {
+    0% { background-color: #001f3f; }
+    50% { background-color: #FFFF00; } /* Amarelo Puro */
+    100% { background-color: #001f3f; }
 }
 
-.historico-item strong {
-    font-size: 1.4vw;
-    color: #eee;
-    display: block;
+/* Troca as cores dos textos para PRETO durante o alerta amarelo */
+.piscar-amarelo .destaque, 
+.piscar-amarelo .titulo,
+.piscar-amarelo .label,
+.piscar-amarelo #nome-profissional,
+.piscar-amarelo #consultorio {
+    color: #000 !important;
+    text-shadow: none !important;
 }
 
-.historico-item small {
-    font-size: 1vw;
-    color: #0074D9;
+.piscar-amarelo .chamado-atual {
+    border-color: #000;
 }
 
-/* 6. ANIMAÇÕES */
+.piscar-amarelo .info-secundaria {
+    background-color: #333;
+}
+
+/* Entrada dos nomes no histórico */
 @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-/* Efeito de piscar a tela inteira na chamada */
-.piscar-tela {
-    animation: alert-bg 0.8s infinite;
-}
-
-@keyframes alert-bg {
-    0% { background-color: #001b3a; }
-    50% { background-color: #ff4136; } /* Vermelho alerta */
-    100% { background-color: #001b3a; }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
