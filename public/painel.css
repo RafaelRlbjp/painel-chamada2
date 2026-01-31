@@ -53,9 +53,9 @@ body {
 
 .cards-container{
   width:100%;
+  margin-top:30px;
   display:flex;
-  gap:4vh;
-  margin-top:3vh;
+  gap:40px; /* AQUI separa as duas barras */
 }
 
 .card{
