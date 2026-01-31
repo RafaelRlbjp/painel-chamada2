@@ -1,25 +1,49 @@
 const socket = io();
 const sintetizador = window.speechSynthesis;
 
-// 🔔 BEEP MP3 (4x)
 const beep = new Audio("/audio/bip.mp3");
 
-function tocarBeep() {
+function tocar2Bips() {
   beep.currentTime = 0;
   beep.play().catch(()=>{});
 
   setTimeout(() => {
     beep.currentTime = 0;
     beep.play().catch(()=>{});
-  }, 1200);
+  }, 700);
+}
+
+function falar(frase) {
+  const msg = new SpeechSynthesisUtterance(frase);
+  msg.lang = "pt-BR";
+  msg.rate = 0.9;
+  sintetizador.speak(msg);
 }
 
 socket.on("proxima-chamada", (dados) => {
 
-  // 🔔 alerta sonoro MP3 (funciona na TV)
-  tocarBeep();
+  const frase = `Paciente ${dados.paciente}`;
 
-  // 1. mover atual para histórico
+  // ================= PRIMEIRA CHAMADA =================
+  tocar2Bips();
+
+  setTimeout(() => {
+    sintetizador.cancel();
+    falar(frase);
+  }, 1400);
+
+  // ================= SEGUNDA CHAMADA =================
+  setTimeout(() => {
+    tocar2Bips();
+  }, 6000);
+
+  setTimeout(() => {
+    sintetizador.cancel();
+    falar(frase);
+  }, 7400);
+
+
+  // ---------- histórico ----------
   const nomeAtual = document.getElementById("nome-paciente").innerText;
 
   if (nomeAtual && nomeAtual !== "AGUARDANDO...") {
@@ -32,30 +56,17 @@ socket.on("proxima-chamada", (dados) => {
     if (lista.children.length > 4) lista.lastChild.remove();
   }
 
-  // 2. atualizar tela
+  // ---------- atualizar painel ----------
   document.getElementById("nome-paciente").innerText = dados.paciente;
   document.getElementById("nome-profissional").innerText = dados.profissional;
   document.getElementById("consultorio").innerText = dados.consultorio;
 
-  // 3. piscar SOMENTE painel
-  document.querySelector(".area-principal").classList.add("piscar-amarelo");
+  // ---------- piscar apenas painel ----------
+  const painel = document.querySelector(".area-principal");
+  painel.classList.add("piscar-amarelo");
 
   setTimeout(() => {
-    document.querySelector(".area-principal").classList.remove("piscar-amarelo");
-  }, 8000);
+    painel.classList.remove("piscar-amarelo");
+  }, 9000);
 
-  // 4. voz (opcional — notebook)
-  sintetizador.cancel();
-
-  const frase = `Paciente ${dados.paciente}`;
-
-  const falar = () => {
-    const msg = new SpeechSynthesisUtterance(frase);
-    msg.lang = "pt-BR";
-    msg.rate = 0.9;
-    sintetizador.speak(msg);
-  };
-
-  falar();
-  setTimeout(falar, 6000);
 });
