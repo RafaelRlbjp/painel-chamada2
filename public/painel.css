@@ -11,27 +11,26 @@ body{
   font-family:Arial, Helvetica, sans-serif;
 }
 
-.container{
+.container {
   height:100%;
-  padding:25px;
+  width:100%;
+  padding:40px;
   display:flex;
   flex-direction:column;
-  gap:20px;
+  justify-content:space-between;
 }
 
 /* ================= AREA PRINCIPAL ================= */
 
-.area-principal{
-  flex:4;
-  border:6px solid #0d6efd;
-  border-radius:35px;
+.area-principal {
+  flex:1;
+  border:10px solid #0d6efd;
+  border-radius:40px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  background:#020c1d;
-  box-shadow:0 0 30px #0d6efd55;
-  padding:25px;
+  padding:30px;
 }
 
 .label-topo{
@@ -40,8 +39,9 @@ body{
   letter-spacing:2px;
 }
 
-#nome-paciente{
-  font-size:clamp(45px,12vw,150px);
+#nome-paciente
+ #nome-paciente {
+  font-size: clamp(50px, 14vw, 170px);
   color:#ffd500;
   margin:15px 0;
   text-align:center;
@@ -51,7 +51,8 @@ body{
 /* ================= CARDS ================= */
 
 .cards-container{
-  width:95%;
+  width:100%;
+  margin-top:30px;
   display:flex;
   gap:25px;
 }
@@ -115,17 +116,24 @@ body{
 /* ================= ALERTA ================= */
 
 .piscar-amarelo{
-  animation:pisca .5s infinite;
+  animation:pisca 1s infinite;
 }
 
 @keyframes pisca{
-  0%,100%{background:#020c1d;}
-  50%{background:#ffd500;}
+  0%{
+    background:#001b3a;
+  }
+  50%{
+    background:#ffd500;
+  }
+  100%{
+    background:#001b3a;
+  }
 }
 
 .piscar-amarelo #nome-paciente{
-  color:black;
-  text-shadow:none;
+  color:#000;
+  text-shadow:0 0 20px #fff;
 }
 
 /* ================= MOBILE ================= */
