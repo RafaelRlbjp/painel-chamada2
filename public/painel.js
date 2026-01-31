@@ -49,3 +49,8 @@ socket.on("proxima-chamada", (dados) => {
   falar();
   setTimeout(falar, 6000);
 });
+
+setInterval(()=>{
+  const r = document.getElementById("relogio");
+  r.innerText = new Date().toLocaleTimeString();
+},1000);
