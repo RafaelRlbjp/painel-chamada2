@@ -73,15 +73,15 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    border: 0.8vh solid #0074D9;
-    border-radius: 4vh;
+    border: 0.8vh solid #7ab5e8;
+    border-radius: 2vh;
     background: rgba(255, 255, 255, 0.03);
     margin-bottom: 2vh;
 }
 
 .label-paciente {
-    font-size: 4vh;
-    color: #85fffd;
+    font-size: 8vh;
+    color: #FFCC00;
     letter-spacing: 1.5vw;
     font-weight: 700;
 }
