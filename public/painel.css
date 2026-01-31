@@ -142,16 +142,16 @@ body{
 
 #nome-profissional,
 #consultorio{
-  font-size:4vw;
+  font: size 40px;;
 }
 
   #nome-paciente{
-    font-size:12vw;
+    font: size 30px;
   }
 
   #nome-profissional,
   #consultorio{
-    font-size:4vw;
+    font: size 40px;;
   }
 
   .card{
@@ -163,7 +163,7 @@ body{
   }
 
   .titulo-hist{
-    font-size:3vh;
+    font: size 30pix;
   }
 
   #lista-historico li{
