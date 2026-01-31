@@ -187,3 +187,31 @@ body {
 }
 
 }
+
+@media (min-width: 1200px) {
+
+.area-principal{
+  padding-top:40px;
+}
+
+#nome-paciente{
+  margin-bottom:60px;
+}
+
+/* separar bem profissional / local */
+.cards-container{
+  gap:120px;
+  margin-top:20px;
+}
+
+/* subir cards um pouco */
+.cards-container{
+  transform: translateY(-40px);
+}
+
+/* evitar que invadam histórico */
+.secao-historico{
+  margin-top:60px;
+}
+
+}
