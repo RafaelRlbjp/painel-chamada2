@@ -1,133 +1,18 @@
-/* 1. CONFIGURAÇÕES TÉCNICAS (NÃO MUDAR) */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background-color: #001b3a; /* Azul escuro de fundo */
-    color: #ffffff;
-    font-family: 'Arial', sans-serif;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; /* Evita que a tela role na TV */
-    transition: background-color 0.3s ease;
-}
-
-/* 2. ESTRUTURA PRINCIPAL */
-.container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* 3. ÁREA DO CHAMADO (PARTE SUPERIOR) */
-.chamada-principal {
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-}
-
-.header-label {
-    font-size: 2.5vw;
-    color: #85fffd;
-    font-weight: bold;
-    letter-spacing: 5px;
-}
-
-#nome-paciente {
-    font-size: 9vw; /* Tamanho grande para TV */
-    font-weight: 900;
-    color: #FFDC00; /* Nome em amarelo vibrante */
-    text-transform: uppercase;
-    margin: 20px 0;
-    text-shadow: 4px 4px 10px rgba(0,0,0,0.5);
-}
-
-/* 4. INFORMAÇÕES SECUNDÁRIAS */
-.info-secundaria {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    margin-top: 30px;
-}
-
-.box-info {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px 30px;
-    border-radius: 10px;
-    text-align: center;
-    min-width: 30%;
-}
-
-.label {
-    display: block;
-    font-size: 1.5vw;
-    color: #bdc3c7;
-    margin-bottom: 5px;
-}
-
-#nome-profissional, #consultorio {
-    font-size: 3vw;
-    font-weight: bold;
-}
-
-/* 5. RODAPÉ DO HISTÓRICO */
-.rodape-historico {
-    flex: 1;
-    background-color: #000000;
-    padding: 10px 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.titulo-historico {
-    font-size: 1.2vw;
-    color: #666;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.historico-flex {
-    display: flex;
-    gap: 15px;
-    overflow-x: hidden;
-    align-items: center;
-}
-
-.historico-item {
-    background: #1a1a1a;
-    border-left: 5px solid #0074D9;
-    padding: 10px 20px;
-    border-radius: 5px;
-    min-width: 200px;
-}
-
-.historico-item strong {
-    display: block;
-    font-size: 1.3vw;
-    color: #eee;
-}
-
-.historico-item small {
-    font-size: 1vw;
-    color: #0074D9;
-}
-
-/* 6. ANIMAÇÃO: PISCAR EM AMARELO */
 .piscar-amarelo {
     animation: alerta-amarelo 0.8s infinite !important;
 }
 
 @keyframes alerta-amarelo {
-    0% { background-color: #001f3f; }
-    50% { background-color: #FFFF00; }
-    100% { background-color: #001f3f; }
+    0% { background-color: #001b3a; } /* Cor original */
+    50% { background-color: #FFFF00; } /* Amarelo Vibrante */
+    100% { background-color: #001b3a; }
+}
+
+/* Garante que o texto fique preto durante o pisca para contraste */
+.piscar-amarelo #nome-paciente, 
+.piscar-amarelo .header-label, 
+.piscar-amarelo #nome-profissional, 
+.piscar-amarelo #consultorio {
+    color: #000 !important;
+    text-shadow: none !important;
 }

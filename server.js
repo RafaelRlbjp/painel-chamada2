@@ -7,32 +7,29 @@ const io = require("socket.io")(http, { cors: { origin: "*" } });
 const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, "public")));
 
-let filaChamadas = [];
-let estaProcessando = false;
+let fila = [];
+let processando = false;
 
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "public", "painel.html")));
 
 io.on("connection", (socket) => {
   socket.on("chamar", (dados) => {
-    filaChamadas.push(dados);
+    fila.push(dados);
     processarFila();
   });
 });
 
 function processarFila() {
-  if (estaProcessando || filaChamadas.length === 0) return;
-
-  estaProcessando = true;
-  const proximo = filaChamadas.shift();
-  
+  if (processando || fila.length === 0) return;
+  processando = true;
+  const proximo = fila.shift();
   io.emit("proxima-chamada", proximo);
 
-  // AUMENTADO PARA 16 SEGUNDOS: 
-  // Garante que o painel termine as 2 falas e o pisca antes de enviar o próximo.
+  // Espera 16 segundos para o painel terminar o ciclo completo antes de enviar o próximo
   setTimeout(() => {
-    estaProcessando = false;
+    processando = false;
     processarFila();
   }, 16000); 
 }
 
-http.listen(PORT, "0.0.0.0", () => console.log(`Servidor rodando na porta ${PORT}`));
+http.listen(PORT, "0.0.0.0", () => console.log(`Servidor online na porta ${PORT}`));

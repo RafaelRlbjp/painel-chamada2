@@ -2,33 +2,32 @@ const socket = io();
 const sintetizador = window.speechSynthesis;
 
 socket.on("proxima-chamada", (dados) => {
-    // 1. Histórico
-    const nomeAnterior = document.getElementById("nome-paciente").innerText;
-    if (nomeAnterior && nomeAnterior !== "Aguardando..." && nomeAnterior !== "") {
-        const li = document.createElement("li");
-        li.innerText = nomeAnterior;
+    // 1. Gerenciar Histórico (Antes de mudar o nome atual)
+    const nomeAtual = document.getElementById("nome-paciente").innerText;
+    if (nomeAtual && nomeAtual !== "Aguardando..." && nomeAtual !== "") {
         const lista = document.getElementById("lista-historico");
-        lista.prepend(li);
+        const item = document.createElement("li");
+        item.innerText = nomeAtual;
+        lista.prepend(item);
         if (lista.children.length > 5) lista.lastChild.remove();
     }
 
-    // 2. Atualizar Tela
+    // 2. Atualizar a Tela
     document.getElementById("nome-paciente").innerText = dados.paciente;
     document.getElementById("nome-profissional").innerText = dados.profissional;
     document.getElementById("consultorio").innerText = dados.consultorio;
 
-    // 3. PISCAR AMARELO - Forçando a aplicação da classe
-    document.body.classList.remove("piscar-amarelo"); // Limpa se houver uma trava
-    void document.body.offsetWidth; // Truque para reiniciar a animação
+    // 3. Alerta Amarelo (Duração de 15 segundos)
+    document.body.classList.remove("piscar-amarelo");
+    void document.body.offsetWidth; // Reinicia animação
     document.body.classList.add("piscar-amarelo");
 
-    // Remove o pisca após 15 segundos
     setTimeout(() => {
         document.body.classList.remove("piscar-amarelo");
     }, 15000);
 
-    // 4. VOZ DUPLA
-    sintetizador.cancel();
+    // 4. Chamada de Voz Dupla
+    sintetizador.cancel(); 
     const frase = `Paciente, ${dados.paciente}, comparecer ao ${dados.consultorio} com ${dados.profissional}`;
     
     const falar = () => {
@@ -38,6 +37,6 @@ socket.on("proxima-chamada", (dados) => {
         sintetizador.speak(msg);
     };
 
-    falar(); // 1ª vez
-    setTimeout(falar, 7000); // 2ª vez
+    falar(); // 1ª Vez
+    setTimeout(falar, 7500); // 2ª Vez após 7.5 segundos
 });
