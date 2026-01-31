@@ -2,45 +2,37 @@ const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const path = require("path");
-const io = require("socket.io")(http, {
-  cors: { origin: "*", methods: ["GET", "POST"] }
-});
+const io = require("socket.io")(http, { cors: { origin: "*" } });
 
 const PORT = process.env.PORT || 3000;
-
-// Pasta de arquivos estáticos
 app.use(express.static(path.join(__dirname, "public")));
 
-// Fila para organizar as chamadas
-let filaChamadas = [];
+let fila = [];
+let processando = false;
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "painel.html"));
-});
+app.get("/", (req, res) => res.sendFile(path.join(__dirname, "public", "painel.html")));
 
 io.on("connection", (socket) => {
-  console.log("Conectado: " + socket.id);
+    socket.on("chamar", (dados) => {
+        fila.push(dados); // Adiciona ao final da fila
+        processarFila();
+    });
+});
 
-  // 1. Recebe o clique do formulário e coloca na fila
-  socket.on("chamar", (dados) => {
-    // Adiciona à fila para garantir a ordem
-    filaChamadas.push(dados);
+function processarFila() {
+    if (processando || fila.length === 0) return;
     
-    // Pega o último item adicionado para chamar agora
-    const chamadaAtual = filaChamadas[filaChamadas.length - 1];
+    processando = true;
+    const proximo = fila.shift(); // Remove o primeiro da fila
+    
+    // Envia para o painel
+    io.emit("proxima-chamada", proximo);
 
-    console.log("Chamando agora:", chamadaAtual);
+    // Aguarda 10 segundos (tempo da voz falar 2x) antes de liberar a próxima pessoa da fila
+    setTimeout(() => {
+        processando = false;
+        processarFila();
+    }, 10000);
+}
 
-    // 2. Envia para o painel (emite para todos)
-    // O painel vai usar esses dados para o TEXTO e para a VOZ
-    io.emit("proxima-chamada", chamadaAtual);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Desconectado");
-  });
-});
-
-http.listen(PORT, "0.0.0.0", () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+http.listen(PORT, "0.0.0.0", () => console.log(`Servidor na porta ${PORT}`));

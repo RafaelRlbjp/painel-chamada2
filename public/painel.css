@@ -1,13 +1,13 @@
-/* Configurações Gerais */
+/* Configurações de Reset e Fonte */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Arial Black', sans-serif;
 }
 
 body {
-    background-color: #001f3f; /* Azul Marinho Profissional */
+    background-color: #001f3f; /* Azul Marinho de fundo */
     color: white;
     height: 100vh;
     display: flex;
@@ -20,110 +20,121 @@ body {
 /* Container Principal */
 .painel-container {
     width: 95%;
-    height: 90%;
+    height: 95%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    text-align: center;
+    gap: 20px;
 }
 
-/* Área do Chamado Atual (Destaque) */
+/* Área do Chamado Principal */
 .chamado-atual {
-    flex: 2;
+    flex: 3;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 40px;
-    border: 4px solid #0074D9;
+    border-radius: 30px;
+    border: 5px solid #0074D9;
+    padding: 20px;
+    text-align: center;
 }
 
 .titulo {
-    font-size: 3rem;
-    letter-spacing: 5px;
+    font-size: 3.5rem;
     color: #7FDBFF;
-    margin-bottom: 20px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
 }
 
 .destaque {
-    font-size: 8rem; /* Nome do Paciente bem grande */
-    font-weight: bold;
+    font-size: 9rem; /* Nome do paciente gigante */
+    font-weight: 900;
     text-transform: uppercase;
     color: #ffffff;
-    text-shadow: 4px 4px 10px rgba(0,0,0,0.5);
-    margin-bottom: 30px;
+    line-height: 1.1;
+    margin: 20px 0;
 }
 
-/* Informações de Rodapé (Profissional e Local) */
+/* Rodapé com Profissional e Consultório */
 .info-secundaria {
     display: flex;
+    width: 100%;
     justify-content: space-around;
     background: #0074D9;
-    padding: 20px;
-    border-radius: 15px;
+    padding: 25px;
+    border-radius: 20px;
 }
 
 .label {
     display: block;
-    font-size: 1.2rem;
-    color: #eedb09; /* Roxo para etiquetas */
+    font-size: 1.5rem;
+    color: #001f3f;
     font-weight: bold;
-    margin-bottom: 5px;
+    text-transform: uppercase;
 }
 
 #nome-profissional, #consultorio {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: bold;
+    color: white;
 }
 
-/* Área do Histórico (Fica na parte de baixo) */
+/* Área de Histórico (Rodapé Inferior) */
 .historico-secao {
     flex: 1;
-    margin-top: 30px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 15px;
-    padding: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    padding: 20px;
 }
 
 .historico-secao h2 {
-    font-size: 2.8rem;
-    color: #aaa;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #333;
+    font-size: 1.8rem;
+    color: #7FDBFF;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #0074D9;
+    padding-bottom: 5px;
 }
 
 #lista-historico {
     list-style: none;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 #lista-historico li {
-    font-size: 1.8rem;
-    color: #ccc;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 10px;
-    border-radius: 8px;
-    animation: slideIn 0.5s ease forwards;
+    font-size: 2rem;
+    background: #111;
+    padding: 10px 25px;
+    border-radius: 50px;
+    color: #aaa;
+    border: 1px solid #333;
+    animation: aparecer 0.5s ease-out;
 }
 
 /* --- ANIMAÇÕES --- */
 
-/* Efeito de piscar a tela inteira */
-.piscar-tela {
-    animation: alert-blink 0.8s infinite;
+/* Efeito de piscar em AMARELO conforme solicitado */
+.piscar-amarelo {
+    animation: alerta-amarelo 0.8s infinite;
 }
 
-@keyframes alert-blink {
+@keyframes alerta-amarelo {
     0% { background-color: #001f3f; }
-    50% { background-color: #FF4136; } /* Pisca em Vermelho */
+    50% { background-color: #FFD700; } /* Amarelo Ouro */
     100% { background-color: #001f3f; }
 }
 
-/* Entrada suave dos nomes no histórico */
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-50px); }
-    to { opacity: 1; transform: translateX(0); }
+/* Troca a cor da letra para PRETO durante o pisca para dar contraste */
+.piscar-amarelo .destaque, 
+.piscar-amarelo .titulo,
+.piscar-amarelo #nome-profissional,
+.piscar-amarelo #consultorio {
+    color: #000 !important;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
 }
