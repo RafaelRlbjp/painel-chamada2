@@ -1,83 +1,61 @@
-document.getElementById("aviso-som").addEventListener("click", () => {
-  speechSynthesis.speak(new SpeechSynthesisUtterance("Som ativado"));
-});
-
 const socket = io();
 const sintetizador = window.speechSynthesis;
 
-const nomePaciente = document.getElementById("nome-paciente");
-const nomeProfissional = document.getElementById("nome-profissional");
-const consultorio = document.getElementById("consultorio");
-const listaHistorico = document.getElementById("lista-historico");
+// 🔔 BEEP MP3 (2x)
+const beep = new Audio("/audio/bip.mp3");
 
-// estado inicial
-nomePaciente.classList.add("aguardando");
+function tocarBeep() {
+  beep.currentTime = 0;
+  beep.play().catch(()=>{});
+
+  setTimeout(() => {
+    beep.currentTime = 0;
+    beep.play().catch(()=>{});
+  }, 1200);
+}
 
 socket.on("proxima-chamada", (dados) => {
 
-  /* HISTÓRICO */
-  const nomeAtual = nomePaciente.innerText;
+  // 🔔 alerta sonoro MP3 (funciona na TV)
+  tocarBeep();
+
+  // 1. mover atual para histórico
+  const nomeAtual = document.getElementById("nome-paciente").innerText;
+
   if (nomeAtual && nomeAtual !== "AGUARDANDO...") {
-    const li = document.createElement("li");
-    li.innerText = nomeAtual;
-    listaHistorico.prepend(li);
-    if (listaHistorico.children.length > 4)
-      listaHistorico.lastChild.remove();
+    const lista = document.getElementById("lista-historico");
+    const novoItem = document.createElement("li");
+
+    novoItem.innerText = nomeAtual;
+    lista.prepend(novoItem);
+
+    if (lista.children.length > 4) lista.lastChild.remove();
   }
 
-  /* ATUALIZA TELA */
-  nomePaciente.innerText = dados.paciente;
-  nomeProfissional.innerText = dados.profissional;
-  consultorio.innerText = dados.consultorio;
+  // 2. atualizar tela
+  document.getElementById("nome-paciente").innerText = dados.paciente;
+  document.getElementById("nome-profissional").innerText = dados.profissional;
+  document.getElementById("consultorio").innerText = dados.consultorio;
 
-  nomePaciente.classList.remove("aguardando");
-
-  /* ALERTA VISUAL */
+  // 3. piscar SOMENTE painel
   document.querySelector(".area-principal").classList.add("piscar-amarelo");
-setTimeout(() => {
-  document.querySelector(".area-principal").classList.remove("piscar-amarelo");
-}, 12000);
 
+  setTimeout(() => {
+    document.querySelector(".area-principal").classList.remove("piscar-amarelo");
+  }, 8000);
 
-  /* VOZ (2x) */
+  // 4. voz (opcional — notebook)
   sintetizador.cancel();
 
-  const frase = `Paciente ${dados.paciente}. Comparecer ao ${dados.consultorio} com ${dados.profissional}`;
+  const frase = `Paciente ${dados.paciente}`;
 
-  function falar() {
+  const falar = () => {
     const msg = new SpeechSynthesisUtterance(frase);
     msg.lang = "pt-BR";
     msg.rate = 0.9;
     sintetizador.speak(msg);
-  }
+  };
 
   falar();
   setTimeout(falar, 6000);
-});
-
-setInterval(()=>{
-  const r = document.getElementById("relogio");
-  r.innerText = new Date().toLocaleTimeString();
-},1000);
-
-// FORÇA MODO TV AUTOMÁTICO
-if (
-navigator.userAgent.includes("TV") ||
-navigator.userAgent.includes("SMART") ||
-navigator.userAgent.includes("Android")
-){
-document.body.classList.add("tv");
-}
-
-const aviso = document.getElementById("aviso-som");
-
-aviso.addEventListener("click", () => {
-
-    const msg = new SpeechSynthesisUtterance("Som ativado");
-    msg.lang = "pt-BR";
-
-    speechSynthesis.speak(msg);
-
-    aviso.style.display = "none";
-
 });
