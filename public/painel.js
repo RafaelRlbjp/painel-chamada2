@@ -63,3 +63,16 @@ navigator.userAgent.includes("Android")
 ){
 document.body.classList.add("tv");
 }
+
+const aviso = document.getElementById("aviso-som");
+
+aviso.addEventListener("click", () => {
+
+    const msg = new SpeechSynthesisUtterance("Som ativado");
+    msg.lang = "pt-BR";
+
+    speechSynthesis.speak(msg);
+
+    aviso.style.display = "none";
+
+});
