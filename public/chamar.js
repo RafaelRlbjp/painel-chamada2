@@ -1,40 +1,46 @@
 const socket = io();
 
-// Função principal disparada pelo botão do formulário
-function realizarChamada() {
-    // 1. CAPTURA DOS DADOS DO FORMULÁRIO
-    // Certifique-se de que os IDs abaixo existem no seu chamar.html
-    const pacienteInput = document.getElementById("paciente");
-    const profissionalInput = document.getElementById("profissional");
-    const consultorioInput = document.getElementById("consultorio");
+// Função que é disparada ao clicar no botão ou dar Submit no formulário
+function realizarChamada(event) {
+    // Se estiver usando dentro de um formulário <form>, isso evita o recarregamento da página
+    if (event) event.preventDefault();
 
-    // Validação básica para não enviar campos vazios
-    if (!pacienteInput.value) {
-        console.warn("Nome do paciente é obrigatório.");
+    // Captura os valores dos campos pelos IDs
+    const inputPaciente = document.getElementById("input-paciente");
+    const inputProfissional = document.getElementById("input-profissional");
+    const inputConsultorio = document.getElementById("input-consultorio");
+
+    const paciente = inputPaciente.value.trim();
+    const profissional = inputProfissional.value;
+    const consultorio = inputConsultorio.value;
+
+    // Validação simples: não envia se o nome do paciente estiver vazio
+    if (paciente === "") {
+        console.warn("Tentativa de chamada com nome vazio negada.");
         return;
     }
 
+    // Monta o objeto de dados exatamente como o servidor e o painel esperam
     const dados = {
-        paciente: pacienteInput.value,
-        profissional: profissionalInput.value || "Não informado",
-        consultorio: consultorioInput.value || "Geral"
+        paciente: paciente,
+        profissional: profissional,
+        consultorio: consultorio
     };
 
-    // 2. ENVIO PARA O SERVIDOR
-    // O servidor recebe e repassa para o painel.js
+    // Envia os dados para o servidor (que vai colocar na fila)
     socket.emit("chamar", dados);
 
-    // 3. LOG DE CONFIRMAÇÃO NO TERMINAL DO NAVEGADOR (SEM POP-UP)
-    console.log("Chamada enviada com sucesso:", dados);
+    // LOG de confirmação no console (substitui o alert para não travar a tela)
+    console.log("Chamada enviada com sucesso para a fila:", dados);
 
-    // 4. LIMPAR O CAMPO DO PACIENTE PARA A PRÓXIMA CHAMADA
-    pacienteInput.value = "";
-    pacienteInput.focus(); // Coloca o cursor de volta no campo de texto
+    // Limpa apenas o campo do nome do paciente para a próxima chamada
+    inputPaciente.value = "";
+    inputPaciente.focus(); // Coloca o cursor de volta no campo de nome
 }
 
-// Opcional: Permitir chamar ao apertar "Enter" no campo do paciente
-document.getElementById("paciente").addEventListener("keypress", function (e) {
+// Opcional: Permitir que o "Enter" no campo de nome também chame o paciente
+document.getElementById("input-paciente").addEventListener("keypress", function(e) {
     if (e.key === "Enter") {
-        realizarChamada();
+        realizarChamada(e);
     }
 });
