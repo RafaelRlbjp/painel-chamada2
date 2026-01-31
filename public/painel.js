@@ -1,3 +1,7 @@
+document.getElementById("aviso-som").addEventListener("click", () => {
+  speechSynthesis.speak(new SpeechSynthesisUtterance("Som ativado"));
+});
+
 const socket = io();
 const sintetizador = window.speechSynthesis;
 
@@ -29,10 +33,11 @@ socket.on("proxima-chamada", (dados) => {
   nomePaciente.classList.remove("aguardando");
 
   /* ALERTA VISUAL */
-  document.body.classList.add("piscar-amarelo");
-  setTimeout(() => {
-    document.body.classList.remove("piscar-amarelo");
-  }, 12000);
+  document.querySelector(".area-principal").classList.add("piscar-amarelo");
+setTimeout(() => {
+  document.querySelector(".area-principal").classList.remove("piscar-amarelo");
+}, 12000);
+
 
   /* VOZ (2x) */
   sintetizador.cancel();
