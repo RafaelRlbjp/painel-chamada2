@@ -108,7 +108,7 @@ animation:pisca .6s infinite;
 }
 
 .piscar-amarelo #nome-paciente{
-color:black;
+color:rgb(255, 250, 250);
 }
 
 /* ================= MOBILE ================= */
