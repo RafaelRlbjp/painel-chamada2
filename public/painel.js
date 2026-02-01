@@ -1,124 +1,83 @@
 const socket = io();
 
-const nomeElement = document.getElementById("nome-paciente");
-const profElement = document.getElementById("nome-profissional");
-const consElement = document.getElementById("consultorio");
-const histElement = document.getElementById("lista-historico");
+const nome = document.getElementById("nome-paciente");
+const prof = document.getElementById("nome-profissional");
+const cons = document.getElementById("consultorio");
+const hist = document.getElementById("lista-historico");
 const bip = document.getElementById("bip");
 const painel = document.getElementById("painel");
 
-let filaChamados = [];
-let processandoFila = false;
-let ultimoId = "";
-
-/* RECEBE CHAMADOS */
+let primeiraCarga = true;
 
 socket.on("novoChamado", dados => {
 
- if(!dados?.ultimo) return;
+ if(!dados || !dados.ultimo) return;
 
- const idAtual =
-   dados.ultimo.nome +
-   dados.ultimo.profissional +
-   dados.ultimo.consultorio;
+ nome.innerText = dados.ultimo.nome.toUpperCase();
+ prof.innerText = dados.ultimo.profissional.toUpperCase();
+ cons.innerText = dados.ultimo.consultorio.toUpperCase();
 
- if(idAtual === ultimoId) return;
-
- ultimoId = idAtual;
-
- filaChamados.push(dados);
-
- if(!processandoFila) executarFila();
-});
-
-/* FILA */
-
-async function executarFila(){
-
- if(filaChamados.length === 0){
-   processandoFila = false;
-   return;
- }
-
- processandoFila = true;
-
- const dados = filaChamados.shift();
- const { ultimo, historico } = dados;
-
- atualizarInterface(dados);
-
- painel.classList.add("piscar-amarelo");
-
- tocarBip();
-
- await falarPaciente(ultimo.nome, ultimo.consultorio, ultimo.profissional);
-
- setTimeout(()=>{
-   painel.classList.remove("piscar-amarelo");
-   setTimeout(executarFila,1200);
- },1000);
-}
-
-/* INTERFACE */
-
-function atualizarInterface(dados){
-
- nomeElement.innerText = dados.ultimo.nome.toUpperCase();
- profElement.innerText = dados.ultimo.profissional.toUpperCase();
- consElement.innerText = dados.ultimo.consultorio.toUpperCase();
-
- histElement.innerHTML="";
+ hist.innerHTML="";
 
  dados.historico.forEach(p=>{
    const li=document.createElement("li");
    li.innerText=`${p.nome}`;
-   histElement.appendChild(li);
+   hist.appendChild(li);
  });
-}
 
-/* BIP 4X */
+ if(primeiraCarga){
+   primeiraCarga=false;
+   return;
+ }
 
-function tocarBip(){
+ painel.classList.add("piscar-amarelo");
 
+ tocarBip(4);
+
+ falar2x(`Paciente ${dados.ultimo.nome}. Dirigir-se ao ${dados.ultimo.consultorio}. Com ${dados.ultimo.profissional}`);
+
+ setTimeout(()=>{
+  painel.classList.remove("piscar-amarelo");
+ },4000);
+
+});
+
+/* ===== BIP ===== */
+
+function tocarBip(qtd){
  let i=0;
-
  const t=setInterval(()=>{
-   bip.currentTime=0;
-   bip.play().catch(()=>{});
-   i++;
-   if(i>=4) clearInterval(t);
+  bip.currentTime=0;
+  bip.play().catch(()=>{});
+  i++;
+  if(i>=qtd) clearInterval(t);
  },500);
 }
 
-/* VOZ */
+/* ===== VOZ 2X ===== */
 
-function falarPaciente(nome,local,prof){
+function falar2x(texto){
 
- return new Promise(resolve=>{
+ let vezes=0;
 
-   if(!speechSynthesis) return resolve();
+ const repetir=setInterval(()=>{
 
-   speechSynthesis.cancel();
+  const msg=new SpeechSynthesisUtterance(texto);
+  msg.lang="pt-BR";
+  msg.rate=0.9;
 
-   const frase=`Paciente ${nome}. Dirigir-se ao ${local}. Com ${prof}`;
+  speechSynthesis.speak(msg);
 
-   const fala=new SpeechSynthesisUtterance(frase);
-   fala.lang="pt-BR";
-   fala.rate=0.9;
+  vezes++;
 
-   fala.onend=resolve;
-   fala.onerror=resolve;
+  if(vezes>=2) clearInterval(repetir);
 
-   speechSynthesis.speak(fala);
- });
+ },3500);
 }
 
-/* DESBLOQUEIO AUDIO */
+/* ===== LIBERA AUDIO ===== */
 
-document.addEventListener("click",()=>{
-
- const m=new SpeechSynthesisUtterance(" ");
- speechSynthesis.speak(m);
+document.body.addEventListener("click",()=>{
  bip.play().catch(()=>{});
-
+ speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
 },{once:true});
