@@ -9,62 +9,58 @@ body {
   color: white;
   height: 100vh;
   width: 100vw;
-  font-family: 'Arial Black', Arial, sans-serif;
+  font-family: Arial Black, Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Garante que nada saia da tela */
+  overflow: hidden; /* Proíbe qualquer barra de rolagem */
 }
 
 .container {
   width: 98vw;
-  height: 96vh;
+  height: 98vh; /* Ocupa a tela quase toda, mas deixa margem de segurança */
   display: grid;
-  /* O minmax(0, ...) é o segredo para o conteúdo não empurrar o grid */
-  grid-template-rows: minmax(0, 2.5fr) minmax(0, 1fr) auto;
-  gap: 15px;
+  /* O segredo: Paciente flexível, Profissional fixo, Histórico fixo */
+  grid-template-rows: 1fr 160px 70px; 
+  gap: 10px;
   padding: 10px;
 }
 
 /* ÁREA DO PACIENTE */
 .area-principal {
-  border: clamp(5px, 1vw, 10px) solid #0d6efd;
+  border: 10px solid #0d6efd;
   border-radius: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #001427;
-  transition: background 0.3s;
-  overflow: hidden; /* Impede o nome de vazar do card */
-  padding: 20px;
+  padding: 15px;
+  min-height: 0; /* Permite que o container reduza para não expulsar os de baixo */
 }
 
 .label-topo {
-  font-size: clamp(1.2rem, 3vw, 2.5rem);
+  font-size: 1.5rem;
   opacity: 0.8;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  margin-bottom: 5px;
 }
 
 #nome-paciente {
-  /* Fonte flexível: mínimo 3rem, ideal 10vw, máximo 9rem */
-  font-size: clamp(3rem, 10vw, 9rem);
+  /* Fonte proporcional à altura da tela (vh) para nunca estourar */
+  font-size: clamp(2rem, 15vh, 7rem);
   color: #ffd500;
   text-align: center;
-  line-height: 1.1;
-  margin-top: 10px;
-  word-wrap: break-word;
-  max-width: 100%;
-  display: block;
+  line-height: 1;
+  width: 100%;
+  overflow: hidden;
+  text-transform: uppercase;
 }
 
 /* CARDS PROFISSIONAL E LOCAL */
 .cards-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  min-height: 0; /* Permite encolhimento se necessário */
+  gap: 15px;
 }
 
 .card {
@@ -74,62 +70,57 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 15px;
-  overflow: hidden;
+  padding: 10px;
 }
 
 .card .label {
-  font-size: clamp(1rem, 2vw, 1.8rem);
+  font-size: 1.1rem;
   opacity: 0.9;
-  text-transform: uppercase;
+  margin-bottom: 5px;
 }
 
 #nome-profissional, #consultorio {
-  font-size: clamp(1.5rem, 4vw, 3.8rem);
+  font-size: clamp(1.2rem, 5vh, 2.8rem);
   font-weight: bold;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Se o nome for gigante, ele coloca "..." */
-  width: 100%;
+  text-overflow: ellipsis;
+  width: 95%;
 }
 
 /* HISTÓRICO */
 .secao-historico {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  padding: 15px 25px;
+  padding: 5px 20px;
   display: flex;
   align-items: center;
-  gap: 20px;
-  min-height: 70px;
+  gap: 15px;
+  overflow: hidden;
 }
 
 .titulo-hist { 
   color: #ffd500; 
-  font-size: clamp(1rem, 1.5vw, 1.4rem); 
-  min-width: 160px; 
-  text-transform: uppercase;
+  font-size: 1rem; 
+  min-width: 150px; 
 }
 
 #lista-historico { 
   display: flex; 
-  gap: 15px; 
+  gap: 8px; 
   list-style: none; 
-  overflow: hidden; 
-  flex-grow: 1;
 }
 
 #lista-historico li {
   background: #111;
-  padding: 8px 25px;
+  padding: 6px 15px;
   border-radius: 50px;
   white-space: nowrap;
-  font-size: clamp(0.9rem, 1.2vw, 1.3rem);
-  border: 1px solid rgba(255,255,255,0.2);
+  font-size: 0.9rem;
 }
 
-/* ANIMAÇÃO PISCAR (AJUSTADA) */
+/* ANIMAÇÃO PISCAR */
 .piscar-amarelo {
   animation: pisca-alerta 0.8s infinite;
 }
@@ -139,7 +130,6 @@ body {
   50% { background-color: #ffd500; }
 }
 
-/* Quando estiver piscando, o texto precisa ficar preto para contraste */
 .piscar-amarelo #nome-paciente, 
 .piscar-amarelo .label-topo {
   color: #000 !important;
