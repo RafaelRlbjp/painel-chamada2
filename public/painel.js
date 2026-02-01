@@ -62,6 +62,8 @@ function falar2x(texto){
 
  const repetir=setInterval(()=>{
 
+  tocarBip(2); // bip também na segunda chamada
+
   const msg=new SpeechSynthesisUtterance(texto);
   msg.lang="pt-BR";
   msg.rate=0.9;
@@ -74,6 +76,7 @@ function falar2x(texto){
 
  },3500);
 }
+
 
 /* ===== LIBERA AUDIO ===== */
 
