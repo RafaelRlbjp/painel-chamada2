@@ -144,3 +144,21 @@ document.body.addEventListener("click",()=>{
  speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
 
 },{once:true});
+
+const ativar = document.getElementById("ativarAudio");
+
+if(ativar){
+
+ ativar.addEventListener("click",()=>{
+
+   bip.play().catch(()=>{});
+
+   const msg = new SpeechSynthesisUtterance("Sistema ativado");
+   msg.volume = 0;
+
+   speechSynthesis.speak(msg);
+
+   ativar.remove();
+
+ });
+}
