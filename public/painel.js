@@ -7,29 +7,37 @@ const hist = document.getElementById("lista-historico");
 const bip = document.getElementById("bip");
 const painel = document.getElementById("painel");
 
-const modoTV = window.innerWidth > 1500;
-
-let primeiraCarga = true;
 let audioLiberado = false;
-
+let primeiraCarga = true;
 let fila = [];
 let executando = false;
 
-/* ================= RECEBE CHAMADOS ================= */
+/* ================= LIBERA AUDIO NA TV ================= */
+
+document.body.addEventListener("click", () => {
+
+ if(audioLiberado) return;
+ audioLiberado = true;
+
+ bip.currentTime = 0;
+ bip.play().then(()=>{
+   bip.pause();
+   bip.currentTime = 0;
+ }).catch(()=>{});
+
+ const dummy = new SpeechSynthesisUtterance("");
+ dummy.lang = "pt-BR";
+ speechSynthesis.speak(dummy);
+
+},{once:true});
+
+/* ================= RECEBE CHAMADO ================= */
 
 socket.on("novoChamado", dados => {
 
  if(!dados || !dados.ultimo) return;
 
- atualizarHistorico(dados.historico);
-
- if(primeiraCarga){
-   primeiraCarga=false;
-   mostrar(dados.ultimo);
-   return;
- }
-
- fila.push(dados.ultimo);
+ fila.push(dados);
 
  if(!executando){
    processarFila();
@@ -39,116 +47,87 @@ socket.on("novoChamado", dados => {
 
 /* ================= FILA ================= */
 
-async function processarFila(){
+function processarFila(){
 
- if(fila.length===0){
-   executando=false;
+ if(fila.length === 0){
+   executando = false;
    return;
  }
 
- executando=true;
+ executando = true;
 
- const atual=fila.shift();
+ const dados = fila.shift();
+ atualizarTela(dados);
 
- mostrar(atual);
+ if(primeiraCarga){
+   primeiraCarga = false;
+   executando = false;
+   return;
+ }
 
  painel.classList.add("piscar-amarelo");
 
- await chamada(atual);
- await esperar(1000);
- await chamada(atual);
+ tocarBip(2);
 
- painel.classList.remove("piscar-amarelo");
+ falar(`Paciente ${dados.ultimo.nome}. Dirigir-se ao ${dados.ultimo.consultorio}. Com ${dados.ultimo.profissional}`);
 
- await esperar(1200);
+ setTimeout(()=>{
+   painel.classList.remove("piscar-amarelo");
 
- processarFila();
+   setTimeout(()=>{
+     processarFila();
+   },1500);
+
+ },6000);
+
 }
 
-/* ================= UMA CHAMADA ================= */
+/* ================= ATUALIZA UI ================= */
 
-function chamada(d){
+function atualizarTela(dados){
 
- return new Promise(resolve=>{
+ nome.innerText = dados.ultimo.nome.toUpperCase();
+ prof.innerText = dados.ultimo.profissional.toUpperCase();
+ cons.innerText = dados.ultimo.consultorio.toUpperCase();
 
-   if(modoTV){
-     tocarBip();
-   }
+ hist.innerHTML = "";
 
-   falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
-
-   setTimeout(resolve,3500);
-
+ dados.historico.forEach(p=>{
+   const li = document.createElement("li");
+   li.innerText = p.nome;
+   hist.appendChild(li);
  });
+
 }
 
-/* ================= UTIL ================= */
+/* ================= BIP 2X ================= */
 
-function mostrar(d){
- nome.innerText=d.nome.toUpperCase();
- prof.innerText=d.profissional.toUpperCase();
- cons.innerText=d.consultorio.toUpperCase();
-}
-
-function atualizarHistorico(lista){
- hist.innerHTML="";
- lista.forEach(p=>{
-  const li=document.createElement("li");
-  li.innerText=p.nome;
-  hist.appendChild(li);
- });
-}
-
-function esperar(ms){
- return new Promise(r=>setTimeout(r,ms));
-}
-
-/* ================= BIP 2x ================= */
-
-function tocarBip(){
+function tocarBip(qtd){
 
  let i=0;
 
  const t=setInterval(()=>{
 
-  bip.currentTime=0;
-  bip.play().catch(()=>{});
-  i++;
+   bip.currentTime=0;
+   bip.play().catch(()=>{});
+   i++;
 
-  if(i>=2) clearInterval(t);
+   if(i>=qtd) clearInterval(t);
 
  },500);
+
 }
 
 /* ================= VOZ ================= */
 
-function falar(txt){
-
- if(!speechSynthesis) return;
+function falar(texto){
 
  speechSynthesis.cancel();
 
- const msg=new SpeechSynthesisUtterance(txt);
+ const msg=new SpeechSynthesisUtterance(texto);
  msg.lang="pt-BR";
  msg.rate=0.9;
 
  speechSynthesis.speak(msg);
+
 }
-
-/* ================= DESBLOQUEIO AUDIO ================= */
-
-document.addEventListener("click",()=>{
-
- if(audioLiberado) return;
- audioLiberado=true;
-
- bip.volume = 0;
- bip.play().catch(()=>{});
- bip.pause();
- bip.currentTime = 0;
- bip.volume = 1;
-
- speechSynthesis.cancel();
-
-},{once:true});
-
