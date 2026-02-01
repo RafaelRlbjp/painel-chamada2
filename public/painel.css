@@ -139,3 +139,12 @@ body{
 }
 
 }
+
+#painel.piscar-amarelo{
+ animation:pisca .6s infinite;
+}
+
+@keyframes pisca{
+ 0%,100%{background:#001427;}
+ 50%{background:yellow;}
+}
