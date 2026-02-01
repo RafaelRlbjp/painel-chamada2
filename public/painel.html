@@ -1,41 +1,49 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Painel de Chamada Profissional</title>
-  <link rel="stylesheet" href="painel.css">
-  <script src="/socket.io/socket.io.js"></script>
+<meta charset="utf-8">
+<title>Painel</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div id="relogio"></div>
 
-  <div id="aviso-som" onclick="this.style.display='none'" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; display:flex; justify-content:center; align-items:center; color:white; font-size:2rem; cursor:pointer;">
-    CLIQUE AQUI PARA ATIVAR O SOM
-  </div>
+<div class="container">
 
-  <div class="container">
-    <main class="area-principal">
-      <span class="label-topo">PACIENTE</span>
-      <div id="nome-paciente">AGUARDANDO...</div>
-      
-      <div class="cards-container">
-        <div class="card">
-          <span class="label">PROFISSIONAL</span>
-          <div id="nome-profissional">---</div>
-        </div>
-        <div class="card">
-          <span class="label">LOCAL</span>
-          <div id="consultorio">---</div>
-        </div>
-      </div>
-    </main>
+<div class="area-principal" id="painel">
 
-    <footer class="secao-historico">
-      <span class="titulo-hist">ÚLTIMOS CHAMADOS:</span>
-      <ul id="lista-historico"></ul>
-    </footer>
-  </div>
+<div class="label-topo">PACIENTE</div>
+<div id="nome-paciente">AGUARDANDO...</div>
 
-  <script src="painel.js"></script>
+</div>
+
+<div class="cards-container">
+
+<div class="card">
+<div class="label">PROFISSIONAL</div>
+<div id="nome-profissional">---</div>
+</div>
+
+<div class="card">
+<div class="label">CONSULTÓRIO</div>
+<div id="consultorio">---</div>
+</div>
+
+</div>
+
+<div class="secao-historico">
+
+<div class="titulo-hist">ÚLTIMOS CHAMADOS</div>
+<ul id="lista-historico"></ul>
+
+</div>
+
+</div>
+
+<audio id="bip" src="audio/bip.mp3"></audio>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="painel.js"></script>
+
 </body>
 </html>

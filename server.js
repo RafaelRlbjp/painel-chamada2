@@ -1,35 +1,33 @@
 const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
-const path = require("path");
-const io = require("socket.io")(http, { cors: { origin: "*" } });
+const io = require("socket.io")(http);
 
-const PORT = process.env.PORT || 3000;
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+app.use(express.static("public"));
 
-let fila = [];
-let processando = false;
+let ultimo = null;
+let historico = [];
 
-app.get("/", (req, res) => res.sendFile(path.join(__dirname, "public", "painel.html")));
+app.post("/chamar", (req,res)=>{
 
-io.on("connection", (socket) => {
-  socket.on("chamar", (dados) => {
-    fila.push(dados);
-    processarFila();
+  ultimo = req.body;
+
+  historico.unshift({
+    nome:req.body.nome,
+    profissional:req.body.profissional,
+    consultorio:req.body.consultorio
   });
+
+  historico = historico.slice(0,5);
+
+  io.emit("novoChamado",{ultimo,historico});
+
+  res.sendStatus(200);
 });
 
-function processarFila() {
-  if (processando || fila.length === 0) return;
-  processando = true;
-  const proximo = fila.shift();
-  io.emit("proxima-chamada", proximo);
+io.on("connection",(socket)=>{
+  socket.emit("novoChamado",{ultimo,historico});
+});
 
-  // Espera 16 segundos para o painel terminar o ciclo completo antes de enviar o próximo
-  setTimeout(() => {
-    processando = false;
-    processarFila();
-  }, 16000); 
-}
-
-http.listen(PORT, "0.0.0.0", () => console.log(`Servidor online na porta ${PORT}`));
+http.listen(process.env.PORT || 3000);

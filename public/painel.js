@@ -1,74 +1,51 @@
 const socket = io();
-const sintetizador = window.speechSynthesis;
 
-const beep1 = new Audio("/audio/bip.mp3");
-const beep2 = new Audio("/audio/bip.mp3");
+const nome = document.getElementById("nome-paciente");
+const prof = document.getElementById("nome-profissional");
+const cons = document.getElementById("consultorio");
+const hist = document.getElementById("lista-historico");
+const bip = document.getElementById("bip");
+const painel = document.getElementById("painel");
 
+socket.on("novoChamado",dados=>{
 
-function tocar2Bips() {
-  beep1.currentTime = 0;
-  beep1.play().catch(()=>{});
+ if(!dados.ultimo) return;
 
-  setTimeout(() => {
-    beep2.currentTime = 0;
-    beep2.play().catch(()=>{});
-  }, 600);
-}
+ nome.innerText = dados.ultimo.nome;
+ prof.innerText = dados.ultimo.profissional;
+ cons.innerText = dados.ultimo.consultorio;
 
-function falar(frase) {
-  const msg = new SpeechSynthesisUtterance(frase);
-  msg.lang = "pt-BR";
-  msg.rate = 0.9;
-  sintetizador.speak(msg);
-}
+ hist.innerHTML = "";
 
-socket.on("proxima-chamada", (dados) => {
+ dados.historico.forEach(p=>{
+   const li = document.createElement("li");
+   li.innerText = `${p.nome} - ${p.profissional}`;
+   hist.appendChild(li);
+ });
 
-  const frase = `Paciente ${dados.paciente}`;
+ painel.classList.add("piscar-amarelo");
 
-  // ================= PRIMEIRA CHAMADA =================
-  tocar2Bips();
+ tocarBip(4);
 
-  setTimeout(() => {
-    sintetizador.cancel();
-    falar(frase);
-  }, 1400);
+ falar(`Paciente ${dados.ultimo.nome}, dirigir-se ao consultório ${dados.ultimo.consultorio}`);
 
-  // ================= SEGUNDA CHAMADA =================
-  setTimeout(() => {
-    tocar2Bips();
-  }, 6000);
-
-  setTimeout(() => {
-    sintetizador.cancel();
-    falar(frase);
-  }, 7400);
-
-
-  // ---------- histórico ----------
-  const nomeAtual = document.getElementById("nome-paciente").innerText;
-
-  if (nomeAtual && nomeAtual !== "AGUARDANDO...") {
-    const lista = document.getElementById("lista-historico");
-    const novoItem = document.createElement("li");
-
-    novoItem.innerText = nomeAtual;
-    lista.prepend(novoItem);
-
-    if (lista.children.length > 4) lista.lastChild.remove();
-  }
-
-  // ---------- atualizar painel ----------
-  document.getElementById("nome-paciente").innerText = dados.paciente;
-  document.getElementById("nome-profissional").innerText = dados.profissional;
-  document.getElementById("consultorio").innerText = dados.consultorio;
-
-  // ---------- piscar apenas painel ----------
-  const painel = document.querySelector(".area-principal");
-  painel.classList.add("piscar-amarelo");
-
-  setTimeout(() => {
-    painel.classList.remove("piscar-amarelo");
-  }, 9000);
+ setTimeout(()=>{
+   painel.classList.remove("piscar-amarelo");
+ },3000);
 
 });
+
+function tocarBip(qtd){
+ let i=0;
+ const t=setInterval(()=>{
+   bip.play();
+   i++;
+   if(i>=qtd) clearInterval(t);
+ },500);
+}
+
+function falar(texto){
+ const msg=new SpeechSynthesisUtterance(texto);
+ msg.lang="pt-BR";
+ speechSynthesis.speak(msg);
+}
