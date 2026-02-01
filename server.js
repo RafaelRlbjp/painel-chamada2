@@ -5,46 +5,47 @@ const io = require("socket.io")(http);
 const path = require("path");
 
 app.use(express.json());
-app.use(express.static("public"));
+
+// Serve os arquivos da pasta 'public'
+app.use(express.static(path.join(__dirname, "public")));
 
 let ultimo = null;
 let historico = [];
 
-// Rota principal
+// Rota para o Painel (quem assiste)
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "painel.html"));
 });
 
-// Lógica centralizada para atualizar chamados
-function registrarChamado(dados) {
-  // Garantimos que o objeto tenha exatamente estas propriedades
-  ultimo = {
-    nome: dados.nome || dados.paciente, // Aceita 'nome' ou 'paciente' para evitar erros
-    profissional: dados.profissional,
-    consultorio: dados.consultorio
-  };
-
-  historico.unshift(ultimo);
-  historico = historico.slice(0, 5);
-  
-  io.emit("novoChamado", { ultimo, historico });
-}
-
-// Rota POST (caso use fetch/axios)
-app.post("/chamar", (req, res) => {
-  registrarChamado(req.body);
-  res.sendStatus(200);
+// Rota para a tela de chamar (quem clica)
+app.get("/chamar", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "chamar.html"));
 });
 
-// Comunicação via Socket.io
 io.on("connection", (socket) => {
-  // Envia o estado atual para quem acabou de conectar
+  console.log("Novo dispositivo conectado ao painel");
+  
+  // Envia os dados atuais assim que o painel abre
   socket.emit("novoChamado", { ultimo, historico });
 
   socket.on("chamar", (dados) => {
-    registrarChamado(dados);
+    if (!dados) return;
+
+    ultimo = {
+      nome: dados.nome,
+      profissional: dados.profissional,
+      consultorio: dados.consultorio
+    };
+
+    historico.unshift(ultimo);
+    historico = historico.slice(0, 5);
+
+    // Envia para TODO MUNDO
+    io.emit("novoChamado", { ultimo, historico });
   });
 });
 
 const PORT = process.env.PORT || 3000;
-http.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+http.listen(PORT, () => {
+  console.log(`Servidor rodando em: http://localhost:${PORT}`);
+});
