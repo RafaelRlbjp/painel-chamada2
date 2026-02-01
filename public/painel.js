@@ -7,17 +7,17 @@ const hist = document.getElementById("lista-historico");
 const bip = document.getElementById("bip");
 const painel = document.getElementById("painel");
 
-let audioLiberado = false;
-let primeiraCarga = true;
+let liberado = false;
+let primeira = true;
 let fila = [];
-let executando = false;
+let ocupado = false;
 
-/* ================= LIBERA AUDIO NA TV ================= */
+/* ===== LIBERA AUDIO NA TV ===== */
 
-document.body.addEventListener("click", () => {
+document.body.addEventListener("click",()=>{
 
- if(audioLiberado) return;
- audioLiberado = true;
+ if(liberado) return;
+ liberado = true;
 
  bip.currentTime = 0;
  bip.play().then(()=>{
@@ -25,64 +25,50 @@ document.body.addEventListener("click", () => {
    bip.currentTime = 0;
  }).catch(()=>{});
 
- const dummy = new SpeechSynthesisUtterance("");
- dummy.lang = "pt-BR";
- speechSynthesis.speak(dummy);
+ speechSynthesis.speak(new SpeechSynthesisUtterance(""));
 
 },{once:true});
 
-/* ================= RECEBE CHAMADO ================= */
+/* ===== RECEBE CHAMADOS ===== */
 
-socket.on("novoChamado", dados => {
+socket.on("novoChamado",dados=>{
 
  if(!dados || !dados.ultimo) return;
 
  fila.push(dados);
 
- if(!executando){
-   processarFila();
- }
+ if(!ocupado) executarFila();
 
 });
 
-/* ================= FILA ================= */
+/* ===== FILA ===== */
 
-function processarFila(){
+function executarFila(){
 
  if(fila.length === 0){
-   executando = false;
+   ocupado = false;
    return;
  }
 
- executando = true;
+ ocupado = true;
 
  const dados = fila.shift();
+
  atualizarTela(dados);
 
- if(primeiraCarga){
-   primeiraCarga = false;
-   executando = false;
+ if(primeira){
+   primeira = false;
+   ocupado = false;
    return;
  }
 
  painel.classList.add("piscar-amarelo");
 
- tocarBip(2);
-
- falar(`Paciente ${dados.ultimo.nome}. Dirigir-se ao ${dados.ultimo.consultorio}. Com ${dados.ultimo.profissional}`);
-
- setTimeout(()=>{
-   painel.classList.remove("piscar-amarelo");
-
-   setTimeout(()=>{
-     processarFila();
-   },1500);
-
- },6000);
+ chamarComBip(dados);
 
 }
 
-/* ================= ATUALIZA UI ================= */
+/* ===== UI ===== */
 
 function atualizarTela(dados){
 
@@ -90,17 +76,47 @@ function atualizarTela(dados){
  prof.innerText = dados.ultimo.profissional.toUpperCase();
  cons.innerText = dados.ultimo.consultorio.toUpperCase();
 
- hist.innerHTML = "";
+ hist.innerHTML="";
 
  dados.historico.forEach(p=>{
-   const li = document.createElement("li");
-   li.innerText = p.nome;
+   const li=document.createElement("li");
+   li.innerText=p.nome;
    hist.appendChild(li);
  });
 
 }
 
-/* ================= BIP 2X ================= */
+/* ===== 2 CHAMADAS + 2 BIPS ===== */
+
+function chamarComBip(dados){
+
+ let chamadas = 0;
+
+ const repetir = setInterval(()=>{
+
+   painel.classList.add("piscar-amarelo");
+   tocarBip(2);
+   falar(dados);
+
+   chamadas++;
+
+   if(chamadas >= 2){
+
+     clearInterval(repetir);
+
+     setTimeout(()=>{
+       painel.classList.remove("piscar-amarelo");
+       ocupado = false;
+       executarFila();
+     },3000);
+
+   }
+
+ },3500);
+
+}
+
+/* ===== BIP ===== */
 
 function tocarBip(qtd){
 
@@ -114,17 +130,20 @@ function tocarBip(qtd){
 
    if(i>=qtd) clearInterval(t);
 
- },500);
+ },450);
 
 }
 
-/* ================= VOZ ================= */
+/* ===== VOZ ===== */
 
-function falar(texto){
+function falar(d){
 
  speechSynthesis.cancel();
 
- const msg=new SpeechSynthesisUtterance(texto);
+ const msg=new SpeechSynthesisUtterance(
+  `Paciente ${d.ultimo.nome}. Dirigir-se ao ${d.ultimo.consultorio}. Com ${d.ultimo.profissional}`
+ );
+
  msg.lang="pt-BR";
  msg.rate=0.9;
 
