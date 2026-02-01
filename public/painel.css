@@ -1,8 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   background: #001427;
@@ -10,131 +6,76 @@ body {
   height: 100vh;
   width: 100vw;
   font-family: 'Arial Black', sans-serif;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 
 .container {
-  width: 98vw;
-  height: 98vh;
+  width: 96vw;
+  height: 94vh;
   display: flex;
   flex-direction: column;
-  gap: 1.5vh; /* Gap baseado na altura da tela */
-  padding: 1vh;
+  gap: 2vh;
 }
 
-/* ÁREA DO PACIENTE */
 .area-principal {
-  flex: 2; /* Ocupa 2 partes do espaço */
-  border: 0.8vh solid #0d6efd;
-  border-radius: 4vh;
+  flex: 1; 
+  border: 1.5vh solid #0d6efd;
+  border-radius: 5vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #001427;
   padding: 2vh;
-  min-height: 0; 
-}
-
-.label-topo {
-  font-size: 4vh; /* Tamanho fixo relativo à altura da TV */
-  opacity: 0.8;
-  margin-bottom: 1vh;
 }
 
 #nome-paciente {
-  font-size: clamp(3rem, 15vh, 12rem); /* Cresce conforme a TV, mas tem limite */
+  font-size: clamp(2rem, 15vh, 12rem);
   color: #ffd500;
   text-align: center;
   line-height: 1.1;
-  width: 100%;
-  word-wrap: break-word;
-  overflow: hidden;
   text-transform: uppercase;
 }
 
-/* CARDS PROFISSIONAL E LOCAL */
-.cards-container {
-  flex: 1; /* Ocupa 1 parte do espaço */
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5vh;
-  min-height: 0;
-}
+.cards-container { height: 25vh; display: flex; gap: 2vw; }
 
 .card {
+  flex: 1;
   background: #0d6efd;
-  border-radius: 3vh;
+  border-radius: 4vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1.5vh;
 }
 
-.card .label {
-  font-size: 2.5vh;
-  opacity: 0.9;
-  margin-bottom: 0.5vh;
-}
+.label { font-size: 2.5vh; opacity: 0.9; margin-bottom: 1vh; }
 
 #nome-profissional, #consultorio {
-  font-size: clamp(1.5rem, 6vh, 4.5rem);
+  font-size: clamp(1.5rem, 6vh, 4rem);
   font-weight: bold;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; /* Evita que o texto saia do card azul */
-  width: 95%;
 }
 
-/* HISTÓRICO */
 .secao-historico {
-  flex: 0 0 10vh; /* Tamanho fixo de 10% da altura da tela */
+  height: 10vh;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2vh;
-  padding: 0 2vw;
   display: flex;
   align-items: center;
-  gap: 2vw;
+  padding: 0 2vw;
 }
 
-.titulo-hist { 
-  color: #ffd500; 
-  font-size: 2.2vh; 
-  min-width: fit-content;
-}
+.titulo-hist { color: #ffd500; font-size: 2vh; min-width: 200px; }
+#lista-historico { display: flex; gap: 1vw; list-style: none; }
+#lista-historico li { background: #111; padding: 1vh 2vw; border-radius: 5vh; font-size: 1.8vh; }
 
-#lista-historico { 
-  display: flex; 
-  gap: 1vw; 
-  list-style: none;
-  overflow: hidden;
-}
-
-#lista-historico li {
-  background: #111;
-  padding: 1vh 2vw;
-  border-radius: 5vh;
-  white-space: nowrap;
-  font-size: 2vh;
-  border: 1px solid #333;
-}
-
-/* ANIMAÇÃO PISCAR */
-.piscar-amarelo {
-  animation: pisca-alerta 0.8s infinite;
-}
-
+/* Animação */
+.piscar-amarelo { animation: pisca-alerta 0.8s infinite; }
 @keyframes pisca-alerta {
   0%, 100% { background-color: #001427; }
   50% { background-color: #ffd500; }
 }
-
-.piscar-amarelo #nome-paciente, 
-.piscar-amarelo .label-topo {
-  color: #000 !important;
-}
+.piscar-amarelo #nome-paciente { color: #000 !important; }

@@ -8,35 +8,70 @@ const bip = document.getElementById("bip");
 const painel = document.getElementById("painel");
 
 let primeiraCarga = true;
+let filaChamados = [];
+let processandoFila = false;
 
 socket.on("novoChamado", (dados) => {
     if (!dados || !dados.ultimo) return;
 
+    // Se for a primeira carga, apenas mostra na tela sem alarde
+    if (primeiraCarga) {
+        atualizarInterface(dados);
+        primeiraCarga = false;
+        return;
+    }
+
+    // Adiciona o chamado na fila para evitar um atropelar o outro
+    filaChamados.push(dados);
+    
+    if (!processandoFila) {
+        executarFila();
+    }
+});
+
+async function executarFila() {
+    if (filaChamados.length === 0) {
+        processandoFila = false;
+        return;
+    }
+
+    processandoFila = true;
+    const dados = filaChamados.shift();
     const { ultimo, historico } = dados;
 
-    // Atualiza Textos
+    // 1. Atualiza a Interface
+    atualizarInterface(dados);
+
+    // 2. Inicia Alerta Visual e Sonoro
+    painel.classList.add("piscar-amarelo");
+    tocarBip();
+
+    // 3. Chamada de Voz com garantia de término
+    await chamarVozPromessa(ultimo.nome, ultimo.consultorio, ultimo.profissional);
+
+    // 4. Finalização: Para de piscar e aguarda um pouco antes do próximo
+    setTimeout(() => {
+        painel.classList.remove("piscar-amarelo");
+        setTimeout(() => {
+            executarFila(); // Chama o próximo da fila, se houver
+        }, 1500); 
+    }, 1000);
+}
+
+function atualizarInterface(dados) {
+    const { ultimo, historico } = dados;
+    
     nomeElement.innerText = ultimo.nome.toUpperCase();
     profElement.innerText = ultimo.profissional.toUpperCase();
     consElement.innerText = ultimo.consultorio.toUpperCase();
 
-    // Atualiza Histórico
     histElement.innerHTML = "";
     historico.forEach(p => {
         const li = document.createElement("li");
         li.innerText = `${p.nome} - ${p.profissional}`;
         histElement.appendChild(li);
     });
-
-    // Só aciona alarme se não for o carregamento inicial da página
-    if (!primeiraCarga) {
-        painel.classList.add("piscar-amarelo");
-        tocarBip();
-        // Chamada na ordem solicitada: Paciente, Consultório, Profissional
-        chamarVozSincronizada(ultimo.nome, ultimo.consultorio, ultimo.profissional);
-    } else {
-        primeiraCarga = false;
-    }
-});
+}
 
 function tocarBip() {
     let i = 0;
@@ -48,31 +83,29 @@ function tocarBip() {
     }, 500);
 }
 
-function chamarVozSincronizada(nome, local, prof) {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
+// Transforma a fala em uma "Promessa" para o JS saber exatamente quando acabou
+function chamarVozPromessa(nome, local, prof) {
+    return new Promise((resolve) => {
+        if (!window.speechSynthesis) return resolve();
+        
+        window.speechSynthesis.cancel();
+        const frase = `Paciente ${nome}. Dirigir-se ao ${local}. Com ${prof}`;
+        
+        // Falamos apenas uma vez de forma clara, repetindo apenas se necessário
+        const fala = new SpeechSynthesisUtterance(frase);
+        fala.lang = "pt-BR";
+        fala.rate = 0.9;
 
-    // Nova Ordem: Paciente -> Consultório -> Profissional
-    const frase = `Paciente ${nome}. Dirigir-se ao ${local}. Com ${prof}`;
-    
-    const fala1 = new SpeechSynthesisUtterance(frase);
-    const fala2 = new SpeechSynthesisUtterance(frase);
+        fala.onend = () => resolve();
+        fala.onerror = () => resolve(); // Garante que a fila não trave se der erro
 
-    [fala1, fala2].forEach(f => {
-        f.lang = "pt-BR";
-        f.rate = 0.9;
+        window.speechSynthesis.speak(fala);
     });
-
-    // Para de piscar apenas quando a última fala terminar
-    fala2.onend = () => {
-        painel.classList.remove("piscar-amarelo");
-    };
-
-    window.speechSynthesis.speak(fala1);
-    window.speechSynthesis.speak(fala2);
 }
 
-// Desbloqueio obrigatório de áudio
+// Desbloqueio obrigatório (Clique uma vez na TV ao abrir a página)
 document.addEventListener("click", () => {
-    window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
+    const msg = new SpeechSynthesisUtterance("Sistema de voz ativado");
+    msg.volume = 0; // Silencioso, só para ativar o motor de voz
+    window.speechSynthesis.speak(msg);
 }, { once: true });
