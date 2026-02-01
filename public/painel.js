@@ -7,10 +7,25 @@ const hist = document.getElementById("lista-historico");
 const bip = document.getElementById("bip");
 const painel = document.getElementById("painel");
 
-let primeiraCarga = true;
-let audioLiberado = false;
+const overlay = document.getElementById("unlockSound");
 
-/* ================= RECEBE CHAMADO ================= */
+let primeiraCarga = true;
+let somLiberado = false;
+
+/* ========= ATIVA SOM NA TV ========= */
+
+overlay.addEventListener("click",()=>{
+
+ bip.play().then(()=>{
+
+   somLiberado = true;
+   overlay.style.display="none";
+
+ }).catch(()=>{});
+
+},{once:true});
+
+/* ========= RECEBE CHAMADO ========= */
 
 socket.on("novoChamado", dados => {
 
@@ -28,7 +43,6 @@ socket.on("novoChamado", dados => {
    hist.appendChild(li);
  });
 
- // Primeira carga não toca nada
  if(primeiraCarga){
    primeiraCarga=false;
    return;
@@ -36,79 +50,51 @@ socket.on("novoChamado", dados => {
 
  painel.classList.add("piscar-amarelo");
 
- executarChamadas();
+ tocarBip2x();   // primeira chamada
+ falar2x(`Paciente ${dados.ultimo.nome}. Dirigir-se ao ${dados.ultimo.consultorio}. Com ${dados.ultimo.profissional}`);
+
+ setTimeout(()=>{
+  painel.classList.remove("piscar-amarelo");
+ },5000);
 
 });
 
-/* ================= EXECUÇÃO COMPLETA ================= */
+/* ========= BIP 2X ========= */
 
-function executarChamadas(){
+function tocarBip2x(){
 
- // PRIMEIRA CHAMADA
- tocarBip(2);
- falar(`Paciente ${nome.innerText}. Dirigir-se ao ${cons.innerText}. Com ${prof.innerText}`);
+ if(!somLiberado) return;
 
- // SEGUNDA CHAMADA APÓS 4s
- setTimeout(()=>{
-   tocarBip(2);
-   falar(`Paciente ${nome.innerText}. Dirigir-se ao ${cons.innerText}. Com ${prof.innerText}`);
- },4000);
-
- // PARA O ALERTA
- setTimeout(()=>{
-   painel.classList.remove("piscar-amarelo");
- },8000);
-}
-
-/* ================= BIP ================= */
-
-function tocarBip(qtd){
-
- let i=0;
-
- const t=setInterval(()=>{
-   bip.currentTime=0;
-   bip.play().catch(()=>{});
-   i++;
-
-   if(i>=qtd) clearInterval(t);
-
- },500);
-}
-
-/* ================= VOZ ================= */
-
-function falar(texto){
-
- if(!speechSynthesis) return;
-
- speechSynthesis.cancel();
-
- const msg=new SpeechSynthesisUtterance(texto);
- msg.lang="pt-BR";
- msg.rate=0.9;
-
- speechSynthesis.speak(msg);
-}
-
-/* ================= LIBERA AUDIO TV ================= */
-
-document.addEventListener("click",()=>{
-
- if(audioLiberado) return;
-
- audioLiberado=true;
-
- bip.volume=0.3;
  bip.currentTime=0;
  bip.play().catch(()=>{});
 
- const msg=new SpeechSynthesisUtterance("Sistema pronto");
- msg.lang="pt-BR";
- msg.volume=0.3;
+ setTimeout(()=>{
+   bip.currentTime=0;
+   bip.play().catch(()=>{});
+ },600);
 
- speechSynthesis.speak(msg);
+}
 
- nome.innerText="AGUARDANDO...";
+/* ========= VOZ 2X + BIP ========= */
 
-});
+function falar2x(texto){
+
+ let vezes=0;
+
+ const repetir=setInterval(()=>{
+
+   tocarBip2x();
+
+   const msg=new SpeechSynthesisUtterance(texto);
+   msg.lang="pt-BR";
+   msg.rate=0.9;
+
+   speechSynthesis.speak(msg);
+
+   vezes++;
+
+   if(vezes>=2) clearInterval(repetir);
+
+ },3500);
+
+}

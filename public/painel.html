@@ -1,50 +1,42 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="utf-8">
-    <title>Painel de Chamados</title>
-    <link rel="stylesheet" href="painel.css">
+<meta charset="UTF-8">
+<title>Painel</title>
+<link rel="stylesheet" href="painel.css">
 </head>
+
 <body>
 
-    <div id="ativarAudio"
-style="
-position:fixed;
-inset:0;
-background:black;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:4vh;
-z-index:9999;
-cursor:pointer;
-">
-TOQUE NA TELA PARA ATIVAR O SOM
-</div>
-
+<!-- OVERLAY PARA ATIVAR SOM -->
+<div id="unlockSound">TOQUE NA TELA PARA ATIVAR O SOM</div>
 
 <div class="container">
-    <div class="area-principal" id="painel">
-        <div class="label-topo">PACIENTE</div>
-        <div id="nome-paciente">AGUARDANDO...</div>
-    </div>
 
-    <div class="cards-container">
-        <div class="card">
-            <div class="label">PROFISSIONAL</div>
-            <div id="nome-profissional">---</div>
-        </div>
-        <div class="card">
-            <div class="label">CONSULTÓRIO</div>
-            <div id="consultorio">---</div>
-        </div>
-    </div>
+<div class="area-principal" id="painel">
+<div class="label-topo">PACIENTE</div>
+<div id="nome-paciente">AGUARDANDO...</div>
+</div>
 
-    <div class="secao-historico">
-        <div class="titulo-hist">ÚLTIMOS CHAMADOS</div>
-        <ul id="lista-historico"></ul>
-    </div>
+<div class="cards-container">
+
+<div class="card">
+<div class="label">PROFISSIONAL</div>
+<div id="nome-profissional">---</div>
+</div>
+
+<div class="card">
+<div class="label">CONSULTÓRIO</div>
+<div id="consultorio">---</div>
+</div>
+
+</div>
+
+<div class="secao-historico">
+<div class="titulo-hist">ÚLTIMOS CHAMADOS</div>
+<ul id="lista-historico"></ul>
+</div>
+
 </div>
 
 <audio id="bip" src="audio/bip.mp3"></audio>
