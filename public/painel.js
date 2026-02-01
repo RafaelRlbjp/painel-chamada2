@@ -11,15 +11,16 @@ let primeiraCarga = true;
 let fila = [];
 let executando = false;
 
-/* ================= SOCKET ================= */
+/* ================= RECEBE CHAMADO ================= */
 
 socket.on("novoChamado", dados => {
 
  if(!dados || !dados.ultimo) return;
 
+ atualizarTela(dados);
+
  if(primeiraCarga){
-   atualizarTela(dados);
-   primeiraCarga=false;
+   primeiraCarga = false;
    return;
  }
 
@@ -28,6 +29,7 @@ socket.on("novoChamado", dados => {
  if(!executando){
    executarFila();
  }
+
 });
 
 /* ================= FILA ================= */
@@ -43,24 +45,26 @@ async function executarFila(){
 
  const dados = fila.shift();
 
- atualizarTela(dados);
-
  painel.classList.add("piscar-amarelo");
 
- await tocarBip(2);
+ // PRIMEIRA CHAMADA
+ tocarBip(2);
+ await falar(`Paciente ${dados.ultimo.nome}. Dirigir-se ao ${dados.ultimo.consultorio}. Com ${dados.ultimo.profissional}`);
 
- await falar2x(
-   `Paciente ${dados.ultimo.nome}. Dirigir-se ao ${dados.ultimo.consultorio}. Com ${dados.ultimo.profissional}`
- );
+ await delay(1200);
+
+ // SEGUNDA CHAMADA
+ tocarBip(2);
+ await falar(`Paciente ${dados.ultimo.nome}. Dirigir-se ao ${dados.ultimo.consultorio}. Com ${dados.ultimo.profissional}`);
 
  painel.classList.remove("piscar-amarelo");
 
- setTimeout(()=>{
-   executarFila();
- },1000);
+ await delay(800);
+
+ executarFila();
 }
 
-/* ================= TELA ================= */
+/* ================= INTERFACE ================= */
 
 function atualizarTela(dados){
 
@@ -71,72 +75,58 @@ function atualizarTela(dados){
  hist.innerHTML="";
 
  dados.historico.forEach(p=>{
-   const li=document.createElement("li");
-   li.innerText=p.nome;
+   const li = document.createElement("li");
+   li.innerText = p.nome;
    hist.appendChild(li);
  });
+
 }
 
-/* ================= BIP PROMESSA ================= */
+/* ================= BIP ================= */
 
-function tocarBip(vezes=2){
+function tocarBip(qtd){
+
+ let i=0;
+
+ const t=setInterval(()=>{
+
+  bip.currentTime=0;
+  bip.play().catch(()=>{});
+
+  i++;
+
+  if(i>=qtd) clearInterval(t);
+
+ },450);
+}
+
+/* ================= VOZ ================= */
+
+function falar(texto){
 
  return new Promise(resolve=>{
 
-   let i=0;
+  speechSynthesis.cancel();
 
-   const t=setInterval(()=>{
+  const msg = new SpeechSynthesisUtterance(texto);
+  msg.lang="pt-BR";
+  msg.rate=0.9;
 
-     bip.currentTime=0;
-     bip.play().catch(()=>{});
+  msg.onend = resolve;
+  msg.onerror = resolve;
 
-     i++;
-
-     if(i>=vezes){
-       clearInterval(t);
-       resolve();
-     }
-
-   },500);
+  speechSynthesis.speak(msg);
 
  });
 }
 
-/* ================= VOZ 2X ================= */
+/* ================= DELAY ================= */
 
-function falar2x(texto){
-
- return new Promise(resolve=>{
-
-   let vezes=0;
-
-   function falar(){
-
-     const msg=new SpeechSynthesisUtterance(texto);
-     msg.lang="pt-BR";
-     msg.rate=0.9;
-
-     msg.onend=()=>{
-
-       vezes++;
-
-       if(vezes<2){
-         tocarBip(2).then(()=>falar());
-       }else{
-         resolve();
-       }
-
-     };
-
-     speechSynthesis.speak(msg);
-   }
-
-   falar();
-
- });
+function delay(ms){
+ return new Promise(r=>setTimeout(r,ms));
 }
 
-/* ================= DESBLOQUEIO AUDIO ================= */
+/* ================= LIBERA AUDIO NA TV ================= */
 
 document.body.addEventListener("click",()=>{
 
@@ -144,21 +134,3 @@ document.body.addEventListener("click",()=>{
  speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
 
 },{once:true});
-
-const ativar = document.getElementById("ativarAudio");
-
-if(ativar){
-
- ativar.addEventListener("click",()=>{
-
-   bip.play().catch(()=>{});
-
-   const msg = new SpeechSynthesisUtterance("Sistema ativado");
-   msg.volume = 0;
-
-   speechSynthesis.speak(msg);
-
-   ativar.remove();
-
- });
-}
