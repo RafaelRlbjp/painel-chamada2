@@ -142,9 +142,13 @@ document.addEventListener("click",()=>{
  if(audioLiberado) return;
  audioLiberado=true;
 
+ bip.volume = 0;
  bip.play().catch(()=>{});
+ bip.pause();
+ bip.currentTime = 0;
+ bip.volume = 1;
 
- const m=new SpeechSynthesisUtterance(" ");
- speechSynthesis.speak(m);
+ speechSynthesis.cancel();
 
 },{once:true});
+
