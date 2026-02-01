@@ -10,26 +10,24 @@ app.use(express.static("public"));
 let ultimo = null;
 let historico = [];
 
-// 👉 rota principal
 app.get("/", (req,res)=>{
-  res.sendFile(path.join(__dirname,"public","painel.html"));
+ res.sendFile(path.join(__dirname,"public","painel.html"));
 });
 
 app.post("/chamar",(req,res)=>{
 
-  ultimo = req.body;
+ ultimo = {
+  nome:req.body.paciente,
+  profissional:req.body.profissional,
+  consultorio:req.body.consultorio
+ };
 
-  historico.unshift({
-    nome:req.body.nome,
-    profissional:req.body.profissional,
-    consultorio:req.body.consultorio
-  });
+ historico.unshift(ultimo);
+ historico = historico.slice(0,5);
 
-  historico = historico.slice(0,5);
+ io.emit("novoChamado",{ultimo,historico});
 
-  io.emit("novoChamado",{ultimo,historico});
-
-  res.sendStatus(200);
+ res.sendStatus(200);
 });
 
 io.on("connection",(socket)=>{
