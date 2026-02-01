@@ -116,35 +116,56 @@ body{
   color:black;
 }
 
-/* ================= NOTEBOOK / CELULAR ================= */
+/* ================= NOTEBOOK ================= */
 
-@media(max-width:900px){
+@media(max-width:1200px){
+
+#nome-paciente{
+  font-size:10vw;
+}
 
 .cards-container{
   grid-template-columns:1fr;
-  gap:25px;
+  gap:30px;
+}
+
+}
+
+/* ================= TV GRANDE (modo painel real) ================= */
+
+@media(min-width:1500px){
+
+.container{
+  padding:80px;
+}
+
+.area-principal{
+  min-height:45vh;
 }
 
 #nome-paciente{
-  font-size:12vw;
-}
-
-}
-
-/* ================= TV GRANDE ================= */
-
-@media(min-width:1600px){
-
-.container{
-  padding:50px;
-}
-
-.card{
-  padding:60px;
+  font-size:14vw;
 }
 
 .cards-container{
-  gap:90px;
+  gap:120px;
+}
+
+.card{
+  padding:70px;
+}
+
+#nome-profissional,
+#consultorio{
+  font-size:5vw;
+}
+
+.secao-historico{
+  padding:40px 60px;
+}
+
+#lista-historico li{
+  font-size:2.8vh;
 }
 
 }
