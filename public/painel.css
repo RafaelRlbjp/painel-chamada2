@@ -9,115 +9,119 @@ body {
   color: white;
   height: 100vh;
   width: 100vw;
-  font-family: Arial Black, Arial, sans-serif;
+  font-family: 'Arial Black', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Proíbe qualquer barra de rolagem */
+  overflow: hidden;
 }
 
 .container {
   width: 98vw;
-  height: 98vh; /* Ocupa a tela quase toda, mas deixa margem de segurança */
-  display: grid;
-  /* O segredo: Paciente flexível, Profissional fixo, Histórico fixo */
-  grid-template-rows: 1fr 160px 70px; 
-  gap: 10px;
-  padding: 10px;
+  height: 98vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh; /* Gap baseado na altura da tela */
+  padding: 1vh;
 }
 
 /* ÁREA DO PACIENTE */
 .area-principal {
-  border: 10px solid #0d6efd;
-  border-radius: 40px;
+  flex: 2; /* Ocupa 2 partes do espaço */
+  border: 0.8vh solid #0d6efd;
+  border-radius: 4vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #001427;
-  padding: 15px;
-  min-height: 0; /* Permite que o container reduza para não expulsar os de baixo */
+  padding: 2vh;
+  min-height: 0; 
 }
 
 .label-topo {
-  font-size: 1.5rem;
+  font-size: 4vh; /* Tamanho fixo relativo à altura da TV */
   opacity: 0.8;
-  margin-bottom: 5px;
+  margin-bottom: 1vh;
 }
 
 #nome-paciente {
-  /* Fonte proporcional à altura da tela (vh) para nunca estourar */
-  font-size: clamp(2rem, 15vh, 7rem);
+  font-size: clamp(3rem, 15vh, 12rem); /* Cresce conforme a TV, mas tem limite */
   color: #ffd500;
   text-align: center;
-  line-height: 1;
+  line-height: 1.1;
   width: 100%;
+  word-wrap: break-word;
   overflow: hidden;
   text-transform: uppercase;
 }
 
 /* CARDS PROFISSIONAL E LOCAL */
 .cards-container {
+  flex: 1; /* Ocupa 1 parte do espaço */
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  gap: 1.5vh;
+  min-height: 0;
 }
 
 .card {
   background: #0d6efd;
-  border-radius: 30px;
+  border-radius: 3vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 1.5vh;
 }
 
 .card .label {
-  font-size: 1.1rem;
+  font-size: 2.5vh;
   opacity: 0.9;
-  margin-bottom: 5px;
+  margin-bottom: 0.5vh;
 }
 
 #nome-profissional, #consultorio {
-  font-size: clamp(1.2rem, 5vh, 2.8rem);
+  font-size: clamp(1.5rem, 6vh, 4.5rem);
   font-weight: bold;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; /* Evita que o texto saia do card azul */
   width: 95%;
 }
 
 /* HISTÓRICO */
 .secao-historico {
+  flex: 0 0 10vh; /* Tamanho fixo de 10% da altura da tela */
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 5px 20px;
+  border-radius: 2vh;
+  padding: 0 2vw;
   display: flex;
   align-items: center;
-  gap: 15px;
-  overflow: hidden;
+  gap: 2vw;
 }
 
 .titulo-hist { 
   color: #ffd500; 
-  font-size: 1rem; 
-  min-width: 150px; 
+  font-size: 2.2vh; 
+  min-width: fit-content;
 }
 
 #lista-historico { 
   display: flex; 
-  gap: 8px; 
-  list-style: none; 
+  gap: 1vw; 
+  list-style: none;
+  overflow: hidden;
 }
 
 #lista-historico li {
   background: #111;
-  padding: 6px 15px;
-  border-radius: 50px;
+  padding: 1vh 2vw;
+  border-radius: 5vh;
   white-space: nowrap;
-  font-size: 0.9rem;
+  font-size: 2vh;
+  border: 1px solid #333;
 }
 
 /* ANIMAÇÃO PISCAR */
