@@ -1,162 +1,166 @@
+/* ================= CONFIGURAÇÕES GERAIS ================= */
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-  background:#001427;
-  color:white;
-  height:100vh;
-  font-family:Arial Black, Arial;
+body {
+  background: radial-gradient(circle, #001e3a 0%, #001427 100%);
+  color: white;
+  height: 100vh;
+  width: 100vw;
+  font-family: 'Arial Black', Arial, sans-serif;
+  overflow: hidden; /* Evita barras de rolagem em Smart TVs */
 }
 
-.container{
-  height:100%;
-  padding:30px;
-  display:grid;
-  grid-template-rows:auto auto 1fr;
-  gap:25px;
+/* Container com Margem de Segurança (Overscan) */
+.container {
+  height: 100vh;
+  padding: 4vh 4vw; 
+  display: grid;
+  /* Área principal expande (1fr), cards e histórico fixos (auto) */
+  grid-template-rows: 1fr auto auto; 
+  gap: 3vh;
 }
 
-/* ================= CAIXA PACIENTE ================= */
+/* ================= CAIXA PACIENTE (DESTAQUE) ================= */
 
-.area-principal{
-  border:8px solid #0d6efd;
-  border-radius:35px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  padding:35px;
+.area-principal {
+  border: 10px solid #0d6efd;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background: rgba(13, 110, 253, 0.05);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
 }
 
-.label-topo{
-  font-size:clamp(18px,2vh,28px);
-  opacity:.6;
+.label-topo {
+  font-size: clamp(24px, 3vh, 35px);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.7;
 }
 
-#nome-paciente{
-  font-size:clamp(70px,10vw,200px);
-  color:#ffd500;
-  margin-top:20px;
-  text-align:center;
-  line-height:1.1;
+#nome-paciente {
+  /* Tamanho massivo para visualização à distância */
+  font-size: clamp(80px, 16vw, 300px);
+  color: #ffd500;
+  margin-top: 10px;
+  text-align: center;
+  line-height: 1;
+  text-shadow: 5px 5px 0px rgba(0, 0, 0, 0.8);
 }
 
-/* ================= PROFISSIONAL / LOCAL ================= */
+/* ================= CARDS (PROFISSIONAL / LOCAL) ================= */
 
-.cards-container{
-  width:100%;
-  display:flex;
-  justify-content:space-between;
-  gap:80px;
+.cards-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
 }
 
-.card{
-  background:#0d6efd;
-  padding:35px;
-  border-radius:30px;
-  text-align:center;
-  flex:1;
-  min-height:160px;
+.card {
+  background: #0d6efd;
+  padding: 30px;
+  border-radius: 30px;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 
-.card .label{
-  opacity:.8;
-  font-size:clamp(14px,2vh,22px);
+.card .label {
+  opacity: 0.9;
+  font-size: clamp(18px, 2.5vh, 28px);
+  text-transform: uppercase;
 }
 
 #nome-profissional,
-#consultorio{
-  font-size:clamp(30px,4vw,70px);
-  margin-top:15px;
+#consultorio {
+  font-size: clamp(35px, 5vw, 80px);
+  margin-top: 10px;
+  font-weight: bold;
 }
 
-/* ================= HISTÓRICO ================= */
+/* ================= HISTÓRICO (RODAPÉ) ================= */
 
-.secao-historico{
-  background:#00000050;
-  border-radius:30px;
-  padding:20px 30px;
-  display:flex;
-  align-items:center;
-  gap:25px;
+.secao-historico {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 25px;
+  padding: 15px 40px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.titulo-hist{
-  font-size:clamp(14px,2vh,22px);
-  color:#7dfcff;
+.titulo-hist {
+  font-size: clamp(16px, 2vh, 24px);
+  color: #7dfcff;
+  white-space: nowrap;
 }
 
-#lista-historico{
-  display:flex;
-  gap:20px;
-  list-style:none;
-  flex-wrap:wrap;
+#lista-historico {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+  flex-wrap: nowrap; /* Mantém em uma linha na TV */
+  overflow: hidden;
 }
 
-#lista-historico li{
-  background:#111;
-  padding:12px 30px;
-  border-radius:40px;
-  font-size:clamp(14px,2vh,26px);
+#lista-historico li {
+  background: #111;
+  padding: 10px 25px;
+  border-radius: 50px;
+  font-size: clamp(16px, 2.2vh, 28px);
+  border: 1px solid #333;
+  color: #ddd;
 }
 
-/* ================= ALERTA ================= */
+/* ================= SISTEMA DE ALERTA (PISCAR) ================= */
 
-.piscar-amarelo .area-principal{
-  animation:pisca .6s infinite;
+/* Quando a classe 'piscar-amarelo' for adicionada ao body ou container */
+.piscar-amarelo .area-principal {
+  animation: pisca-tv 0.8s infinite;
+  border-color: white;
 }
 
-@keyframes pisca{
-  0%,100%{background:#001427;}
-  50%{background:yellow;}
+@keyframes pisca-tv {
+  0%, 100% { background-color: #001427; }
+  50% { background-color: #ffd500; }
 }
 
-.piscar-amarelo #nome-paciente{
-  color:rgb(255, 253, 253);
+/* Inverte a cor do texto no pico do brilho para manter leitura */
+.piscar-amarelo #nome-paciente {
+  animation: cor-texto 0.8s infinite;
 }
 
-/* ================= NOTEBOOK / CELULAR ================= */
-
-@media(max-width:900px){
-
-.cards-container{
-  flex-direction:column;
-  gap:25px;
+@keyframes cor-texto {
+  0%, 100% { color: #ffd500; }
+  50% { color: #000; }
 }
 
-#nome-paciente{
-  font-size:12vw;
+/* ================= AJUSTES PARA TELAS GIGANTES (4K+) ================= */
+
+@media (min-width: 2500px) {
+  .container { padding: 6vh 6vw; gap: 5vh; }
+  .area-principal { border-width: 20px; }
+  #nome-paciente { font-size: 22vw; }
 }
 
-}
+/* ================= AJUSTE PARA CELULAR / TABLET ================= */
 
-/* ================= TV GRANDE ================= */
-
-@media(min-width:1600px){
-
-/* Nome do paciente gigante na TV */
-
-#nome-paciente{
-  font-size:clamp(140px,18vw,320px);
-}
-
-/* Histórico mais baixo */
-
-.secao-historico{
-  padding:10px 20px;
-  gap:15px;
-}
-
-#lista-historico li{
-  padding:8px 22px;
-  font-size:1.8vh;
-}
-
-.titulo-hist{
-  font-size:1.8vh;
-}
-
+@media (max-width: 900px) {
+  .cards-container { flex-direction: column; gap: 15px; }
+  .container { grid-template-rows: 1fr auto auto; padding: 20px; }
+  #nome-paciente { font-size: 15vw; }
+  .secao-historico { flex-direction: column; align-items: flex-start; }
 }
