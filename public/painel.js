@@ -1,6 +1,5 @@
 const socket = io();
 
-// Seleção de elementos do DOM
 const nomeElement = document.getElementById("nome-paciente");
 const profElement = document.getElementById("nome-profissional");
 const consElement = document.getElementById("consultorio");
@@ -8,88 +7,69 @@ const histElement = document.getElementById("lista-historico");
 const bip = document.getElementById("bip");
 const painel = document.getElementById("painel");
 
-// Evento disparado quando o servidor envia um novo chamado
 socket.on("novoChamado", (dados) => {
-    console.log("Dados recebidos do servidor:", dados);
+    if (!dados || !dados.ultimo) return;
 
-    // Verifica se os dados são válidos
-    if (!dados || !dados.ultimo) {
-        console.log("Aguardando o primeiro chamado...");
-        return;
-    }
+    const { ultimo, historico } = dados;
 
-    const ultimo = dados.ultimo;
+    // 1. Atualiza Interface
+    nomeElement.innerText = ultimo.nome.toUpperCase();
+    profElement.innerText = ultimo.profissional.toUpperCase();
+    consElement.innerText = ultimo.consultorio.toUpperCase();
 
-    // Atualiza os campos principais (com fallback para evitar undefined)
-    nomeElement.innerText = (ultimo.nome || ultimo.paciente || "---").toUpperCase();
-    profElement.innerText = (ultimo.profissional || "---").toUpperCase();
-    consElement.innerText = (ultimo.consultorio || "---").toUpperCase();
-
-    // Atualiza a lista do histórico
+    // 2. Atualiza Histórico
     histElement.innerHTML = "";
-    if (dados.historico && dados.historico.length > 0) {
-        dados.historico.forEach((item) => {
-            const li = document.createElement("li");
-            li.innerText = `${item.nome} - ${item.profissional}`;
-            histElement.appendChild(li);
-        });
-    }
+    historico.forEach(p => {
+        const li = document.createElement("li");
+        li.innerText = `${p.nome} - ${p.profissional}`;
+        histElement.appendChild(li);
+    });
 
-    // Aciona os efeitos visuais
+    // 3. Inicia Alerta Visual (Piscada)
     painel.classList.add("piscar-amarelo");
-    
-    // Tocar alerta sonoro
-    tocarBip();
-    
-    // Chamar por voz sintetizada
-    chamarVoz(ultimo.nome, ultimo.profissional, ultimo.consultorio);
 
-    // Remove o efeito de piscar após 3.5 segundos
-    setTimeout(() => {
-        painel.classList.remove("piscar-amarelo");
-    }, 3500);
+    // 4. Inicia Alerta Sonoro (Bip) e Voz
+    tocarBip();
+    chamarVozSincronizada(ultimo.nome, ultimo.profissional, ultimo.consultorio);
 });
 
-/**
- * Função para tocar o bip 4 vezes
- */
 function tocarBip() {
     let i = 0;
     const t = setInterval(() => {
         bip.currentTime = 0;
-        bip.play().catch(e => console.log("Erro ao tocar áudio (clique na tela primeiro):", e));
+        bip.play().catch(() => {});
         i++;
         if (i >= 4) clearInterval(t);
     }, 500);
 }
 
-/**
- * Função para chamada de voz sintetizada
- */
-function chamarVoz(paciente, profissional, local) {
+function chamarVozSincronizada(nome, prof, local) {
     if (!window.speechSynthesis) return;
 
-    const texto = `Paciente ${paciente}, com ${profissional}, dirigir-se ao ${local}`;
+    window.speechSynthesis.cancel(); // Para vozes anteriores
+
+    const frase = `Paciente ${nome}, com ${prof}, dirigir-se ao ${local}`;
     
-    // Limpa chamadas pendentes para não acumular
-    window.speechSynthesis.cancel();
+    // Criamos duas instâncias para repetir a frase
+    const fala1 = new SpeechSynthesisUtterance(frase);
+    const fala2 = new SpeechSynthesisUtterance(frase);
 
-    let v = 0;
-    const repetir = setInterval(() => {
-        const msg = new SpeechSynthesisUtterance(texto);
-        msg.lang = "pt-BR";
-        msg.rate = 0.9; // Velocidade um pouco mais lenta para clareza
-        window.speechSynthesis.speak(msg);
+    [fala1, fala2].forEach(f => {
+        f.lang = "pt-BR";
+        f.rate = 0.9;
+    });
 
-        v++;
-        if (v >= 2) clearInterval(repetir);
-    }, 3500);
+    // O PULO DO GATO: Quando a ÚLTIMA fala terminar, removemos a classe CSS
+    fala2.onend = () => {
+        painel.classList.remove("piscar-amarelo");
+    };
+
+    window.speechSynthesis.speak(fala1);
+    window.speechSynthesis.speak(fala2);
 }
 
-// O navegador bloqueia sons automáticos. 
-// O usuário PRECISA clicar uma vez na página para "liberar" o áudio.
-document.body.addEventListener("click", () => {
-    console.log("Áudio e Voz desbloqueados pelo usuário.");
+// Desbloqueio de áudio (obrigatório em navegadores modernos)
+document.addEventListener("click", () => {
     bip.play().catch(() => {});
-    window.speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
 }, { once: true });
