@@ -1,4 +1,4 @@
-/* ================= CONFIGURAÇÕES GERAIS ================= */
+/* ================= RESET E BASE ================= */
 *{
   margin: 0;
   padding: 0;
@@ -6,173 +6,129 @@
 }
 
 body {
-  background: radial-gradient(circle, #001e3a 0%, #001427 100%);
+  background: #000c17;
   color: white;
   height: 100vh;
   width: 100vw;
-  font-family: 'Arial Black', Arial, sans-serif;
-  overflow: hidden; /* Evita barras de rolagem na Smart TV */
+  font-family: 'Arial Black', sans-serif;
+  overflow: hidden; /* Fundamental para TV não criar scroll */
 }
 
-/* ================= RELÓGIO (TOPO DIREITO) ================= */
-#relogio {
-  position: absolute;
-  top: 2vh;
-  right: 3vw;
-  font-size: clamp(20px, 3vh, 40px);
-  opacity: 0.8;
-  font-family: 'monospace'; /* Estilo digital */
-  z-index: 10;
-}
-
-/* ================= AVISO DE SOM (OVERLAY) ================= */
-#aviso-som {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: clamp(20px, 5vw, 50px);
-  text-align: center;
-  padding: 50px;
-  cursor: pointer;
-  border: 5px solid #0d6efd;
-}
-
-/* ================= CONTAINER PRINCIPAL ================= */
+/* Container principal em coluna */
 .container {
   height: 100vh;
-  padding: 5vh 4vw 3vh 4vw; /* Margem de segurança para evitar cortes da TV */
-  display: grid;
-  grid-template-rows: 1fr auto; /* Área principal cresce, rodapé fixo */
-  gap: 4vh;
+  display: flex;
+  flex-direction: column;
+  padding: 3vh 3vw; /* Margens baseadas na tela */
+  gap: 2vh;
 }
 
-/* ================= ÁREA DE CHAMADA PRINCIPAL ================= */
+/* ================= ÁREA DO NOME (O QUE REALMENTE IMPORTA) ================= */
+
 .area-principal {
+  flex: 3; /* Ocupa 3x mais espaço que o resto */
   border: 10px solid #0d6efd;
   border-radius: 40px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly; /* Distribui os elementos internamente */
+  justify-content: center; /* Centraliza o nome verticalmente */
   align-items: center;
-  padding: 4vh;
   background: rgba(13, 110, 253, 0.05);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  padding: 20px;
 }
 
 .label-topo {
-  font-size: clamp(24px, 3vh, 35px);
+  font-size: clamp(20px, 4vh, 40px); /* Título 'PACIENTE' */
+  color: #0d6efd;
   text-transform: uppercase;
-  letter-spacing: 4px;
-  opacity: 0.6;
+  margin-bottom: 2vh;
 }
 
 #nome-paciente {
-  font-size: clamp(80px, 15vw, 320px);
+  /* Aqui está o pulo do gato: largura total e fonte massiva */
+  font-size: clamp(60px, 18vw, 320px); 
   color: #ffd500;
-  text-align: center;
   line-height: 1;
-  text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.8);
+  text-align: center;
   width: 100%;
-  word-wrap: break-word;
+  text-shadow: 10px 10px 0px rgba(0, 0, 0, 0.8);
 }
 
-/* ================= CARDS (PROFISSIONAL / LOCAL) ================= */
+/* ================= BLOCO DE INFORMAÇÕES (PROFISSIONAL/LOCAL) ================= */
+
 .cards-container {
-  width: 100%;
+  flex: 1; /* Ocupa apenas o necessário embaixo */
   display: flex;
-  justify-content: space-between;
-  gap: 3vw;
+  gap: 2vw;
 }
 
 .card {
-  background: #0d6efd;
-  padding: 3vh;
-  border-radius: 30px;
-  text-align: center;
   flex: 1;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  background: #0d6efd;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
 }
 
 .card .label {
-  opacity: 0.9;
-  font-size: clamp(18px, 2.5vh, 28px);
+  font-size: clamp(16px, 2.5vh, 30px);
+  opacity: 0.8;
   text-transform: uppercase;
 }
 
 #nome-profissional,
 #consultorio {
-  font-size: clamp(30px, 4.5vw, 75px);
-  margin-top: 10px;
+  font-size: clamp(24px, 5vw, 80px);
   font-weight: bold;
 }
 
-/* ================= HISTÓRICO (RODAPÉ) ================= */
+/* ================= HISTÓRICO (RODAPÉ DISCRETO) ================= */
+
 .secao-historico {
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 25px;
-  padding: 1.5vh 3vw;
+  flex: 0.4;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
   display: flex;
   align-items: center;
-  gap: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  min-height: 10vh;
+  padding: 0 3vw;
+  gap: 20px;
 }
 
 .titulo-hist {
-  font-size: clamp(16px, 2vh, 24px);
+  font-size: 2vh;
   color: #7dfcff;
-  white-space: nowrap;
 }
 
 #lista-historico {
   display: flex;
-  gap: 15px;
+  gap: 20px;
   list-style: none;
-  flex-wrap: nowrap;
-  overflow: hidden; /* Mantém limpo na TV */
 }
 
 #lista-historico li {
-  background: #111;
-  padding: 10px 25px;
-  border-radius: 50px;
-  font-size: clamp(16px, 2vh, 26px);
-  border: 1px solid #333;
-  color: #ccc;
-  white-space: nowrap;
+  font-size: 2.2vh;
+  opacity: 0.5;
 }
 
-/* ================= ANIMAÇÃO DE ALERTA ================= */
+/* ================= ANIMAÇÃO DE CHAMADA ================= */
+
 .piscar-amarelo .area-principal {
-  animation: pisca-tv 0.8s infinite;
+  animation: alerta-ubs 0.8s infinite;
 }
 
-@keyframes pisca-tv {
-  0%, 100% { background-color: #001427; border-color: #0d6efd; }
-  50% { background-color: #ffd500; border-color: #fff; }
+@keyframes alerta-ubs {
+  0%, 100% { background-color: rgba(13, 110, 253, 0.05); }
+  50% { background-color: #ffd500; border-color: white; }
 }
 
 .piscar-amarelo #nome-paciente {
-  animation: cor-texto 0.8s infinite;
+  animation: texto-alerta 0.8s infinite;
 }
 
-@keyframes cor-texto {
+@keyframes texto-alerta {
   0%, 100% { color: #ffd500; }
   50% { color: #000; }
-}
-
-/* Ajuste para quando o fundo pisca, a label do topo também escurecer */
-.piscar-amarelo .label-topo {
-  animation: cor-label 0.8s infinite;
-}
-
-@keyframes cor-label {
-  0%, 100% { color: white; }
-  50% { color: rgba(0,0,0,0.5); }
 }
