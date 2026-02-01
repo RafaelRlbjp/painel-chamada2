@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Chamar Paciente</title>
+  <title>Sistema de Chamada - Operador</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="chamar.css">
 </head>
@@ -11,53 +11,69 @@
 <div class="box">
   <h2>Chamada de Paciente</h2>
 
-  <label>Profissional</label>
-  <select id="profissional">
-    <option value="">Selecione</option>
-    <option value="Dr. Pedro">Dr. Pedro</option>
-    <option value="Dra. Elba">Dra. Elba</option>
-    <option value="Dra. Karina">Dra. Karina</option>
-    <option value="Dra. Elainy">Dra. Elainy</option>
-    <option value="Enfermeira Gabriella">Enfermeira Gabriella</option>
-    <option value="Enfermeira Vesper">Enfermeira Vesper</option>
-    <option value="Enfermeira Clotilde">Enfermeira Clotilde</option>
-    <option value="Enfermeira Clarice">Enfermeira Clarice</option>
-    <option value="Dra. Fernanda">Dra. Fernanda</option>
-    <option value="Dra. Danielle">Dra. Danielle</option>
-    <option value="Dra. Thaiane">Dra. Thaiane</option>
-    <option value="Dra. Alex">Dra. Alex</option>
-    <option value="Técnica de Enfermagem Mayara">Técnica de Enfermagem Mayara</option>
-    <option value="Técnica de Enfermagem Nayanna">Técnica de Enfermagem Nayanna</option>
-    <option value="Técnica de Enfermagem Priscila">Técnica de Enfermagem Priscila</option>
-    <option value="Recepcionista Kelly">Recepcionista Kelly</option>
-    <option value="Recepcionista chefe Elaine">Recepcionista chefe Elaine</option>
-  </select>
+  <div class="campo">
+    <label for="profissional">Profissional</label>
+    <select id="profissional">
+      <option value="">Selecione</option>
+      <option value="Dr. Pedro">Dr. Pedro</option>
+      <option value="Dra. Elba">Dra. Elba</option>
+      <option value="Dra. Karina">Dra. Karina</option>
+      <option value="Dra. Elainy">Dra. Elainy</option>
+      <option value="Enfermeira Gabriella">Enfermeira Gabriella</option>
+      <option value="Enfermeira Vesper">Enfermeira Vesper</option>
+      <option value="Enfermeira Clotilde">Enfermeira Clotilde</option>
+      <option value="Enfermeira Clarice">Enfermeira Clarice</option>
+      <option value="Dra. Fernanda">Dra. Fernanda</option>
+      <option value="Dra. Danielle">Dra. Danielle</option>
+      <option value="Dra. Thaiane">Dra. Thaiane</option>
+      <option value="Dra. Alex">Dra. Alex</option>
+      <option value="Técnica de Enfermagem Mayara">Técnica de Enfermagem Mayara</option>
+      <option value="Técnica de Enfermagem Nayanna">Técnica de Enfermagem Nayanna</option>
+      <option value="Técnica de Enfermagem Priscila">Técnica de Enfermagem Priscila</option>
+      <option value="Recepcionista Kelly">Recepcionista Kelly</option>
+      <option value="Recepcionista chefe Elaine">Recepcionista chefe Elaine</option>
+    </select>
+  </div>
 
-  <label>Paciente</label>
-  <input type="text" id="paciente" placeholder="Nome do paciente" autocomplete="off">
+  <div class="campo">
+    <label for="paciente">Paciente</label>
+    <input type="text" id="paciente" placeholder="Nome do paciente" autocomplete="off">
+  </div>
 
-  <label>Consultório</label>
-  <select id="consultorio">
-    <option value="">Selecione</option>
-    <option value="Consultório Médico 1">Consultório Médico 1</option>
-    <option value="Consultório Médico 2">Consultório Médico 2</option>
-    <option value="Consultório Médico 3">Consultório Médico 3</option>
-    <option value="Consultório Médico 4">Consultório Médico 4</option>
-    <option value="Consultório de Enfermagem 1">Consultório de Enfermagem 1</option>
-    <option value="Consultório de Enfermagem 2">Consultório de Enfermagem 2</option>
-    <option value="Consultório de Enfermagem 3">Consultório de Enfermagem 3</option>
-    <option value="Consultório de Enfermagem 4">Consultório de Enfermagem 4</option>
-    <option value="Consultório Odontológico 1">Consultório Odontológico 1</option>
-    <option value="Consultório Odontológico 2">Consultório Odontológico 2</option>
-    <option value="Consultório Odontológico 3">Consultório Odontológico 3</option>
-    <option value="Recepção">Recepção</option>
-    <option value="Sala de Triagem">Sala de Triagem</option>
-  </select>
+  <div class="campo">
+    <label for="consultorio">Consultório / Local</label>
+    <select id="consultorio">
+      <option value="">Selecione</option>
+      <option value="Consultório Médico 1">Consultório Médico 1</option>
+      <option value="Consultório Médico 2">Consultório Médico 2</option>
+      <option value="Consultório Médico 3">Consultório Médico 3</option>
+      <option value="Consultório Médico 4">Consultório Médico 4</option>
+      <option value="Consultório de Enfermagem 1">Consultório de Enfermagem 1</option>
+      <option value="Consultório de Enfermagem 2">Consultório de Enfermagem 2</option>
+      <option value="Consultório de Enfermagem 3">Consultório de Enfermagem 3</option>
+      <option value="Consultório de Enfermagem 4">Consultório de Enfermagem 4</option>
+      <option value="Consultório Odontológico 1">Consultório Odontológico 1</option>
+      <option value="Consultório Odontológico 2">Consultório Odontológico 2</option>
+      <option value="Consultório Odontológico 3">Consultório Odontológico 3</option>
+      <option value="Recepção">Recepção</option>
+      <option value="Sala de Triagem">Sala de Triagem</option>
+    </select>
+  </div>
 
-  <button onclick="chamarPaciente()">CHAMAR</button>
+  <button onclick="chamarPaciente()" id="btnChamar">CHAMAR PACIENTE</button>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="chamar.js"></script>
+
+<script>
+  // Atalho: apertar Enter no campo paciente dispara o botão
+  document.getElementById("paciente").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      chamarPaciente();
+    }
+  });
+</script>
+
 </body>
 </html>
