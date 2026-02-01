@@ -102,21 +102,4 @@ color:black;
 .cards-container{grid-template-columns:1fr;}
 }
 
-/* TV */
 
-@media(min-width:1600px){
-
-#nome-paciente{
-font-size:clamp(140px,18vw,320px);
-}
-
-.secao-historico{
-padding:10px 20px;
-}
-
-#lista-historico li{
-padding:8px 22px;
-font-size:1.8vh;
-}
-
-}
