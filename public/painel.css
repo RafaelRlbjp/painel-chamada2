@@ -8,24 +8,27 @@ body {
   background: #001427;
   color: white;
   height: 100vh;
-  font-family: Arial Black, Arial, sans-serif;
+  width: 100vw;
+  font-family: 'Arial Black', Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: hidden; /* Garante que nada saia da tela */
 }
 
 .container {
-  width: 95%;
-  height: 90%;
+  width: 98vw;
+  height: 96vh;
   display: grid;
-  grid-template-rows: 2fr 1fr 0.5fr;
-  gap: 20px;
+  /* O minmax(0, ...) é o segredo para o conteúdo não empurrar o grid */
+  grid-template-rows: minmax(0, 2.5fr) minmax(0, 1fr) auto;
+  gap: 15px;
+  padding: 10px;
 }
 
 /* ÁREA DO PACIENTE */
 .area-principal {
-  border: 10px solid #0d6efd;
+  border: clamp(5px, 1vw, 10px) solid #0d6efd;
   border-radius: 40px;
   display: flex;
   flex-direction: column;
@@ -33,20 +36,27 @@ body {
   align-items: center;
   background: #001427;
   transition: background 0.3s;
+  overflow: hidden; /* Impede o nome de vazar do card */
+  padding: 20px;
 }
 
 .label-topo {
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 3vw, 2.5rem);
   opacity: 0.8;
   letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 #nome-paciente {
-  font-size: 8rem;
+  /* Fonte flexível: mínimo 3rem, ideal 10vw, máximo 9rem */
+  font-size: clamp(3rem, 10vw, 9rem);
   color: #ffd500;
   text-align: center;
-  line-height: 1;
+  line-height: 1.1;
   margin-top: 10px;
+  word-wrap: break-word;
+  max-width: 100%;
+  display: block;
 }
 
 /* CARDS PROFISSIONAL E LOCAL */
@@ -54,6 +64,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  min-height: 0; /* Permite encolhimento se necessário */
 }
 
 .card {
@@ -63,42 +74,62 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 15px;
+  overflow: hidden;
 }
 
 .card .label {
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 2vw, 1.8rem);
   opacity: 0.9;
+  text-transform: uppercase;
 }
 
 #nome-profissional, #consultorio {
-  font-size: 3.5rem;
+  font-size: clamp(1.5rem, 4vw, 3.8rem);
   font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Se o nome for gigante, ele coloca "..." */
+  width: 100%;
 }
 
 /* HISTÓRICO */
 .secao-historico {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  padding: 15px;
+  padding: 15px 25px;
   display: flex;
   align-items: center;
   gap: 20px;
+  min-height: 70px;
 }
 
-.titulo-hist { color: #ffd500; font-size: 1.2rem; min-width: 150px; }
+.titulo-hist { 
+  color: #ffd500; 
+  font-size: clamp(1rem, 1.5vw, 1.4rem); 
+  min-width: 160px; 
+  text-transform: uppercase;
+}
 
-#lista-historico { display: flex; gap: 10px; list-style: none; overflow: hidden; }
+#lista-historico { 
+  display: flex; 
+  gap: 15px; 
+  list-style: none; 
+  overflow: hidden; 
+  flex-grow: 1;
+}
 
 #lista-historico li {
   background: #111;
-  padding: 8px 20px;
+  padding: 8px 25px;
   border-radius: 50px;
   white-space: nowrap;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 1.2vw, 1.3rem);
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
-/* ANIMAÇÃO PISCAR */
+/* ANIMAÇÃO PISCAR (AJUSTADA) */
 .piscar-amarelo {
   animation: pisca-alerta 0.8s infinite;
 }
@@ -108,6 +139,7 @@ body {
   50% { background-color: #ffd500; }
 }
 
+/* Quando estiver piscando, o texto precisa ficar preto para contraste */
 .piscar-amarelo #nome-paciente, 
 .piscar-amarelo .label-topo {
   color: #000 !important;
