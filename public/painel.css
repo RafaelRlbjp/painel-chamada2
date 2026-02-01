@@ -32,25 +32,25 @@ body{
 }
 
 .label-topo{
-  font-size:2vh;
+  font-size:clamp(18px,2vh,28px);
   opacity:.6;
 }
 
 #nome-paciente{
-  font-size:clamp(60px,10vw,190px);
+  font-size:clamp(70px,10vw,200px);
   color:#ffd500;
   margin-top:20px;
   text-align:center;
   line-height:1.1;
 }
 
-/* ================= CAIXA PROFISSIONAL / LOCAL ================= */
+/* ================= PROFISSIONAL / LOCAL ================= */
 
 .cards-container{
   width:100%;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:50px;
+  display:flex;
+  justify-content:space-between;
+  gap:80px;
 }
 
 .card{
@@ -58,6 +58,8 @@ body{
   padding:35px;
   border-radius:30px;
   text-align:center;
+  flex:1;
+  min-height:160px;
 }
 
 .card .label{
@@ -67,7 +69,7 @@ body{
 
 #nome-profissional,
 #consultorio{
-  font-size:clamp(28px,4vw,65px);
+  font-size:clamp(30px,4vw,70px);
   margin-top:15px;
 }
 
@@ -116,56 +118,35 @@ body{
   color:black;
 }
 
-/* ================= NOTEBOOK ================= */
+/* ================= NOTEBOOK / CELULAR ================= */
 
-@media(max-width:1200px){
-
-#nome-paciente{
-  font-size:10vw;
-}
+@media(max-width:900px){
 
 .cards-container{
-  grid-template-columns:1fr;
-  gap:30px;
-}
-
-}
-
-/* ================= TV GRANDE (modo painel real) ================= */
-
-@media(min-width:1500px){
-
-.container{
-  padding:80px;
-}
-
-.area-principal{
-  min-height:45vh;
+  flex-direction:column;
+  gap:25px;
 }
 
 #nome-paciente{
-  font-size:14vw;
+  font-size:12vw;
+}
+
+}
+
+/* ================= TV GRANDE ================= */
+
+@media(min-width:1600px){
+
+.container{
+  padding:50px;
+}
+
+.card{
+  padding:60px;
 }
 
 .cards-container{
   gap:120px;
-}
-
-.card{
-  padding:70px;
-}
-
-#nome-profissional,
-#consultorio{
-  font-size:5vw;
-}
-
-.secao-historico{
-  padding:40px 60px;
-}
-
-#lista-historico li{
-  font-size:2.8vh;
 }
 
 }
