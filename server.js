@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
+const path = require("path");
 
 app.use(express.json());
 app.use(express.static("public"));
@@ -9,7 +10,12 @@ app.use(express.static("public"));
 let ultimo = null;
 let historico = [];
 
-app.post("/chamar", (req,res)=>{
+// 👉 rota principal
+app.get("/", (req,res)=>{
+  res.sendFile(path.join(__dirname,"public","painel.html"));
+});
+
+app.post("/chamar",(req,res)=>{
 
   ultimo = req.body;
 
@@ -27,7 +33,7 @@ app.post("/chamar", (req,res)=>{
 });
 
 io.on("connection",(socket)=>{
-  socket.emit("novoChamado",{ultimo,historico});
+ socket.emit("novoChamado",{ultimo,historico});
 });
 
 http.listen(process.env.PORT || 3000);
