@@ -1,134 +1,122 @@
-/* ================= RESET E BASE ================= */
 *{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
-body {
-  background: #000c17;
-  color: white;
-  height: 100vh;
-  width: 100vw;
-  font-family: 'Arial Black', sans-serif;
-  overflow: hidden; /* Fundamental para TV não criar scroll */
+body{
+background:#001427;
+color:white;
+height:100vh;
+font-family:Arial Black,Arial;
 }
 
-/* Container principal em coluna */
-.container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 3vh 3vw; /* Margens baseadas na tela */
-  gap: 2vh;
+.container{
+height:100%;
+padding:30px;
+display:grid;
+grid-template-rows:auto auto 1fr;
+gap:25px;
 }
 
-/* ================= ÁREA DO NOME (O QUE REALMENTE IMPORTA) ================= */
-
-.area-principal {
-  flex: 3; /* Ocupa 3x mais espaço que o resto */
-  border: 10px solid #0d6efd;
-  border-radius: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Centraliza o nome verticalmente */
-  align-items: center;
-  background: rgba(13, 110, 253, 0.05);
-  padding: 20px;
+.area-principal{
+border:8px solid #0d6efd;
+border-radius:35px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:35px;
 }
 
-.label-topo {
-  font-size: clamp(20px, 4vh, 40px); /* Título 'PACIENTE' */
-  color: #0d6efd;
-  text-transform: uppercase;
-  margin-bottom: 2vh;
+.label-topo{
+font-size:2vh;
+opacity:.6;
 }
 
-#nome-paciente {
-  /* Aqui está o pulo do gato: largura total e fonte massiva */
-  font-size: clamp(60px, 18vw, 320px); 
-  color: #ffd500;
-  line-height: 1;
-  text-align: center;
-  width: 100%;
-  text-shadow: 10px 10px 0px rgba(0, 0, 0, 0.8);
+#nome-paciente{
+font-size:clamp(60px,10vw,190px);
+color:#ffd500;
+margin-top:20px;
+text-align:center;
 }
 
-/* ================= BLOCO DE INFORMAÇÕES (PROFISSIONAL/LOCAL) ================= */
-
-.cards-container {
-  flex: 1; /* Ocupa apenas o necessário embaixo */
-  display: flex;
-  gap: 2vw;
+.cards-container{
+width:100%;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:50px;
 }
 
-.card {
-  flex: 1;
-  background: #0d6efd;
-  border-radius: 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+.card{
+background:#0d6efd;
+padding:35px;
+border-radius:30px;
+text-align:center;
 }
 
-.card .label {
-  font-size: clamp(16px, 2.5vh, 30px);
-  opacity: 0.8;
-  text-transform: uppercase;
+#nome-profissional,#consultorio{
+font-size:clamp(28px,4vw,65px);
+margin-top:15px;
 }
 
-#nome-profissional,
-#consultorio {
-  font-size: clamp(24px, 5vw, 80px);
-  font-weight: bold;
+.secao-historico{
+background:#00000050;
+border-radius:30px;
+padding:20px 30px;
+display:flex;
+align-items:center;
+gap:25px;
 }
 
-/* ================= HISTÓRICO (RODAPÉ DISCRETO) ================= */
-
-.secao-historico {
-  flex: 0.4;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  padding: 0 3vw;
-  gap: 20px;
+#lista-historico{
+display:flex;
+gap:20px;
+list-style:none;
+flex-wrap:wrap;
 }
 
-.titulo-hist {
-  font-size: 2vh;
-  color: #7dfcff;
+#lista-historico li{
+background:#111;
+padding:12px 30px;
+border-radius:40px;
+font-size:2vh;
 }
 
-#lista-historico {
-  display: flex;
-  gap: 20px;
-  list-style: none;
+.piscar-amarelo .area-principal{
+animation:pisca .6s infinite;
 }
 
-#lista-historico li {
-  font-size: 2.2vh;
-  opacity: 0.5;
+@keyframes pisca{
+0%,100%{background:#001427;}
+50%{background:yellow;}
 }
 
-/* ================= ANIMAÇÃO DE CHAMADA ================= */
-
-.piscar-amarelo .area-principal {
-  animation: alerta-ubs 0.8s infinite;
+.piscar-amarelo #nome-paciente{
+color:black;
 }
 
-@keyframes alerta-ubs {
-  0%, 100% { background-color: rgba(13, 110, 253, 0.05); }
-  50% { background-color: #ffd500; border-color: white; }
+/* MOBILE */
+
+@media(max-width:900px){
+.cards-container{grid-template-columns:1fr;}
 }
 
-.piscar-amarelo #nome-paciente {
-  animation: texto-alerta 0.8s infinite;
+/* TV */
+
+@media(min-width:1600px){
+
+#nome-paciente{
+font-size:clamp(140px,18vw,320px);
 }
 
-@keyframes texto-alerta {
-  0%, 100% { color: #ffd500; }
-  50% { color: #000; }
+.secao-historico{
+padding:10px 20px;
+}
+
+#lista-historico li{
+padding:8px 22px;
+font-size:1.8vh;
+}
+
 }
