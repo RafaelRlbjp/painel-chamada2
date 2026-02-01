@@ -7,17 +7,19 @@ const histElement = document.getElementById("lista-historico");
 const bip = document.getElementById("bip");
 const painel = document.getElementById("painel");
 
+let primeiraCarga = true;
+
 socket.on("novoChamado", (dados) => {
     if (!dados || !dados.ultimo) return;
 
     const { ultimo, historico } = dados;
 
-    // 1. Atualiza Interface
+    // Atualiza Textos
     nomeElement.innerText = ultimo.nome.toUpperCase();
     profElement.innerText = ultimo.profissional.toUpperCase();
     consElement.innerText = ultimo.consultorio.toUpperCase();
 
-    // 2. Atualiza Histórico
+    // Atualiza Histórico
     histElement.innerHTML = "";
     historico.forEach(p => {
         const li = document.createElement("li");
@@ -25,12 +27,15 @@ socket.on("novoChamado", (dados) => {
         histElement.appendChild(li);
     });
 
-    // 3. Inicia Alerta Visual (Piscada)
-    painel.classList.add("piscar-amarelo");
-
-    // 4. Inicia Alerta Sonoro (Bip) e Voz
-    tocarBip();
-    chamarVozSincronizada(ultimo.nome, ultimo.profissional, ultimo.consultorio);
+    // Só aciona alarme se não for o carregamento inicial da página
+    if (!primeiraCarga) {
+        painel.classList.add("piscar-amarelo");
+        tocarBip();
+        // Chamada na ordem solicitada: Paciente, Consultório, Profissional
+        chamarVozSincronizada(ultimo.nome, ultimo.consultorio, ultimo.profissional);
+    } else {
+        primeiraCarga = false;
+    }
 });
 
 function tocarBip() {
@@ -43,14 +48,13 @@ function tocarBip() {
     }, 500);
 }
 
-function chamarVozSincronizada(nome, prof, local) {
+function chamarVozSincronizada(nome, local, prof) {
     if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
 
-    window.speechSynthesis.cancel(); // Para vozes anteriores
-
-    const frase = `Paciente ${nome}, com ${prof}, dirigir-se ao ${local}`;
+    // Nova Ordem: Paciente -> Consultório -> Profissional
+    const frase = `Paciente ${nome}. Dirigir-se ao ${local}. Com ${prof}`;
     
-    // Criamos duas instâncias para repetir a frase
     const fala1 = new SpeechSynthesisUtterance(frase);
     const fala2 = new SpeechSynthesisUtterance(frase);
 
@@ -59,7 +63,7 @@ function chamarVozSincronizada(nome, prof, local) {
         f.rate = 0.9;
     });
 
-    // O PULO DO GATO: Quando a ÚLTIMA fala terminar, removemos a classe CSS
+    // Para de piscar apenas quando a última fala terminar
     fala2.onend = () => {
         painel.classList.remove("piscar-amarelo");
     };
@@ -68,8 +72,7 @@ function chamarVozSincronizada(nome, prof, local) {
     window.speechSynthesis.speak(fala2);
 }
 
-// Desbloqueio de áudio (obrigatório em navegadores modernos)
+// Desbloqueio obrigatório de áudio
 document.addEventListener("click", () => {
-    bip.play().catch(() => {});
     window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
 }, { once: true });
