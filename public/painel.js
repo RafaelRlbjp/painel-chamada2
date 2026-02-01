@@ -128,9 +128,26 @@ function delay(ms){
 
 /* ================= LIBERA AUDIO NA TV ================= */
 
-document.body.addEventListener("click",()=>{
+let audioLiberado = false;
 
+function liberarAudio(){
+
+ if(audioLiberado) return;
+
+ audioLiberado = true;
+
+ bip.volume = 0;
  bip.play().catch(()=>{});
- speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
 
-},{once:true});
+ const msg = new SpeechSynthesisUtterance(" ");
+ msg.volume = 0;
+ speechSynthesis.speak(msg);
+
+ document.getElementById("nome-paciente").innerText = "AGUARDANDO...";
+}
+
+/* TV exige toque físico */
+
+document.addEventListener("touchstart", liberarAudio, { once:true });
+document.addEventListener("click", liberarAudio, { once:true });
+
