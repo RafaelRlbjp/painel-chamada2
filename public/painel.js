@@ -7,45 +7,85 @@ const hist = document.getElementById("lista-historico");
 const bip = document.getElementById("bip");
 const painel = document.getElementById("painel");
 
-socket.on("novoChamado",dados=>{
+/* ================= RECEBE CHAMADO ================= */
 
- if(!dados.ultimo) return;
+socket.on("novoChamado", dados => {
 
- nome.innerText = dados.ultimo.nome;
- prof.innerText = dados.ultimo.profissional;
- cons.innerText = dados.ultimo.consultorio;
+ if (!dados || !dados.ultimo) return;
+
+ nome.innerText = dados.ultimo.nome || "—";
+ prof.innerText = dados.ultimo.profissional || "—";
+ cons.innerText = dados.ultimo.consultorio || "—";
 
  hist.innerHTML = "";
 
- dados.historico.forEach(p=>{
+ dados.historico.slice(0,5).forEach(p => {
    const li = document.createElement("li");
-   li.innerText = `${p.nome} - ${p.profissional}`;
+   li.innerText = p.nome;
    hist.appendChild(li);
  });
 
  painel.classList.add("piscar-amarelo");
 
- tocarBip(4);
+ tocarBip();
 
- falar(`Paciente ${dados.ultimo.nome}, dirigir-se ao consultório ${dados.ultimo.consultorio}`);
+ chamarVoz(dados.ultimo.nome, dados.ultimo.consultorio);
 
  setTimeout(()=>{
    painel.classList.remove("piscar-amarelo");
- },3000);
+ },3500);
 
 });
 
-function tocarBip(qtd){
- let i=0;
- const t=setInterval(()=>{
-   bip.play();
-   i++;
-   if(i>=qtd) clearInterval(t);
- },500);
+/* ================= BIP 4X ================= */
+
+function tocarBip(){
+
+ let contador = 0;
+
+ const tocar = setInterval(()=>{
+
+   bip.currentTime = 0;
+   bip.play().catch(()=>{});
+
+   contador++;
+
+   if(contador >= 4){
+     clearInterval(tocar);
+   }
+
+ },600);
+
 }
 
-function falar(texto){
- const msg=new SpeechSynthesisUtterance(texto);
- msg.lang="pt-BR";
- speechSynthesis.speak(msg);
+/* ================= VOZ 2X ================= */
+
+function chamarVoz(nome, local){
+
+ const texto = `Paciente ${nome}, dirigir-se ao ${local}`;
+
+ let vezes = 0;
+
+ const repetir = setInterval(()=>{
+
+   const msg = new SpeechSynthesisUtterance(texto);
+   msg.lang = "pt-BR";
+   msg.rate = 0.9;
+   speechSynthesis.speak(msg);
+
+   vezes++;
+
+   if(vezes >= 2){
+     clearInterval(repetir);
+   }
+
+ },3500);
+
 }
+
+/* ================= GARANTE ATIVAÇÃO DE AUDIO ================= */
+
+document.body.addEventListener("click",()=>{
+ bip.play().catch(()=>{});
+ speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
+},{once:true});
