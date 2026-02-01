@@ -10,35 +10,41 @@ app.use(express.static("public"));
 let ultimo = null;
 let historico = [];
 
-app.get("/", (req,res)=>{
- res.sendFile(path.join(__dirname,"public","painel.html"));
+// Rota principal
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "painel.html"));
 });
 
-app.post("/chamar",(req,res)=>{
+// Lógica centralizada para atualizar chamados
+function registrarChamado(dados) {
+  // Garantimos que o objeto tenha exatamente estas propriedades
+  ultimo = {
+    nome: dados.nome || dados.paciente, // Aceita 'nome' ou 'paciente' para evitar erros
+    profissional: dados.profissional,
+    consultorio: dados.consultorio
+  };
 
- ultimo = {
-  nome:req.body.nome,
-  profissional:req.body.profissional,
-  consultorio:req.body.consultorio
- };
+  historico.unshift(ultimo);
+  historico = historico.slice(0, 5);
+  
+  io.emit("novoChamado", { ultimo, historico });
+}
 
- historico.unshift(ultimo);
- historico = historico.slice(0,5);
-
- io.emit("novoChamado",{ultimo,historico});
-
- res.sendStatus(200);
+// Rota POST (caso use fetch/axios)
+app.post("/chamar", (req, res) => {
+  registrarChamado(req.body);
+  res.sendStatus(200);
 });
 
-io.on("connection",(socket)=>{
- socket.emit("novoChamado",{ultimo,historico});
+// Comunicação via Socket.io
+io.on("connection", (socket) => {
+  // Envia o estado atual para quem acabou de conectar
+  socket.emit("novoChamado", { ultimo, historico });
 
- socket.on("chamar",(dados)=>{
-   ultimo=dados;
-   historico.unshift(dados);
-   historico=historico.slice(0,5);
-   io.emit("novoChamado",{ultimo,historico});
- });
+  socket.on("chamar", (dados) => {
+    registrarChamado(dados);
+  });
 });
 
-http.listen(process.env.PORT || 3000);
+const PORT = process.env.PORT || 3000;
+http.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
