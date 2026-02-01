@@ -10,139 +10,146 @@ const painel = document.getElementById("painel");
 let fila = [];
 let executando = false;
 let liberado = false;
-let primeira = true;
 
-/* ================= LIBERA AUDIO NA TV ================= */
+/* ================= UTIL ================= */
 
-document.body.addEventListener("click", () => {
+function esperar(ms){
+ return new Promise(r=>setTimeout(r,ms));
+}
 
-  if (liberado) return;
-  liberado = true;
+function isTV(){
+ return window.innerWidth > 1000;
+}
 
-  bip.currentTime = 0;
-  bip.play().then(() => {
-    bip.pause();
-    bip.currentTime = 0;
-  }).catch(() => {});
-
-  speechSynthesis.cancel();
-  speechSynthesis.speak(new SpeechSynthesisUtterance(""));
-
-}, { once: true });
-
-/* ================= RECEBE CHAMADO ================= */
+/* ================= SOCKET ================= */
 
 socket.on("novoChamado", dados => {
 
-  if (!dados || !dados.ultimo) return;
+ if(!dados || !dados.ultimo) return;
 
-  fila.push(dados);
+ fila.push(dados);
 
-  if (!executando) executarFila();
-
+ if(!executando){
+   executarFila();
+ }
 });
 
 /* ================= FILA ================= */
 
-function executarFila() {
+async function executarFila(){
 
-  if (fila.length === 0) {
-    executando = false;
-    return;
-  }
+ executando = true;
 
-  executando = true;
+ while(fila.length){
 
-  const dados = fila.shift();
+   const dados = fila.shift();
 
-  atualizarTela(dados);
+   mostrar(dados);
+   atualizarHistorico(dados.historico);
 
-  if (primeira) {
-    primeira = false;
-    executando = false;
-    return;
-  }
+   await chamarPaciente(dados.ultimo);
 
-  chamar2x(dados);
+   await esperar(3000); // pausa entre pacientes
+ }
+
+ executando = false;
 }
 
-/* ================= UI ================= */
+/* ================= MOSTRAR ================= */
 
-function atualizarTela(dados) {
+function mostrar(d){
 
-  nome.innerText = dados.ultimo.nome.toUpperCase();
-  prof.innerText = dados.ultimo.profissional.toUpperCase();
-  cons.innerText = dados.ultimo.consultorio.toUpperCase();
-
-  hist.innerHTML = "";
-
-  dados.historico.forEach(p => {
-    const li = document.createElement("li");
-    li.innerText = p.nome;
-    hist.appendChild(li);
-  });
+ nome.innerText = d.ultimo.nome.toUpperCase();
+ prof.innerText = d.ultimo.profissional.toUpperCase();
+ cons.innerText = d.ultimo.consultorio.toUpperCase();
 }
 
-/* ================= CHAMADA DUPLA ================= */
+/* ================= HISTÓRICO ================= */
 
-function chamar2x(dados) {
+function atualizarHistorico(lista){
 
-  let vezes = 0;
+ hist.innerHTML="";
 
-  const repetir = setInterval(() => {
+ lista.forEach(p=>{
+   const li=document.createElement("li");
+   li.innerText = p.nome;
+   hist.appendChild(li);
+ });
+}
 
-    painel.classList.add("piscar-amarelo");
+/* ================= CHAMADA ================= */
 
-    tocarBip(2);
-    falar(dados);
+async function chamarPaciente(p){
 
-    vezes++;
+ const texto = `Paciente ${p.nome}. Dirigir-se ao ${p.consultorio}. Com ${p.profissional}`;
 
-    if (vezes >= 2) {
+ for(let i=0;i<2;i++){
 
-      clearInterval(repetir);
+   painel.classList.add("piscar-amarelo");
 
-      setTimeout(() => {
-        painel.classList.remove("piscar-amarelo");
-        executando = false;
-        executarFila();
-      }, 2500);
+   if(isTV()) tocarBip(2);
 
-    }
+   falar(texto);
 
-  }, 3500);
+   await esperar(3500);
+
+   painel.classList.remove("piscar-amarelo");
+
+   await esperar(1500);
+ }
 }
 
 /* ================= BIP ================= */
 
-function tocarBip(qtd) {
+function tocarBip(vezes){
 
-  let i = 0;
+ let i=0;
 
-  const t = setInterval(() => {
+ const t=setInterval(()=>{
 
-    bip.currentTime = 0;
-    bip.play().catch(() => {});
+   bip.currentTime=0;
+   bip.play().catch(()=>{});
 
-    i++;
+   i++;
 
-    if (i >= qtd) clearInterval(t);
+   if(i>=vezes) clearInterval(t);
 
-  }, 450);
+ },400);
 }
 
 /* ================= VOZ ================= */
 
-function falar(d) {
+function falar(txt){
 
-  speechSynthesis.cancel();
+ const msg=new SpeechSynthesisUtterance(txt);
+ msg.lang="pt-BR";
+ msg.rate=0.9;
 
-  const msg = new SpeechSynthesisUtterance(
-    `Paciente ${d.ultimo.nome}. Dirigir-se ao ${d.ultimo.consultorio}. Com ${d.ultimo.profissional}`
-  );
-
-  msg.lang = "pt-BR";
-  msg.rate = 0.9;
-
-  speechSynthesis.speak(msg);
+ speechSynthesis.cancel();
+ speechSynthesis.speak(msg);
 }
+
+/* ================= LIBERAR SOM ================= */
+
+const ativar = document.getElementById("ativarSom");
+
+if(!isTV()){
+ ativar.remove();
+ liberado=true;
+}
+
+/* ===== LIBERAR SOM NA TV ===== */
+
+document.body.addEventListener("click",()=>{
+
+ if(liberado) return;
+
+ liberado=true;
+
+ ativar.remove();
+
+ bip.play().catch(()=>{});
+ speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
+
+},{once:true});
+
