@@ -115,7 +115,7 @@ body{
 }
 
 .piscar-amarelo #nome-paciente{
-  color:black;
+  color:rgb(255, 253, 253);
 }
 
 /* ================= NOTEBOOK / CELULAR ================= */
@@ -137,16 +137,26 @@ body{
 
 @media(min-width:1600px){
 
-.container{
-  padding:50px;
+/* Nome do paciente gigante na TV */
+
+#nome-paciente{
+  font-size:clamp(140px,18vw,320px);
 }
 
-.card{
-  padding:60px;
+/* Histórico mais baixo */
+
+.secao-historico{
+  padding:10px 20px;
+  gap:15px;
 }
 
-.cards-container{
-  gap:120px;
+#lista-historico li{
+  padding:8px 22px;
+  font-size:1.8vh;
+}
+
+.titulo-hist{
+  font-size:1.8vh;
 }
 
 }
