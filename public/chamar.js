@@ -1,22 +1,15 @@
-const socket = io();
+const socket=io();
 
-function chamarPaciente() {
-  const paciente = document.getElementById("paciente").value.trim();
-  const profissional = document.getElementById("profissional").value;
-  const consultorio = document.getElementById("consultorio").value;
+function chamarPaciente(){
 
-  if (!paciente || !profissional || !consultorio) {
-    alert("Preencha todos os campos!");
-    return;
-  }
+ const nome=document.getElementById("paciente").value.trim();
+ const profissional=document.getElementById("profissional").value;
+ const consultorio=document.getElementById("consultorio").value;
 
-  // Enviando como 'nome' para bater com o servidor
-  socket.emit("chamar", {
-    nome: paciente,
-    profissional: profissional,
-    consultorio: consultorio
-  });
+ if(!nome||!profissional||!consultorio) return;
 
-  document.getElementById("paciente").value = "";
-  document.getElementById("paciente").focus();
+ socket.emit("chamar",{nome,profissional,consultorio});
+
+ document.getElementById("paciente").value="";
+ document.getElementById("paciente").focus();
 }

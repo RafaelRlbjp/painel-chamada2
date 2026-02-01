@@ -174,3 +174,12 @@ body {
     padding: 1.5vh 3vw;
   }
 }
+
+#painel.piscar-amarelo{
+ animation:piscando .7s infinite;
+}
+
+@keyframes piscando{
+ 0%,100%{background:#001427;}
+ 50%{background:#ffd500;}
+}
