@@ -8,65 +8,13 @@ const bip = document.getElementById("bip");
 const painel = document.getElementById("painel");
 
 let primeiraCarga = true;
-let fila = [];
-let executando = false;
+let audioLiberado = false;
 
 /* ================= RECEBE CHAMADO ================= */
 
 socket.on("novoChamado", dados => {
 
  if(!dados || !dados.ultimo) return;
-
- atualizarTela(dados);
-
- if(primeiraCarga){
-   primeiraCarga = false;
-   return;
- }
-
- fila.push(dados);
-
- if(!executando){
-   executarFila();
- }
-
-});
-
-/* ================= FILA ================= */
-
-async function executarFila(){
-
- if(fila.length === 0){
-   executando = false;
-   return;
- }
-
- executando = true;
-
- const dados = fila.shift();
-
- painel.classList.add("piscar-amarelo");
-
- // PRIMEIRA CHAMADA
- tocarBip(2);
- await falar(`Paciente ${dados.ultimo.nome}. Dirigir-se ao ${dados.ultimo.consultorio}. Com ${dados.ultimo.profissional}`);
-
- await delay(1200);
-
- // SEGUNDA CHAMADA
- tocarBip(2);
- await falar(`Paciente ${dados.ultimo.nome}. Dirigir-se ao ${dados.ultimo.consultorio}. Com ${dados.ultimo.profissional}`);
-
- painel.classList.remove("piscar-amarelo");
-
- await delay(800);
-
- executarFila();
-}
-
-/* ================= INTERFACE ================= */
-
-function atualizarTela(dados){
 
  nome.innerText = dados.ultimo.nome.toUpperCase();
  prof.innerText = dados.ultimo.profissional.toUpperCase();
@@ -75,11 +23,41 @@ function atualizarTela(dados){
  hist.innerHTML="";
 
  dados.historico.forEach(p=>{
-   const li = document.createElement("li");
-   li.innerText = p.nome;
+   const li=document.createElement("li");
+   li.innerText=p.nome;
    hist.appendChild(li);
  });
 
+ // Primeira carga não toca nada
+ if(primeiraCarga){
+   primeiraCarga=false;
+   return;
+ }
+
+ painel.classList.add("piscar-amarelo");
+
+ executarChamadas();
+
+});
+
+/* ================= EXECUÇÃO COMPLETA ================= */
+
+function executarChamadas(){
+
+ // PRIMEIRA CHAMADA
+ tocarBip(2);
+ falar(`Paciente ${nome.innerText}. Dirigir-se ao ${cons.innerText}. Com ${prof.innerText}`);
+
+ // SEGUNDA CHAMADA APÓS 4s
+ setTimeout(()=>{
+   tocarBip(2);
+   falar(`Paciente ${nome.innerText}. Dirigir-se ao ${cons.innerText}. Com ${prof.innerText}`);
+ },4000);
+
+ // PARA O ALERTA
+ setTimeout(()=>{
+   painel.classList.remove("piscar-amarelo");
+ },8000);
 }
 
 /* ================= BIP ================= */
@@ -89,65 +67,48 @@ function tocarBip(qtd){
  let i=0;
 
  const t=setInterval(()=>{
+   bip.currentTime=0;
+   bip.play().catch(()=>{});
+   i++;
 
-  bip.currentTime=0;
-  bip.play().catch(()=>{});
+   if(i>=qtd) clearInterval(t);
 
-  i++;
-
-  if(i>=qtd) clearInterval(t);
-
- },450);
+ },500);
 }
 
 /* ================= VOZ ================= */
 
 function falar(texto){
 
- return new Promise(resolve=>{
+ if(!speechSynthesis) return;
 
-  speechSynthesis.cancel();
+ speechSynthesis.cancel();
 
-  const msg = new SpeechSynthesisUtterance(texto);
-  msg.lang="pt-BR";
-  msg.rate=0.9;
+ const msg=new SpeechSynthesisUtterance(texto);
+ msg.lang="pt-BR";
+ msg.rate=0.9;
 
-  msg.onend = resolve;
-  msg.onerror = resolve;
-
-  speechSynthesis.speak(msg);
-
- });
+ speechSynthesis.speak(msg);
 }
 
-/* ================= DELAY ================= */
+/* ================= LIBERA AUDIO TV ================= */
 
-function delay(ms){
- return new Promise(r=>setTimeout(r,ms));
-}
-
-/* ================= LIBERA AUDIO NA TV ================= */
-
-let audioLiberado = false;
-
-function liberarAudio(){
+document.addEventListener("click",()=>{
 
  if(audioLiberado) return;
 
- audioLiberado = true;
+ audioLiberado=true;
 
- bip.volume = 0;
+ bip.volume=0.3;
+ bip.currentTime=0;
  bip.play().catch(()=>{});
 
- const msg = new SpeechSynthesisUtterance(" ");
- msg.volume = 0;
+ const msg=new SpeechSynthesisUtterance("Sistema pronto");
+ msg.lang="pt-BR";
+ msg.volume=0.3;
+
  speechSynthesis.speak(msg);
 
- document.getElementById("nome-paciente").innerText = "AGUARDANDO...";
-}
+ nome.innerText="AGUARDANDO...";
 
-/* TV exige toque físico */
-
-document.addEventListener("touchstart", liberarAudio, { once:true });
-document.addEventListener("click", liberarAudio, { once:true });
-
+});
