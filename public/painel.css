@@ -165,5 +165,5 @@ setInterval(()=>{
 
  }
 
-},60000); // 1 minuto
+},20000); // 20 segundo
 
