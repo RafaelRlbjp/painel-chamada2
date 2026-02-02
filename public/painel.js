@@ -42,78 +42,94 @@ async function executarFila(){
   const dados = fila.shift();
   const d = dados.ultimo;
 
-  // atualiza tela ANTES de qualquer áudio
-  nome.innerText = d.nome.toUpperCase();
-  prof.innerText = d.profissional.toUpperCase();
-  cons.innerText = d.consultorio.toUpperCase();
+  atualizarTela(dados);
 
-  hist.innerHTML="";
-  dados.historico.forEach(p=>{
-   const li=document.createElement("li");
-   li.innerText=p.nome;
-   hist.appendChild(li);
-  });
+  await chamadaCompleta(d);
 
-  if(audioLiberado){
-   await chamadaCompleta(d);
-  }
-
-  await esperar(1000);
+  await esperar(800);
  }
 
  executando = false;
 }
 
-/* ================= CHAMADA COMPLETA ================= */
+/* ================= ATUALIZA TELA ================= */
+
+function atualizarTela(dados){
+
+ const d = dados.ultimo;
+
+ nome.innerText = d.nome.toUpperCase();
+ prof.innerText = d.profissional.toUpperCase();
+ cons.innerText = d.consultorio.toUpperCase();
+
+ hist.innerHTML="";
+ dados.historico.forEach(p=>{
+  const li=document.createElement("li");
+  li.innerText=p.nome;
+  hist.appendChild(li);
+ });
+
+}
+
+/* ================= CHAMADA ================= */
 
 async function chamadaCompleta(d){
 
+ if(!audioLiberado) return;
+
  painel.classList.add("piscar-amarelo");
 
- // PRIMEIRA CHAMADA
- tocarBip2x();
- await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
+ // PRIMEIRA
+ await bipEFala(d);
 
- await esperar(800);
+ await esperar(600);
 
- // SEGUNDA CHAMADA
- tocarBip2x();
- await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
+ // SEGUNDA
+ await bipEFala(d);
 
  painel.classList.remove("piscar-amarelo");
-
- await esperar(1000);
 }
 
-/* ================= FALAR ESPERANDO TERMINAR ================= */
+/* ================= BIP + FALA ================= */
+
+async function bipEFala(d){
+
+ tocarBip2x();
+
+ await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
+
+}
+
+/* ================= FALA ================= */
 
 function falar(texto){
 
  return new Promise(resolve=>{
 
-  const msg = new SpeechSynthesisUtterance(texto);
-  msg.lang="pt-BR";
-  msg.rate=0.85;
-
-  msg.onend = ()=> resolve();
-
   speechSynthesis.cancel();
+
+  const msg = new SpeechSynthesisUtterance(texto);
+  msg.lang = "pt-BR";
+  msg.rate = 0.85;
+
+  msg.onend = resolve;
+
   speechSynthesis.speak(msg);
 
  });
 }
 
-/* ================= BIP 2X ================= */
+/* ================= BIP ================= */
 
 function tocarBip2x(){
 
- bip.currentTime=0;
+ bip.currentTime = 0;
  bip.play().catch(()=>{});
 
  setTimeout(()=>{
-  bip.currentTime=0;
+  bip.currentTime = 0;
   bip.play().catch(()=>{});
- },900);
+ },700);
 
 }
 

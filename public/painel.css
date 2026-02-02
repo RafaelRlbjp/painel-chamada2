@@ -114,10 +114,9 @@ body{
 
 /* ================= ALERTA ================= */
 
-.piscar-amarelo{
- animation:pisca .7s 6;
+..piscar-amarelo{
+ animation: pisca .7s infinite;
 }
-
 
 @keyframes pisca{
  0%,100%{background:#001427;}
@@ -127,6 +126,7 @@ body{
 .piscar-amarelo #nome-paciente{
  color:black;
 }
+
 
 /* ================================================= */
 /* ======================= TV ======================= */
