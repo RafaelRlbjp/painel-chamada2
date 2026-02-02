@@ -40,30 +40,25 @@ async function executarFila(){
  while(fila.length){
 
   const dados = fila.shift();
-  const p = dados.ultimo;
 
-  // Atualiza tela
-  nome.innerText = p.nome.toUpperCase();
-  prof.innerText = p.profissional.toUpperCase();
-  cons.innerText = p.consultorio.toUpperCase();
+  nome.innerText = dados.ultimo.nome.toUpperCase();
+  prof.innerText = dados.ultimo.profissional.toUpperCase();
+  cons.innerText = dados.ultimo.consultorio.toUpperCase();
 
   hist.innerHTML="";
-  dados.historico.forEach(h=>{
+  dados.historico.forEach(p=>{
     const li=document.createElement("li");
-    li.innerText=h.nome;
+    li.innerText=p.nome;
     hist.appendChild(li);
   });
 
   painel.classList.add("piscar-amarelo");
 
-  if(audioLiberado){
-    await chamadaCompleta(p);
-  }
+  await chamadaCompleta(dados.ultimo);
 
   painel.classList.remove("piscar-amarelo");
 
-  // pausa antes do próximo
-  await esperar(800);
+  await esperar(1500);
  }
 
  executando = false;
@@ -71,18 +66,20 @@ async function executarFila(){
 
 /* ================= CHAMADA ================= */
 
-async function chamadaCompleta(p){
+async function chamadaCompleta(d){
 
- // 1ª chamada
- tocarBip2x();
- await falar(`Paciente ${p.nome}. Dirigir-se ao ${p.consultorio}. Com ${p.profissional}`);
+ for(let i=0;i<2;i++){
 
- await esperar(1200);
+   tocarBip2x();
 
- // 2ª chamada
- tocarBip2x();
- await falar(`Paciente ${p.nome}. Dirigir-se ao ${p.consultorio}. Com ${p.profissional}`);
+   if(audioLiberado){
+     await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
+   }else{
+     await esperar(4000);
+   }
 
+   await esperar(1200);
+ }
 }
 
 /* ================= VOZ ================= */
@@ -97,7 +94,7 @@ function falar(texto){
 
   msg.onend = ()=> resolve();
 
-  speechSynthesis.cancel(); // limpa fila antiga
+  speechSynthesis.cancel();
   speechSynthesis.speak(msg);
 
  });
@@ -117,10 +114,10 @@ function tocarBip2x(){
 
   if(i>=2) clearInterval(t);
 
- },450);
+ },500);
 }
 
-/* ================= LIBERAR AUDIO ================= */
+/* ================= ATIVAR AUDIO ================= */
 
 document.body.addEventListener("click",()=>{
 
