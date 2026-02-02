@@ -35,6 +35,7 @@ body{
  justify-content:center;
  align-items:center;
  padding:2vh;
+ width:100%;
 }
 
 .label-topo{
@@ -42,10 +43,8 @@ body{
  opacity:.7;
 }
 
-/* PC CONTROLADO */
-
 #nome-paciente{
- font-size:10vh;
+ font-size:7vh;
  color:#ffd500;
  text-align:center;
  line-height:1;
@@ -58,27 +57,29 @@ body{
 .cards-container{
  display:grid;
  grid-template-columns:1fr 1fr;
- gap:3vw;
+ gap:2vw;
 }
 
 .card{
  background:#0d6efd;
- border-radius:4vh;
+ border-radius:3vh;
  display:flex;
  flex-direction:column;
  justify-content:center;
  align-items:center;
+ padding:1vh;
+ min-height:120px;
 }
 
 .card .label{
- font-size:3vh;
+ font-size:2.5vh;
  opacity:.8;
 }
 
 .card div{
- font-size:5vh;
+ font-size:4vh;
  text-align:center;
- padding:1vh 2vw;
+ padding:.5vh 1vw;
 }
 
 /* ================= HISTÓRICO ================= */
@@ -87,11 +88,13 @@ body{
  display:flex;
  align-items:center;
  gap:2vw;
+ max-height:120px;
+ overflow:hidden;
 }
 
 .titulo-hist{
  color:#ffd500;
- font-size:2.5vh;
+ font-size:2.2vh;
 }
 
 #lista-historico{
@@ -106,6 +109,7 @@ body{
  padding:1vh 2vw;
  border-radius:5vh;
  font-size:2vh;
+ white-space:nowrap;
 }
 
 /* ================= ALERTA ================= */
@@ -127,42 +131,34 @@ body{
 /* ======================= TV ======================= */
 /* ================================================= */
 
-/* ================= TV MODE ================= */
-@media (min-width: 1400px) {
+@media (min-width:1400px){
 
-  /* área principal (paciente) mais larga */
-  .area-principal{
-    width: 100% !important;
-    padding: 40px !important;
-  }
+ .area-principal{
+   padding:40px;
+ }
 
-  /* nome do paciente gigante */
-  #nome-paciente{
-    font-size: 6vw !important;
-    line-height: 1.1;
-    text-align: center;
-    word-break: break-word;
-  }
+ #nome-paciente{
+   font-size:6vw;
+ }
 
-  /* cards profissional / consultório lado a lado melhor */
-  .cards-container{
-    gap:40px;
-  }
+ .cards-container{
+   gap:40px;
+ }
 
-}
+ .card{
+   min-height:200px;
+ }
 
+ .card div{
+   font-size:6vh;
+ }
 
+ .titulo-hist{
+   font-size:3vh;
+ }
 
-.card div{
- font-size:10vh;
-}
-
-.titulo-hist{
- font-size:3vh;
-}
-
-#lista-historico li{
- font-size:2.5vh;
-}
+ #lista-historico li{
+   font-size:2.5vh;
+ }
 
 }

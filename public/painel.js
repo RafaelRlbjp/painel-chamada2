@@ -6,19 +6,16 @@ const cons = document.getElementById("consultorio");
 const hist = document.getElementById("lista-historico");
 const bip = document.getElementById("bip");
 const painel = document.getElementById("painel");
+const ativarSom = document.getElementById("ativarSom");
 
 let fila = [];
 let executando = false;
-let liberado = false;
+let audioLiberado = false;
 
 /* ================= UTIL ================= */
 
 function esperar(ms){
- return new Promise(r=>setTimeout(r,ms));
-}
-
-function isTV(){
- return window.innerWidth > 1000;
+  return new Promise(r=>setTimeout(r,ms));
 }
 
 /* ================= SOCKET ================= */
@@ -40,116 +37,96 @@ async function executarFila(){
 
  executando = true;
 
- while(fila.length){
+ while(fila.length > 0){
 
-   const dados = fila.shift();
+  const dados = fila.shift();
 
-   mostrar(dados);
-   atualizarHistorico(dados.historico);
+  nome.innerText = dados.ultimo.nome.toUpperCase();
+  prof.innerText = dados.ultimo.profissional.toUpperCase();
+  cons.innerText = dados.ultimo.consultorio.toUpperCase();
 
-   await chamarPaciente(dados.ultimo);
+  hist.innerHTML="";
+  dados.historico.forEach(p=>{
+    const li=document.createElement("li");
+    li.innerText=p.nome;
+    hist.appendChild(li);
+  });
 
-   await esperar(3000); // pausa entre pacientes
+  painel.classList.add("piscar-amarelo");
+
+  if(audioLiberado){
+    await chamadaCompleta(dados.ultimo);
+  }
+
+  await esperar(2000);
+
+  painel.classList.remove("piscar-amarelo");
+
+  await esperar(1000);
  }
 
  executando = false;
 }
 
-/* ================= MOSTRAR ================= */
+/* ================= CHAMADA COMPLETA ================= */
 
-function mostrar(d){
+async function chamadaCompleta(d){
 
- nome.innerText = d.ultimo.nome.toUpperCase();
- prof.innerText = d.ultimo.profissional.toUpperCase();
- cons.innerText = d.ultimo.consultorio.toUpperCase();
+ // PRIMEIRA CHAMADA
+ tocarBip2x();
+ await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
+
+ await esperar(1500);
+
+ // SEGUNDA CHAMADA
+ tocarBip2x();
+ await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
+
 }
 
-/* ================= HISTÓRICO ================= */
+/* ================= FALAR ESPERANDO TERMINAR ================= */
 
-function atualizarHistorico(lista){
+function falar(texto){
 
- hist.innerHTML="";
+ return new Promise(resolve=>{
 
- lista.forEach(p=>{
-   const li=document.createElement("li");
-   li.innerText = p.nome;
-   hist.appendChild(li);
+  const msg = new SpeechSynthesisUtterance(texto);
+  msg.lang="pt-BR";
+  msg.rate=0.9;
+
+  msg.onend = ()=> resolve();
+
+  speechSynthesis.speak(msg);
+
  });
 }
 
-/* ================= CHAMADA ================= */
+/* ================= BIP 2X ================= */
 
-async function chamarPaciente(p){
-
- const texto = `Paciente ${p.nome}. Dirigir-se ao ${p.consultorio}. Com ${p.profissional}`;
-
- for(let i=0;i<2;i++){
-
-   painel.classList.add("piscar-amarelo");
-
-   if(isTV()) tocarBip(2);
-
-   falar(texto);
-
-   await esperar(3500);
-
-   painel.classList.remove("piscar-amarelo");
-
-   await esperar(1500);
- }
-}
-
-/* ================= BIP ================= */
-
-function tocarBip(vezes){
+function tocarBip2x(){
 
  let i=0;
 
  const t=setInterval(()=>{
 
-   bip.currentTime=0;
-   bip.play().catch(()=>{});
+  bip.currentTime=0;
+  bip.play().catch(()=>{});
+  i++;
 
-   i++;
-
-   if(i>=vezes) clearInterval(t);
+  if(i>=2) clearInterval(t);
 
  },400);
 }
 
-/* ================= VOZ ================= */
-
-function falar(txt){
-
- const msg=new SpeechSynthesisUtterance(txt);
- msg.lang="pt-BR";
- msg.rate=0.9;
-
- speechSynthesis.cancel();
- speechSynthesis.speak(msg);
-}
-
-/* ================= LIBERAR SOM ================= */
-
-const ativar = document.getElementById("ativarSom");
-
-if(!isTV()){
- ativar.remove();
- liberado=true;
-}
-
-/* ===== LIBERAR SOM NA TV ===== */
+/* ================= LIBERAR AUDIO ================= */
 
 document.body.addEventListener("click",()=>{
-
- if(liberado) return;
-
- liberado=true;
-
- ativar.remove();
 
  bip.play().catch(()=>{});
  speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
 
-},{once:true});
+ audioLiberado=true;
 
+ if(ativarSom) ativarSom.style.display="none";
+
+},{once:true});
