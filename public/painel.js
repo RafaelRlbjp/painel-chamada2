@@ -15,7 +15,7 @@ let audioLiberado = false;
 /* ================= UTIL ================= */
 
 function esperar(ms){
- return new Promise(r=>setTimeout(r,ms));
+  return new Promise(r=>setTimeout(r,ms));
 }
 
 /* ================= SOCKET ================= */
@@ -27,9 +27,8 @@ socket.on("novoChamado", dados => {
  fila.push(dados);
 
  if(!executando){
-  executarFila();
+   executarFila();
  }
-
 });
 
 /* ================= FILA ================= */
@@ -41,47 +40,52 @@ async function executarFila(){
  while(fila.length){
 
   const dados = fila.shift();
+  const p = dados.ultimo;
 
-  nome.innerText = dados.ultimo.nome.toUpperCase();
-  prof.innerText = dados.ultimo.profissional.toUpperCase();
-  cons.innerText = dados.ultimo.consultorio.toUpperCase();
+  // Atualiza tela
+  nome.innerText = p.nome.toUpperCase();
+  prof.innerText = p.profissional.toUpperCase();
+  cons.innerText = p.consultorio.toUpperCase();
 
   hist.innerHTML="";
-  dados.historico.forEach(p=>{
-   const li=document.createElement("li");
-   li.innerText=p.nome;
-   hist.appendChild(li);
+  dados.historico.forEach(h=>{
+    const li=document.createElement("li");
+    li.innerText=h.nome;
+    hist.appendChild(li);
   });
 
   painel.classList.add("piscar-amarelo");
 
   if(audioLiberado){
-   await chamadaCompleta(dados.ultimo);
+    await chamadaCompleta(p);
   }
 
   painel.classList.remove("piscar-amarelo");
 
-  await esperar(1200);
+  // pausa antes do próximo
+  await esperar(800);
  }
 
- executando=false;
+ executando = false;
 }
 
 /* ================= CHAMADA ================= */
 
-async function chamadaCompleta(d){
+async function chamadaCompleta(p){
 
- await tocarBip2x();
- await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
+ // 1ª chamada
+ tocarBip2x();
+ await falar(`Paciente ${p.nome}. Dirigir-se ao ${p.consultorio}. Com ${p.profissional}`);
 
- await esperar(800);
+ await esperar(1200);
 
- await tocarBip2x();
- await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
+ // 2ª chamada
+ tocarBip2x();
+ await falar(`Paciente ${p.nome}. Dirigir-se ao ${p.consultorio}. Com ${p.profissional}`);
 
 }
 
-/* ================= FALA ================= */
+/* ================= VOZ ================= */
 
 function falar(texto){
 
@@ -91,37 +95,29 @@ function falar(texto){
   msg.lang="pt-BR";
   msg.rate=0.9;
 
-  msg.onend = ()=>resolve();
+  msg.onend = ()=> resolve();
 
+  speechSynthesis.cancel(); // limpa fila antiga
   speechSynthesis.speak(msg);
 
  });
-
 }
 
-/* ================= BIP PROMESSA ================= */
+/* ================= BIP ================= */
 
 function tocarBip2x(){
 
- return new Promise(resolve=>{
+ let i=0;
 
-  let i=0;
+ const t=setInterval(()=>{
 
-  const t=setInterval(()=>{
+  bip.currentTime=0;
+  bip.play().catch(()=>{});
+  i++;
 
-   bip.currentTime=0;
-   bip.play().catch(()=>{});
-   i++;
+  if(i>=2) clearInterval(t);
 
-   if(i>=2){
-    clearInterval(t);
-    resolve();
-   }
-
-  },400);
-
- });
-
+ },450);
 }
 
 /* ================= LIBERAR AUDIO ================= */
