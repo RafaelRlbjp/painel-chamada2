@@ -114,8 +114,8 @@ body{
 
 /* ================= ALERTA ================= */
 
-..piscar-amarelo{
- animation: pisca .7s infinite;
+.piscar-amarelo{
+ animation:pisca .7s infinite;
 }
 
 @keyframes pisca{
@@ -126,6 +126,7 @@ body{
 .piscar-amarelo #nome-paciente{
  color:black;
 }
+
 
 
 /* ================================================= */
