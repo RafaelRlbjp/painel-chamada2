@@ -133,33 +133,25 @@ body{
 /* ================================================= */
 
 @media (min-width:1400px){
+  
+  .container{
+    grid-template-rows:60% 25% 15%;
+  }
 
- .area-principal{
-   padding:40px;
- }
+  .area-principal{
+    padding:50px !important;
+  }
 
- #nome-paciente{
-   font-size:6vw;
- }
+  #nome-paciente{
+    font-size:6.5vw !important;
+  }
 
- .cards-container{
-   gap:60px;
- }
+  .cards-container{
+    gap:25px;
+  }
 
- .card{
-   min-height:200px;
- }
-
- .card div{
-   font-size:8vh;
- }
-
- .titulo-hist{
-   font-size:5vh;
- }
-
- #lista-historico li{
-   font-size:2.5vh;
- }
+  .card div{
+    font-size:7vh !important;
+  }
 
 }

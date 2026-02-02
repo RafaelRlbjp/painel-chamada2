@@ -29,6 +29,7 @@ socket.on("novoChamado", dados => {
  if(!executando){
   executarFila();
  }
+
 });
 
 /* ================= FILA ================= */
@@ -37,65 +38,45 @@ async function executarFila(){
 
  executando = true;
 
- while(fila.length > 0){
+ while(fila.length){
 
   const dados = fila.shift();
-  const d = dados.ultimo;
 
-  atualizarTela(dados);
+  nome.innerText = dados.ultimo.nome.toUpperCase();
+  prof.innerText = dados.ultimo.profissional.toUpperCase();
+  cons.innerText = dados.ultimo.consultorio.toUpperCase();
 
-  await chamadaCompleta(d);
+  hist.innerHTML="";
+  dados.historico.forEach(p=>{
+   const li=document.createElement("li");
+   li.innerText=p.nome;
+   hist.appendChild(li);
+  });
 
-  await esperar(800);
+  painel.classList.add("piscar-amarelo");
+
+  if(audioLiberado){
+   await chamadaCompleta(dados.ultimo);
+  }
+
+  painel.classList.remove("piscar-amarelo");
+
+  await esperar(1200);
  }
 
- executando = false;
-}
-
-/* ================= ATUALIZA TELA ================= */
-
-function atualizarTela(dados){
-
- const d = dados.ultimo;
-
- nome.innerText = d.nome.toUpperCase();
- prof.innerText = d.profissional.toUpperCase();
- cons.innerText = d.consultorio.toUpperCase();
-
- hist.innerHTML="";
- dados.historico.forEach(p=>{
-  const li=document.createElement("li");
-  li.innerText=p.nome;
-  hist.appendChild(li);
- });
-
+ executando=false;
 }
 
 /* ================= CHAMADA ================= */
 
 async function chamadaCompleta(d){
 
- if(!audioLiberado) return;
+ await tocarBip2x();
+ await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
 
- painel.classList.add("piscar-amarelo");
+ await esperar(800);
 
- // PRIMEIRA
- await bipEFala(d);
-
- await esperar(600);
-
- // SEGUNDA
- await bipEFala(d);
-
- painel.classList.remove("piscar-amarelo");
-}
-
-/* ================= BIP + FALA ================= */
-
-async function bipEFala(d){
-
- tocarBip2x();
-
+ await tocarBip2x();
  await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
 
 }
@@ -106,30 +87,40 @@ function falar(texto){
 
  return new Promise(resolve=>{
 
-  speechSynthesis.cancel();
-
   const msg = new SpeechSynthesisUtterance(texto);
-  msg.lang = "pt-BR";
-  msg.rate = 0.85;
+  msg.lang="pt-BR";
+  msg.rate=0.9;
 
-  msg.onend = resolve;
+  msg.onend = ()=>resolve();
 
   speechSynthesis.speak(msg);
 
  });
+
 }
 
-/* ================= BIP ================= */
+/* ================= BIP PROMESSA ================= */
 
 function tocarBip2x(){
 
- bip.currentTime = 0;
- bip.play().catch(()=>{});
+ return new Promise(resolve=>{
 
- setTimeout(()=>{
-  bip.currentTime = 0;
-  bip.play().catch(()=>{});
- },700);
+  let i=0;
+
+  const t=setInterval(()=>{
+
+   bip.currentTime=0;
+   bip.play().catch(()=>{});
+   i++;
+
+   if(i>=2){
+    clearInterval(t);
+    resolve();
+   }
+
+  },400);
+
+ });
 
 }
 
@@ -140,7 +131,7 @@ document.body.addEventListener("click",()=>{
  bip.play().catch(()=>{});
  speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
 
- audioLiberado = true;
+ audioLiberado=true;
 
  if(ativarSom) ativarSom.style.display="none";
 
