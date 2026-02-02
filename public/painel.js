@@ -15,7 +15,7 @@ let audioLiberado = false;
 /* ================= UTIL ================= */
 
 function esperar(ms){
-  return new Promise(r=>setTimeout(r,ms));
+ return new Promise(r=>setTimeout(r,ms));
 }
 
 /* ================= SOCKET ================= */
@@ -27,7 +27,7 @@ socket.on("novoChamado", dados => {
  fila.push(dados);
 
  if(!executando){
-   executarFila();
+  executarFila();
  }
 });
 
@@ -40,27 +40,23 @@ async function executarFila(){
  while(fila.length > 0){
 
   const dados = fila.shift();
+  const d = dados.ultimo;
 
-  nome.innerText = dados.ultimo.nome.toUpperCase();
-  prof.innerText = dados.ultimo.profissional.toUpperCase();
-  cons.innerText = dados.ultimo.consultorio.toUpperCase();
+  // atualiza tela ANTES de qualquer áudio
+  nome.innerText = d.nome.toUpperCase();
+  prof.innerText = d.profissional.toUpperCase();
+  cons.innerText = d.consultorio.toUpperCase();
 
   hist.innerHTML="";
   dados.historico.forEach(p=>{
-    const li=document.createElement("li");
-    li.innerText=p.nome;
-    hist.appendChild(li);
+   const li=document.createElement("li");
+   li.innerText=p.nome;
+   hist.appendChild(li);
   });
 
-  painel.classList.add("piscar-amarelo");
-
   if(audioLiberado){
-    await chamadaCompleta(dados.ultimo);
+   await chamadaCompleta(d);
   }
-
-  await esperar(2000);
-
-  painel.classList.remove("piscar-amarelo");
 
   await esperar(1000);
  }
@@ -72,16 +68,21 @@ async function executarFila(){
 
 async function chamadaCompleta(d){
 
+ painel.classList.add("piscar-amarelo");
+
  // PRIMEIRA CHAMADA
  tocarBip2x();
  await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
 
- await esperar(1500);
+ await esperar(800);
 
  // SEGUNDA CHAMADA
  tocarBip2x();
  await falar(`Paciente ${d.nome}. Dirigir-se ao ${d.consultorio}. Com ${d.profissional}`);
 
+ painel.classList.remove("piscar-amarelo");
+
+ await esperar(1000);
 }
 
 /* ================= FALAR ESPERANDO TERMINAR ================= */
@@ -92,10 +93,11 @@ function falar(texto){
 
   const msg = new SpeechSynthesisUtterance(texto);
   msg.lang="pt-BR";
-  msg.rate=0.9;
+  msg.rate=0.85;
 
   msg.onend = ()=> resolve();
 
+  speechSynthesis.cancel();
   speechSynthesis.speak(msg);
 
  });
@@ -105,17 +107,14 @@ function falar(texto){
 
 function tocarBip2x(){
 
- let i=0;
+ bip.currentTime=0;
+ bip.play().catch(()=>{});
 
- const t=setInterval(()=>{
-
+ setTimeout(()=>{
   bip.currentTime=0;
   bip.play().catch(()=>{});
-  i++;
+ },900);
 
-  if(i>=2) clearInterval(t);
-
- },400);
 }
 
 /* ================= LIBERAR AUDIO ================= */
@@ -125,7 +124,7 @@ document.body.addEventListener("click",()=>{
  bip.play().catch(()=>{});
  speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
 
- audioLiberado=true;
+ audioLiberado = true;
 
  if(ativarSom) ativarSom.style.display="none";
 

@@ -115,8 +115,9 @@ body{
 /* ================= ALERTA ================= */
 
 .piscar-amarelo{
- animation:pisca .7s infinite;
+ animation:pisca .7s 6;
 }
+
 
 @keyframes pisca{
  0%,100%{background:#001427;}
