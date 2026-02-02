@@ -156,3 +156,14 @@ body{
   }
 
 }
+
+setInterval(()=>{
+
+ if(fila.length===0 && !executando){
+
+   location.reload();
+
+ }
+
+},60000); // 1 minuto
+
