@@ -157,13 +157,3 @@ body{
 
 }
 
-setInterval(()=>{
-
- if(fila.length===0 && !executando){
-
-   location.reload();
-
- }
-
-},20000); // 20 segundo
-
